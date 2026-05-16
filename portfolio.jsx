@@ -187,7 +187,7 @@ function Work() {
             onMouseEnter={() => setHovered(i)}
             onMouseLeave={() => setHovered(null)}
           >
-            <a href={p.href} className="work-row-link">
+            <a href="/work" className="work-row-link">
               <span className="work-n">{p.n}</span>
               <span className="work-name serif">{p.name}</span>
               <span className="work-kind">{p.kind}</span>

@@ -12,6 +12,9 @@ window.PROJECTS = [
     visibility: "public",
     href: "https://crossmancrafts.vercel.app/",
     blurb: "Professional landing page for Cole Crossman.",
+    whatItDoes: "Editorial portfolio and storefront for a one-man furniture shop in Grimsby, Ontario. Showcases small-batch series, accepts commission inquiries, and tracks the studio\u2019s working backlog publicly.",
+    whatMadeItHard: "Marrying a heavy editorial layout \u2014 large display type, hairline grid, dark-mode default \u2014 with real e-commerce mechanics, in a way that doesn\u2019t compromise either.",
+    outcome: "A site that reads like a magazine and operates like a shop. The maker can take commissions and ship small-batch pieces without leaving the editorial frame.",
     featured: true,
   },
   {
@@ -22,7 +25,10 @@ window.PROJECTS = [
     category: "webapp",
     visibility: "public",
     href: "https://infradex.vercel.app/",
-    blurb: "Ontario infrastructure data platform — surfaces geospatial, permit, and property data for the province.",
+    blurb: "Ontario infrastructure data platform \u2014 surfaces geospatial, permit, and property data for the province.",
+    whatItDoes: "An infrastructure intelligence platform for Ontario \u2014 aggregating P3 projects, IESO energy contracts, OPG holdings, and day-ahead electricity prices into one searchable dashboard.",
+    whatMadeItHard: "Pulling data from a dozen public sources \u2014 IESO, OPG, provincial procurement, day-ahead market \u2014 and reconciling them into a single live model with a real-time price feed.",
+    outcome: "A working intelligence platform: $169B in tracked transaction value, 9,500+ assets, live electricity pricing, all in one place. Used to track contract expiries and asset transactions across the province.",
     featured: true,
   },
   {
@@ -34,7 +40,10 @@ window.PROJECTS = [
     visibility: "private",
     href: null,
     blurb: "Custom CRM that replaced a full stack of real-estate sales tools.",
-    longBlurb: "Custom CRM platform built end-to-end for a Toronto-area real estate team. Replaced their full stack of sales tools — contact management, listings, deal pipeline — with one tailored web app. Built solo.",
+    longBlurb: "Custom CRM platform built end-to-end for a Toronto-area real estate team. Replaced their full stack of sales tools \u2014 contact management, listings, deal pipeline \u2014 with one tailored web app. Built solo.",
+    whatItDoes: "A custom CRM purpose-built for a Toronto-area real-estate team \u2014 contacts, properties, call queues, follow-ups, pipeline, and activity tracking in one app.",
+    whatMadeItHard: "Replacing a multi-tool stack (separate CRM, dialer, pipeline, calendar) with one cohesive system that handles 3,800+ properties and runs an agent\u2019s day from call queue to closed deal.",
+    outcome: "Killed roughly $400/mo of SaaS subscriptions. One app, one workflow, every agent action logged to a single activity ledger. Built and delivered solo.",
     featured: true,
   },
   {

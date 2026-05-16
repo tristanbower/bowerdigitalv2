@@ -1,7 +1,8 @@
 {
   "rewrites": [
     { "source": "/research", "destination": "/research.html" },
-    { "source": "/work", "destination": "/work.html" }
+    { "source": "/work", "destination": "/work.html" },
+    { "source": "/work/:slug", "destination": "/work-detail.html" }
   ],
   "headers": [
     {

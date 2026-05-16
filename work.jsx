@@ -72,24 +72,16 @@ function sortedProjects(projects) {
 // ── Cell component ──
 
 function WorkCell({ project, index }) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [pressed, setPressed] = React.useState(false);
   const isPrivate = project.visibility === "private";
   const num = String(index + 1).padStart(2, "0");
 
   const handleClick = () => {
-    if (isPrivate) {
-      setIsOpen((o) => !o);
-    } else {
-      setPressed(true);
-      setTimeout(() => setPressed(false), 120);
-      window.open(project.href, "_blank", "noopener,noreferrer");
-    }
+    window.location.href = `/work/${project.slug}`;
   };
 
   return (
     <button
-      className={`w-cell ${isOpen ? "is-open" : ""} ${pressed ? "is-pressed" : ""}`}
+      className="w-cell"
       onClick={handleClick}
       type="button"
     >
@@ -102,16 +94,9 @@ function WorkCell({ project, index }) {
         <h3 className="w-cell-name serif italic">{project.name}</h3>
         <div className="w-cell-row">
           <span>{project.kind} · {project.year}</span>
-          <span className={isPrivate ? "w-cell-expand-hint" : ""}>
-            {isPrivate ? "Click to expand" : "Open ↗"}
-          </span>
+          <span>Open ↗</span>
         </div>
       </div>
-      {isPrivate && (
-        <div className="w-cell-expand">
-          <p>{project.longBlurb || project.blurb}</p>
-        </div>
-      )}
     </button>
   );
 }
