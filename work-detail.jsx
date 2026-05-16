@@ -58,7 +58,7 @@ function Screenshot({ project, index }) {
   return (
     <div className="wd-screenshot">
       <img
-        src={`/work/${project.slug}.png`}
+        src={`/work-img/${project.slug}.png`}
         alt={`Screenshot of ${project.name}`}
         className="wd-screenshot-img"
       />
