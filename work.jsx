@@ -89,6 +89,7 @@ function WorkCell({ project, index }) {
         <div className="w-cell-dots" />
         <span className="w-cell-num serif italic">{num}</span>
         {isPrivate && <span className="w-cell-private">PRIVATE</span>}
+        {!isPrivate && <img src={`/work-img/${project.slug}.png`} alt="" className="w-cell-screenshot" />}
       </div>
       <div className="w-cell-meta">
         <h3 className="w-cell-name serif italic">{project.name}</h3>
