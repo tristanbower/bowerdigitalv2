@@ -46,11 +46,12 @@ function Screenshot({ project, index }) {
   if (isPrivate) {
     return (
       <div className="wd-screenshot wd-screenshot--private">
-        <div className="wd-screenshot-fallback">
-          <div className="w-cell-dots" />
-          <span className="w-cell-num serif italic">{num}</span>
-        </div>
-        <span className="wd-private-label">PRIVATE BUILD</span>
+        <img
+          src={`/work-img/${project.slug}.png`}
+          alt=""
+          className="wd-screenshot-img wd-screenshot-img--blurred"
+        />
+        <span className="wd-private-pill">PRIVATE BUILD</span>
       </div>
     );
   }

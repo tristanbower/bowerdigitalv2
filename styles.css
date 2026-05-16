@@ -1795,42 +1795,27 @@ body.invert .t-field-form input {
   border: 1px solid var(--hairline);
 }
 .wd-screenshot--private {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.wd-screenshot-fallback {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  max-width: 1200px;
-  background: var(--bg-edge);
-  border: 1px solid var(--hairline);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
+  border: 1px solid var(--hairline);
+  max-width: 1200px;
 }
-.wd-screenshot-fallback .w-cell-dots {
+.wd-screenshot-img--blurred {
+  filter: blur(24px);
+  transform: scale(1.06);
+}
+.wd-private-pill {
   position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, var(--fg-faint) 1px, transparent 1px);
-  background-size: 14px 14px;
-}
-.wd-screenshot-fallback .w-cell-num {
-  position: relative;
-  font-family: var(--display-font);
-  font-size: 96px;
-  line-height: 1;
-  color: var(--fg-faint);
-  user-select: none;
-}
-.wd-private-label {
+  top: 14px;
+  left: 14px;
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
+  font-size: 9px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--fg-mute);
+  color: var(--fg-soft);
+  background: rgba(0, 0, 0, 0.55);
+  padding: 4px 8px;
+  z-index: 1;
 }
 
 /* ── Body ── */
