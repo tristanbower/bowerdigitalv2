@@ -60,13 +60,11 @@ function countForFilter(key) {
   return projects.filter((p) => p.category === cat).length;
 }
 
+// Display order is the order in projects-data.jsx — do not re-sort.
+// (An alphabetical sort used to override the curated order and pushed
+// One Piece TCG Index to #5; Nov 8, 2026.)
 function sortedProjects(projects) {
-  return [...projects].sort((a, b) => {
-    if (a.featured && !b.featured) return -1;
-    if (!a.featured && b.featured) return 1;
-    if (a.year !== b.year) return parseInt(b.year) - parseInt(a.year);
-    return a.name.localeCompare(b.name);
-  });
+  return [...projects];
 }
 
 // ── Cell component ──
