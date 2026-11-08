@@ -20,6 +20,7 @@ window.PROJECTS = [
   {
     slug: "moresun-electric",
     name: "MoreSun Electric",
+    thumbnail: "moresun-electric.gif",
     kind: "Company website",
     year: "2026",
     category: "website",

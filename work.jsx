@@ -88,11 +88,11 @@ function WorkCell({ project, index }) {
         <span className="w-cell-num serif italic">{num}</span>
         {isPrivate && (
           <>
-            <img src={`/work-img/${project.slug}.png`} alt="" className="w-cell-screenshot w-cell-screenshot--blurred" />
+            <img src={`/work-img/${project.thumbnail || project.slug + ".png"}`} alt="" className="w-cell-screenshot w-cell-screenshot--blurred" />
             <span className="w-cell-private">PRIVATE</span>
           </>
         )}
-        {!isPrivate && <img src={`/work-img/${project.slug}.png`} alt="" className="w-cell-screenshot" />}
+        {!isPrivate && <img src={`/work-img/${project.thumbnail || project.slug + ".png"}`} alt="" className="w-cell-screenshot" />}
       </div>
       <div className="w-cell-meta">
         <h3 className="w-cell-name serif italic">{project.name}</h3>
