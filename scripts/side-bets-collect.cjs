@@ -544,7 +544,7 @@ function compositeFor(meta, us, hist, stored, universeRef) {
     });
   });
 
-  const name = `Bower ${meta.short} Index`;
+  const name = `${meta.short} Index`;
   return {
     composite: {
       key: us.key,

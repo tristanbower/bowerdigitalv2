@@ -7,7 +7,7 @@
     "composites": [
       {
         "key": "technology",
-        "name": "Bower Technology Index",
+        "name": "Technology Index",
         "sector": "Information Technology",
         "spdr": "XLK",
         "version": 1,
@@ -182,7 +182,7 @@
       },
       {
         "key": "communication-services",
-        "name": "Bower Communication Services Index",
+        "name": "Communication Services Index",
         "sector": "Communication Services",
         "spdr": "XLC",
         "version": 1,
@@ -357,7 +357,7 @@
       },
       {
         "key": "financials",
-        "name": "Bower Financials Index",
+        "name": "Financials Index",
         "sector": "Financials",
         "spdr": "XLF",
         "version": 1,
@@ -532,7 +532,7 @@
       },
       {
         "key": "energy",
-        "name": "Bower Energy Index",
+        "name": "Energy Index",
         "sector": "Energy",
         "spdr": "XLE",
         "version": 1,
@@ -707,7 +707,7 @@
       },
       {
         "key": "materials",
-        "name": "Bower Materials Index",
+        "name": "Materials Index",
         "sector": "Materials",
         "spdr": "XLB",
         "version": 1,
@@ -882,7 +882,7 @@
       },
       {
         "key": "industrials",
-        "name": "Bower Industrials Index",
+        "name": "Industrials Index",
         "sector": "Industrials",
         "spdr": "XLI",
         "version": 1,
@@ -1057,7 +1057,7 @@
       },
       {
         "key": "consumer-discretionary",
-        "name": "Bower Consumer Discretionary Index",
+        "name": "Consumer Discretionary Index",
         "sector": "Consumer Discretionary",
         "spdr": "XLY",
         "version": 1,
@@ -1232,7 +1232,7 @@
       },
       {
         "key": "consumer-staples",
-        "name": "Bower Consumer Staples Index",
+        "name": "Consumer Staples Index",
         "sector": "Consumer Staples",
         "spdr": "XLP",
         "version": 1,
@@ -1407,7 +1407,7 @@
       },
       {
         "key": "health-care",
-        "name": "Bower Health Care Index",
+        "name": "Health Care Index",
         "sector": "Health Care",
         "spdr": "XLV",
         "version": 1,
@@ -1582,7 +1582,7 @@
       },
       {
         "key": "utilities",
-        "name": "Bower Utilities Index",
+        "name": "Utilities Index",
         "sector": "Utilities",
         "spdr": "XLU",
         "version": 1,
@@ -1757,7 +1757,7 @@
       },
       {
         "key": "real-estate",
-        "name": "Bower Real Estate Index",
+        "name": "Real Estate Index",
         "sector": "Real Estate",
         "spdr": "XLRE",
         "version": 1,
