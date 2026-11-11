@@ -15,6 +15,12 @@
 //   - Every figure carries value + asOf + source. A source that can't be read
 //     is recorded under `blocked` with the reason — never filled with a guess.
 //   - No API keys. Anything that needs one is an open item, not a workaround.
+//   - History files (data/side-bets/history/<series>.json) are append-only:
+//     a run may add points it hasn't seen, never edit or drop a stored one. If
+//     a source later reports a different value for a stored point, the stored
+//     value stays and the difference is logged under `revisions`.
+//   - Backfill comes only from a source's own published history. A series with
+//     no free history source starts from this collector's first reading.
 //
 // Data directory is data/side-bets/ (not public/): this site has no build
 // step and Vercel would treat a top-level public/ folder as the site root.
@@ -26,6 +32,9 @@ const zlib = require("zlib");
 const ROOT = path.resolve(__dirname, "..");
 const OUT_DIR = path.join(ROOT, "data", "side-bets");
 const INDEX_FILE = path.join(OUT_DIR, "index.json");
+const HIST_DIR = path.join(OUT_DIR, "history");
+// Seed window for sources with published history: enough for a 1Y range.
+const HIST_DAYS = 400;
 const SCHEMA = 1;
 const TZ = "America/Toronto";
 // Identify honestly. (Sources that only answer a browser-impersonating
@@ -175,6 +184,11 @@ async function fredSeries(key, label, id, unit, changeUnit, group) {
       : { value: round((diff / prev.value) * 100, 4), unit: "%", basis: `vs prior observation ${prev.date}`, prevValue: prev.value },
     frequency: "daily (observation date)",
     source: { name: src.name, url: src.url, series: id },
+    _history: {
+      points: obs.map((o) => ({ t: o.date, value: o.value })),
+      backfill: { available: true, note: `FRED publishes the full daily history of ${id}; points kept from ${HIST_DAYS} days back.` },
+      source: { name: src.name, url: src.url, endpoint: src.endpoint, series: id },
+    },
   };
 }
 
@@ -200,12 +214,33 @@ async function goldApi(key, label, symbol, unit, group, prevMacro) {
     changeNote: change ? null : "1D change needs a prior-day snapshot (no-key source has no history)",
     frequency: "spot, intraday",
     source: { name: "gold-api.com", url: "https://gold-api.com", endpoint: url, series: symbol },
+    _history: {
+      points: [{ t: d.updatedAt, value: round(d.price, 4) }],
+      backfill: { available: false, note: GOLD_API_NO_HISTORY[symbol] },
+      source: { name: "gold-api.com (this collector's own readings)", url: "https://gold-api.com", endpoint: url, series: symbol },
+    },
   };
 }
+
+// Why gold and copper have no backfill. Verbatim responses, read Nov 10, 2026.
+const GOLD_API_NO_HISTORY = {
+  XAU: "No free history source found. gold-api.com's history endpoint answers {\"error\": \"No x-api-key header.\"} (HTTP 401); FRED's LBMA gold series GOLDAMGBD228NLBM returns HTTP 404 (discontinued). History is this collector's own readings only.",
+  HG: "No free history source found. gold-api.com's history endpoint needs an API key (HTTP 401, \"No x-api-key header.\"). FRED's PCOPPUSDM is a monthly global copper price in USD per metric ton — a different instrument and unit from the COMEX HG USD/lb read here — so it is not substituted. History is this collector's own readings only.",
+};
 
 async function coingeckoBtc() {
   const url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true";
   const d = (await get(url, { json: true })).bitcoin;
+  // Daily history: CoinGecko's daily points are the price at 00:00 UTC. The
+  // free API serves up to 365 days. The trailing "now" point is dropped.
+  const histUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily";
+  const daily = (await get(histUrl, { json: true })).prices
+    .filter(([ms]) => ms % 864e5 === 0)
+    .map(([ms, v]) => ({ t: new Date(ms).toISOString().slice(0, 10), value: round(v, 2) }));
+  // Last 24 hours at CoinGecko's automatic 5-minute granularity.
+  const dayUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1";
+  const day = (await get(dayUrl, { json: true })).prices;
+  const cgSource = (endpoint) => ({ name: "CoinGecko", url: "https://www.coingecko.com/en/coins/bitcoin", endpoint, series: "bitcoin/usd" });
   return {
     key: "btc", label: "Bitcoin", group: "backdrop", unit: "USD",
     value: d.usd,
@@ -213,6 +248,16 @@ async function coingeckoBtc() {
     change: { value: round(d.usd_24h_change, 4), unit: "%", basis: "rolling 24h" },
     frequency: "spot, intraday",
     source: { name: "CoinGecko", url: "https://www.coingecko.com/en/coins/bitcoin", endpoint: url, series: "bitcoin/usd" },
+    intraday: {
+      label: "last 24 hours, 5-minute points",
+      points: day.map(([ms, v]) => ({ t: new Date(ms).toISOString(), value: round(v, 2) })),
+      source: cgSource(dayUrl),
+    },
+    _history: {
+      points: daily,
+      backfill: { available: true, note: "CoinGecko's free API publishes 365 days of daily prices (00:00 UTC each day)." },
+      source: cgSource(histUrl),
+    },
   };
 }
 
@@ -231,8 +276,43 @@ async function cboeHistory(symbol) {
   };
 }
 
+// "2026-11-10T09:31:00" (exchange time, America/New_York) -> UTC ISO string.
+function etToIso(naive) {
+  const guess = new Date(naive + "Z");
+  const off = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", timeZoneName: "shortOffset" })
+    .formatToParts(guess).find((p) => p.type === "timeZoneName").value; // "GMT-5"
+  const h = Number(off.replace("GMT", "") || 0);
+  return new Date(guess.getTime() - h * 36e5).toISOString();
+}
+
+// Latest session from Cboe's 1-minute delayed quotes, sampled every 5 minutes.
+async function cboeIntraday(symbol) {
+  const endpoint = `https://cdn.cboe.com/api/global/delayed_quotes/charts/intraday/${symbol}.json`;
+  const d = await get(endpoint, { json: true });
+  const rows = (d?.data || []).filter((r) => Number.isFinite(r.price?.close));
+  if (!rows.length) return null;
+  const pts = rows.filter((r, i) => i % 5 === 4 || i === rows.length - 1)
+    .map((r) => ({ t: etToIso(r.datetime), value: r.price.close }));
+  return {
+    label: `session of ${rows[0].datetime.slice(0, 10)}, 5-minute points (delayed)`,
+    session: rows[0].datetime.slice(0, 10),
+    points: pts,
+    source: { name: "Cboe delayed quotes (1-minute bars)", url: "https://www.cboe.com/us/equities/market_statistics/historical_data/", endpoint, series: symbol },
+  };
+}
+
 async function etfProxy(key, label, symbol, group) {
   const { closes, source } = await cboeHistory(symbol);
+  const last0 = closes[closes.length - 1];
+  let intraday = null, intradayBlocked = null;
+  try {
+    intraday = await cboeIntraday(symbol);
+    // The CDN sometimes serves an old session; never show it as the latest day.
+    if (intraday && intraday.session < last0.date) {
+      intradayBlocked = `Cboe's intraday feed for ${symbol} returned the session of ${intraday.session}, older than the latest daily close (${last0.date}). Not shown.`;
+      intraday = null;
+    } else if (!intraday) intradayBlocked = `Cboe's intraday feed for ${symbol} returned no rows.`;
+  } catch (e) { intradayBlocked = `Cboe intraday ${symbol}: ${e.message}`; }
   const last = closes[closes.length - 1], prev = closes[closes.length - 2];
   return {
     key, label, group, unit: "USD",
@@ -242,6 +322,13 @@ async function etfProxy(key, label, symbol, group) {
     frequency: "daily close",
     proxy: `${symbol} ETF close (proxy, not the underlying commodity)`,
     source,
+    intraday,
+    intradayBlocked,
+    _history: {
+      points: closes.map((c) => ({ t: c.date, value: c.close })),
+      backfill: { available: true, note: `Cboe publishes the daily close history of ${symbol}; points kept from ${HIST_DAYS} days back. Stooq, the planned source, serves a bot check instead of CSV.` },
+      source,
+    },
   };
 }
 
@@ -253,6 +340,11 @@ async function collectMacro(prev) {
       source: "Stooq (dx.f) / ICE",
       reason: "Stooq serves a JavaScript proof-of-work bot check instead of CSV; ICE distributes DXY data on paid terms. FRED has no DXY series (its broad trade-weighted dollar index, DTWEXBGS, is a different index and is not substituted).",
       needs: "A paid or keyed market-data feed (e.g. a free-tier quote API with key).",
+    },
+    {
+      series: "Daily ETF history via Stooq",
+      source: "https://stooq.com/q/d/l/?s=ura.us&i=d",
+      reason: "Returns \"This site requires JavaScript to verify your browser.\" (a JavaScript proof-of-work page), not CSV. Not bypassed. ETF history is read from Cboe's public daily closes instead.",
     },
   ];
   const jobs = [
@@ -266,11 +358,15 @@ async function collectMacro(prev) {
     ["remx", () => etfProxy("remx", "Rare earths & strategic metals (REMX)", "REMX", "supply-chain")],
     ["botz", () => etfProxy("botz", "Robotics & AI (BOTZ)", "BOTZ", "supply-chain")],
   ];
+  const _histories = {};
   for (const [key, job] of jobs) {
-    try { series.push(await job()); }
-    catch (e) { blocked.push({ series: key, source: "see collector", reason: e.message }); }
+    try {
+      const { _history, ...s } = await job();
+      series.push(s);
+      _histories[`macro-${key}`] = { label: s.label, unit: s.unit, ..._history };
+    } catch (e) { blocked.push({ series: key, source: "see collector", reason: e.message }); }
   }
-  return { series, blocked };
+  return { series, blocked, _histories };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -557,7 +653,7 @@ async function hyperstackList(at) {
 
 const sane = (c) => c && Number.isFinite(c.value) && c.value > 0.2 && c.value < 40;
 
-async function collectCompute(prev) {
+async function collectCompute() {
   const at = new Date().toISOString();
   const blocked = [
     { series: "Google Cloud list price", source: "https://cloud.google.com/compute/gpus-pricing", reason: "H200/H100/B200 prices are rendered client-side; the static pages carry no figures. The Cloud Billing Catalog API needs an API key.", needs: "A Google Cloud API key (free) for the Cloud Billing Catalog API." },
@@ -586,13 +682,7 @@ async function collectCompute(prev) {
     } catch (e) { blocked.push({ series: `${name} list price`, source: name, reason: e.message }); }
   }
 
-  // 30-day history of the Vast.ai H200 median, carried forward snapshot to
-  // snapshot. Built only from this collector's own past runs — nothing backfilled.
-  const today = torontoDate();
-  const past = (prev?.history?.vastH200Median || []).filter((p) => p.date !== today);
-  const cur = gpus.H200.marketplace.median;
-  const history = cur ? [...past, { date: today, value: cur.value, offers: cur.offers, asOf: cur.asOf }] : past;
-  const cutoff = shiftIso(today, { days: -29 });
+  blocked.push(...COMPUTE_NO_HISTORY);
 
   return {
     unit: "USD per GPU-hour",
@@ -603,8 +693,28 @@ async function collectCompute(prev) {
       list: "Provider list price, on-demand (hyperscalers and GPU clouds)",
     },
     gpus,
-    history: { vastH200Median: history.filter((p) => p.date >= cutoff) },
     blocked,
+    _histories: Object.fromEntries(GPUS.map((g) => [`compute-vast-${g.key}`, vastHistoryEntry(g.key, gpus[g.key].marketplace)])),
+  };
+}
+
+// Marketplace price history is built from this collector's own readings —
+// neither marketplace publishes a free history endpoint (checked Nov 10, 2026).
+const COMPUTE_NO_HISTORY = [
+  { series: "Vast.ai price history", source: "https://console.vast.ai/api/v0/", reason: "No public history endpoint found: /api/v0/price_history/, /market/history/, /gpu_stats/ and /bundles/history/ all return HTTP 404. Charts use this collector's own readings only." },
+  { series: "RunPod price history", source: "https://api.runpod.io/graphql", reason: `No history field: asking the GraphQL API for one answers 'Cannot query field "priceHistory" on type "GpuType".', and schema introspection is disabled. RunPod is not charted.` },
+];
+
+function vastHistoryEntry(key, m) {
+  const points = m?.median ? [{
+    t: m.median.asOf, value: m.median.value, offers: m.median.offers,
+    spotLow: m.spotLow?.value ?? null, spotLowOffers: m.spotLow?.offers ?? null,
+  }] : [];
+  return {
+    label: `Vast.ai ${key} marketplace median, on-demand`, unit: "USD per GPU-hour",
+    points,
+    backfill: { available: false, note: "No free history source found for Vast.ai or RunPod. History is this collector's own readings, one point per run." },
+    source: { name: "Vast.ai public marketplace API (this collector's own readings)", url: "https://cloud.vast.ai/create/" },
   };
 }
 
@@ -644,6 +754,75 @@ function writeSnapshot(index, section, data) {
   return true;
 }
 
+// ── History files — append-only, one per series ──
+
+const histFile = (series) => path.join(HIST_DIR, `${series}.json`);
+const sameValue = (a, b) => Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a));
+
+// Adds points whose timestamp isn't stored yet. Stored points are never
+// edited or removed; a source value that differs from a stored one goes to
+// `revisions`. Returns true if the file changed.
+function appendHistory(index, series, entry) {
+  fs.mkdirSync(HIST_DIR, { recursive: true });
+  const file = histFile(series);
+  const cur = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : null;
+  const floor = shiftIso(torontoDate(), { days: -HIST_DAYS });
+  const byT = new Map((cur?.points || []).map((p) => [p.t, p]));
+  const revisions = [...(cur?.revisions || [])];
+  let added = 0;
+  for (const p of entry.points) {
+    if (!p || !Number.isFinite(p.value)) continue;
+    const old = byT.get(p.t);
+    if (!old) {
+      if (p.t.slice(0, 10) < floor) continue; // bounds backfill; stored points stay regardless
+      byT.set(p.t, p); added++;
+    } else if (!sameValue(old.value, p.value) && !revisions.some((r) => r.t === p.t && sameValue(r.sourceValue, p.value))) {
+      revisions.push({ t: p.t, stored: old.value, sourceValue: p.value, seenAt: new Date().toISOString() });
+    }
+  }
+  const revised = revisions.length !== (cur?.revisions || []).length;
+  if (cur && !added && !revised) return false;
+  const points = [...byT.values()].sort((a, b) => a.t.localeCompare(b.t));
+  const out = {
+    schema: SCHEMA,
+    series,
+    label: entry.label,
+    unit: entry.unit,
+    version: (cur?.version || 0) + 1,
+    updated: new Date().toISOString(),
+    appendOnly: "Points are only ever added. A stored point is never edited or removed; later source differences are listed under revisions.",
+    backfill: entry.backfill,
+    source: entry.source,
+    firstPoint: points[0]?.t ?? null,
+    points,
+    revisions,
+  };
+  fs.writeFileSync(file, JSON.stringify(out) + "\n");
+  (index.history ||= {})[series] = `history/${series}.json`;
+  console.log(`  history ${series}: +${added} point(s) → v${out.version}${revised ? " (revision logged)" : ""}`);
+  return true;
+}
+
+// Readings already in earlier snapshots are real collected data: feed them to
+// the history files of series that have no published history (idempotent).
+function seedFromSnapshots(index) {
+  const out = {};
+  for (const f of index.sections.macro?.files || []) {
+    const snap = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
+    for (const s of snap.data.series.filter((x) => x.key === "gold" || x.key === "copper")) {
+      (out[`macro-${s.key}`] ||= []).push({ t: s.asOf, value: s.value });
+    }
+  }
+  for (const f of index.sections.compute?.files || []) {
+    const snap = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
+    for (const g of GPUS) {
+      const e = vastHistoryEntry(g.key, snap.data.gpus[g.key]?.marketplace);
+      (out[`compute-vast-${g.key}`] ||= []).push(...e.points);
+    }
+  }
+  return out;
+}
+
 async function main() {
   const only = process.argv[2];
   fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -651,13 +830,21 @@ async function main() {
   const sections = {
     macro: () => collectMacro(latestSnapshot(index, "macro")?.data),
     sectors: () => collectSectors(),
-    compute: () => collectCompute(latestSnapshot(index, "compute")?.data),
+    compute: () => collectCompute(),
   };
+  const seeds = seedFromSnapshots(index);
   let wrote = false, failed = false;
   for (const [name, fn] of Object.entries(sections)) {
     if (only && only !== name) continue;
     console.log(`collecting ${name}…`);
-    try { wrote = writeSnapshot(index, name, await fn()) || wrote; }
+    try {
+      const { _histories = {}, ...data } = await fn();
+      wrote = writeSnapshot(index, name, data) || wrote;
+      for (const [series, entry] of Object.entries(_histories)) {
+        const points = [...(seeds[series] || []), ...entry.points];
+        wrote = appendHistory(index, series, { ...entry, points }) || wrote;
+      }
+    }
     catch (e) { failed = true; console.error(`  ${name}: FAILED — ${e.message}`); }
   }
   if (wrote) {
