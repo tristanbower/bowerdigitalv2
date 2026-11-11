@@ -1,0 +1,197 @@
+{
+  "schema": 1,
+  "section": "macro",
+  "collectedAt": "2026-11-11T00:13:57.813Z",
+  "data": {
+    "series": [
+      {
+        "key": "us10y",
+        "label": "US 10Y Treasury yield",
+        "group": "backdrop",
+        "unit": "%",
+        "value": 4.88,
+        "asOf": "2026-11-09",
+        "change": {
+          "value": 0.02,
+          "unit": "pp",
+          "basis": "vs prior observation 2026-11-06",
+          "prevValue": 4.86
+        },
+        "frequency": "daily (observation date)",
+        "source": {
+          "name": "FRED, Federal Reserve Bank of St. Louis",
+          "url": "https://fred.stlouisfed.org/series/DGS10",
+          "series": "DGS10"
+        }
+      },
+      {
+        "key": "wti",
+        "label": "WTI crude oil (Cushing spot)",
+        "group": "energy",
+        "unit": "USD/bbl",
+        "value": 99.64,
+        "asOf": "2026-11-03",
+        "change": {
+          "value": -0.4197,
+          "unit": "%",
+          "basis": "vs prior observation 2026-11-02",
+          "prevValue": 100.06
+        },
+        "frequency": "daily (observation date)",
+        "source": {
+          "name": "FRED, Federal Reserve Bank of St. Louis",
+          "url": "https://fred.stlouisfed.org/series/DCOILWTICO",
+          "series": "DCOILWTICO"
+        }
+      },
+      {
+        "key": "natgas",
+        "label": "Henry Hub natural gas (spot)",
+        "group": "energy",
+        "unit": "USD/MMBtu",
+        "value": 2.63,
+        "asOf": "2026-11-03",
+        "change": {
+          "value": 3.5433,
+          "unit": "%",
+          "basis": "vs prior observation 2026-11-02",
+          "prevValue": 2.54
+        },
+        "frequency": "daily (observation date)",
+        "source": {
+          "name": "FRED, Federal Reserve Bank of St. Louis",
+          "url": "https://fred.stlouisfed.org/series/DHHNGSP",
+          "series": "DHHNGSP"
+        }
+      },
+      {
+        "key": "gold",
+        "label": "Gold (spot)",
+        "group": "backdrop",
+        "unit": "USD/oz",
+        "value": 4041.8,
+        "asOf": "2026-11-11T00:13:28Z",
+        "change": null,
+        "changeNote": "1D change needs a prior-day snapshot (no-key source has no history)",
+        "frequency": "spot, intraday",
+        "source": {
+          "name": "gold-api.com",
+          "url": "https://gold-api.com",
+          "endpoint": "https://api.gold-api.com/price/XAU",
+          "series": "XAU"
+        }
+      },
+      {
+        "key": "copper",
+        "label": "Copper",
+        "group": "supply-chain",
+        "unit": "USD/lb",
+        "value": 6.2975,
+        "asOf": "2026-11-11T00:13:30Z",
+        "change": null,
+        "changeNote": "1D change needs a prior-day snapshot (no-key source has no history)",
+        "frequency": "spot, intraday",
+        "source": {
+          "name": "gold-api.com",
+          "url": "https://gold-api.com",
+          "endpoint": "https://api.gold-api.com/price/HG",
+          "series": "HG"
+        }
+      },
+      {
+        "key": "btc",
+        "label": "Bitcoin",
+        "group": "backdrop",
+        "unit": "USD",
+        "value": 73630,
+        "asOf": "2026-11-11T00:13:22.000Z",
+        "change": {
+          "value": -2.1466,
+          "unit": "%",
+          "basis": "rolling 24h"
+        },
+        "frequency": "spot, intraday",
+        "source": {
+          "name": "CoinGecko",
+          "url": "https://www.coingecko.com/en/coins/bitcoin",
+          "endpoint": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true",
+          "series": "bitcoin/usd"
+        }
+      },
+      {
+        "key": "ura",
+        "label": "Uranium miners (URA)",
+        "group": "energy",
+        "unit": "USD",
+        "value": 34.34,
+        "asOf": "2026-11-09",
+        "change": {
+          "value": 6.1843,
+          "unit": "%",
+          "basis": "close vs close 2026-11-06",
+          "prevValue": 32.34
+        },
+        "frequency": "daily close",
+        "proxy": "URA ETF close (proxy, not the underlying commodity)",
+        "source": {
+          "name": "Cboe delayed quotes (daily closes)",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+          "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/URA.json",
+          "series": "URA"
+        }
+      },
+      {
+        "key": "remx",
+        "label": "Rare earths & strategic metals (REMX)",
+        "group": "supply-chain",
+        "unit": "USD",
+        "value": 53.72,
+        "asOf": "2026-11-09",
+        "change": {
+          "value": 4.5136,
+          "unit": "%",
+          "basis": "close vs close 2026-11-06",
+          "prevValue": 51.4
+        },
+        "frequency": "daily close",
+        "proxy": "REMX ETF close (proxy, not the underlying commodity)",
+        "source": {
+          "name": "Cboe delayed quotes (daily closes)",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+          "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/REMX.json",
+          "series": "REMX"
+        }
+      },
+      {
+        "key": "botz",
+        "label": "Robotics & AI (BOTZ)",
+        "group": "supply-chain",
+        "unit": "USD",
+        "value": 31.88,
+        "asOf": "2026-11-09",
+        "change": {
+          "value": 2.6731,
+          "unit": "%",
+          "basis": "close vs close 2026-11-06",
+          "prevValue": 31.05
+        },
+        "frequency": "daily close",
+        "proxy": "BOTZ ETF close (proxy, not the underlying commodity)",
+        "source": {
+          "name": "Cboe delayed quotes (daily closes)",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+          "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/BOTZ.json",
+          "series": "BOTZ"
+        }
+      }
+    ],
+    "blocked": [
+      {
+        "series": "DXY (ICE US Dollar Index)",
+        "source": "Stooq (dx.f) / ICE",
+        "reason": "Stooq serves a JavaScript proof-of-work bot check instead of CSV; ICE distributes DXY data on paid terms. FRED has no DXY series (its broad trade-weighted dollar index, DTWEXBGS, is a different index and is not substituted).",
+        "needs": "A paid or keyed market-data feed (e.g. a free-tier quote API with key)."
+      }
+    ]
+  }
+}

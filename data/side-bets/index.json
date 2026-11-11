@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "sections": {
+    "macro": {
+      "files": [
+        "macro-2026-11-10.json"
+      ],
+      "latest": "macro-2026-11-10.json"
+    },
+    "sectors": {
+      "files": [
+        "sectors-2026-11-10.json"
+      ],
+      "latest": "sectors-2026-11-10.json"
+    },
+    "compute": {
+      "files": [
+        "compute-2026-11-10.json",
+        "compute-2026-11-10-2.json"
+      ],
+      "latest": "compute-2026-11-10-2.json"
+    }
+  },
+  "updated": "2026-11-11T00:13:57.814Z"
+}

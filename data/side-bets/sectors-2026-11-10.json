@@ -1,0 +1,953 @@
+{
+  "schema": 1,
+  "section": "sectors",
+  "collectedAt": "2026-11-11T00:05:41.413Z",
+  "data": {
+    "method": "Each sector is the Select Sector SPDR fund that tracks it, measured close to close; S&P 500 measured with SPY.",
+    "returnBasis": "Price return from daily closes (dividends not included). 1W/1M/3M/1Y compare the latest close with the last close on or before the same calendar date one week/month/three months/year earlier; YTD compares with the last close of the prior year.",
+    "classificationCheck": "GOOGL, GOOG and META confirmed in XLC holdings and absent from XLK holdings.",
+    "funds": [
+      {
+        "etf": "SPY",
+        "sector": "S&P 500 (index reference)",
+        "close": {
+          "value": 752.69,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/SPY.json",
+            "series": "SPY"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 2.3664,
+            "from": "2026-11-06",
+            "fromClose": 735.29
+          },
+          "1W": {
+            "value": 0.0784,
+            "from": "2026-11-02",
+            "fromClose": 752.1
+          },
+          "1M": {
+            "value": -3.324,
+            "from": "2026-10-09",
+            "fromClose": 778.57
+          },
+          "3M": {
+            "value": -2.6602,
+            "from": "2026-08-07",
+            "fromClose": 773.26
+          },
+          "YTD": {
+            "value": 10.3781,
+            "from": "2025-12-31",
+            "fromClose": 681.92
+          },
+          "1Y": {
+            "value": 12.1794,
+            "from": "2025-11-07",
+            "fromClose": 670.97
+          }
+        },
+        "weightInSP500": null,
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx"
+          },
+          "items": [
+            {
+              "name": "APPLE INC",
+              "ticker": "AAPL",
+              "weight": 7.86
+            },
+            {
+              "name": "NVIDIA CORP",
+              "ticker": "NVDA",
+              "weight": 6.64
+            },
+            {
+              "name": "MICROSOFT CORP",
+              "ticker": "MSFT",
+              "weight": 6.21
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLK",
+        "sector": "Information Technology",
+        "close": {
+          "value": 170.88,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLK.json",
+            "series": "XLK"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 3.7271,
+            "from": "2026-11-06",
+            "fromClose": 164.74
+          },
+          "1W": {
+            "value": -1.9171,
+            "from": "2026-11-02",
+            "fromClose": 174.22
+          },
+          "1M": {
+            "value": -14.0356,
+            "from": "2026-10-09",
+            "fromClose": 198.78
+          },
+          "3M": {
+            "value": -9.0919,
+            "from": "2026-08-07",
+            "fromClose": 187.97
+          },
+          "YTD": {
+            "value": 18.6914,
+            "from": "2025-12-31",
+            "fromClose": 143.97
+          },
+          "1Y": {
+            "value": 18.6008,
+            "from": "2025-11-07",
+            "fromClose": 144.08
+          }
+        },
+        "weightInSP500": {
+          "value": 36.06,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLK daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlk.xlsx"
+          },
+          "items": [
+            {
+              "name": "APPLE INC",
+              "ticker": "AAPL",
+              "weight": 16.33
+            },
+            {
+              "name": "NVIDIA CORP",
+              "ticker": "NVDA",
+              "weight": 13.79
+            },
+            {
+              "name": "MICROSOFT CORP",
+              "ticker": "MSFT",
+              "weight": 12.92
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLC",
+        "sector": "Communication Services",
+        "close": {
+          "value": 107.36,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLC.json",
+            "series": "XLC"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 2.4525,
+            "from": "2026-11-06",
+            "fromClose": 104.79
+          },
+          "1W": {
+            "value": 7.0816,
+            "from": "2026-11-02",
+            "fromClose": 100.26
+          },
+          "1M": {
+            "value": -2.736,
+            "from": "2026-10-09",
+            "fromClose": 110.38
+          },
+          "3M": {
+            "value": -3.4966,
+            "from": "2026-08-07",
+            "fromClose": 111.25
+          },
+          "YTD": {
+            "value": -8.8005,
+            "from": "2025-12-31",
+            "fromClose": 117.72
+          },
+          "1Y": {
+            "value": -4.2369,
+            "from": "2025-11-07",
+            "fromClose": 112.11
+          }
+        },
+        "weightInSP500": {
+          "value": 8.82,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLC daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlc.xlsx"
+          },
+          "items": [
+            {
+              "name": "META PLATFORMS INC CLASS A",
+              "ticker": "META",
+              "weight": 21.4
+            },
+            {
+              "name": "ALPHABET INC CL A",
+              "ticker": "GOOGL",
+              "weight": 10.64
+            },
+            {
+              "name": "ALPHABET INC CL C",
+              "ticker": "GOOG",
+              "weight": 8.55
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLF",
+        "sector": "Financials",
+        "close": {
+          "value": 57.99,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLF.json",
+            "series": "XLF"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.4521,
+            "from": "2026-11-06",
+            "fromClose": 57.16
+          },
+          "1W": {
+            "value": 0.747,
+            "from": "2026-11-02",
+            "fromClose": 57.56
+          },
+          "1M": {
+            "value": 5.9565,
+            "from": "2026-10-09",
+            "fromClose": 54.73
+          },
+          "3M": {
+            "value": 0.6771,
+            "from": "2026-08-07",
+            "fromClose": 57.6
+          },
+          "YTD": {
+            "value": 5.8791,
+            "from": "2025-12-31",
+            "fromClose": 54.77
+          },
+          "1Y": {
+            "value": 9.8712,
+            "from": "2025-11-07",
+            "fromClose": 52.78
+          }
+        },
+        "weightInSP500": {
+          "value": 12.53,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLF daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlf.xlsx"
+          },
+          "items": [
+            {
+              "name": "BERKSHIRE HATHAWAY INC CL B",
+              "ticker": "BRK.B",
+              "weight": 13.12
+            },
+            {
+              "name": "JPMORGAN CHASE + CO",
+              "ticker": "JPM",
+              "weight": 11.14
+            },
+            {
+              "name": "VISA INC CLASS A SHARES",
+              "ticker": "V",
+              "weight": 8.79
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLE",
+        "sector": "Energy",
+        "close": {
+          "value": 61.94,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLE.json",
+            "series": "XLE"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 0.5193,
+            "from": "2026-11-06",
+            "fromClose": 61.62
+          },
+          "1W": {
+            "value": -7.8959,
+            "from": "2026-11-02",
+            "fromClose": 67.25
+          },
+          "1M": {
+            "value": -4.8248,
+            "from": "2026-10-09",
+            "fromClose": 65.08
+          },
+          "3M": {
+            "value": 7.7217,
+            "from": "2026-08-07",
+            "fromClose": 57.5
+          },
+          "YTD": {
+            "value": 38.5372,
+            "from": "2025-12-31",
+            "fromClose": 44.71
+          },
+          "1Y": {
+            "value": 38.3516,
+            "from": "2025-11-07",
+            "fromClose": 44.77
+          }
+        },
+        "weightInSP500": {
+          "value": 3.47,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLE daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xle.xlsx"
+          },
+          "items": [
+            {
+              "name": "EXXONMOBIL HOLDINGS CORP",
+              "ticker": "XOM",
+              "weight": 24.2
+            },
+            {
+              "name": "CHEVRON CORP",
+              "ticker": "CVX",
+              "weight": 18.54
+            },
+            {
+              "name": "CONOCOPHILLIPS",
+              "ticker": "COP",
+              "weight": 7.19
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLB",
+        "sector": "Materials",
+        "close": {
+          "value": 52.94,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLB.json",
+            "series": "XLB"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.9057,
+            "from": "2026-11-06",
+            "fromClose": 51.95
+          },
+          "1W": {
+            "value": -1.3602,
+            "from": "2026-11-02",
+            "fromClose": 53.67
+          },
+          "1M": {
+            "value": 7.101,
+            "from": "2026-10-09",
+            "fromClose": 49.43
+          },
+          "3M": {
+            "value": 0.1513,
+            "from": "2026-08-07",
+            "fromClose": 52.86
+          },
+          "YTD": {
+            "value": 16.7365,
+            "from": "2025-12-31",
+            "fromClose": 45.35
+          },
+          "1Y": {
+            "value": 23.3745,
+            "from": "2025-11-07",
+            "fromClose": 42.91
+          }
+        },
+        "weightInSP500": {
+          "value": 1.77,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLB daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlb.xlsx"
+          },
+          "items": [
+            {
+              "name": "LINDE PLC",
+              "ticker": "LIN",
+              "weight": 12.97
+            },
+            {
+              "name": "NEWMONT CORP",
+              "ticker": "NEM",
+              "weight": 7.13
+            },
+            {
+              "name": "VULCAN MATERIALS CO",
+              "ticker": "VMC",
+              "weight": 5.28
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLI",
+        "sector": "Industrials",
+        "close": {
+          "value": 168.89,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLI.json",
+            "series": "XLI"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 3.8237,
+            "from": "2026-11-06",
+            "fromClose": 162.67
+          },
+          "1W": {
+            "value": -0.4832,
+            "from": "2026-11-02",
+            "fromClose": 169.71
+          },
+          "1M": {
+            "value": -0.2127,
+            "from": "2026-10-09",
+            "fromClose": 169.25
+          },
+          "3M": {
+            "value": -8.7968,
+            "from": "2026-08-07",
+            "fromClose": 185.18
+          },
+          "YTD": {
+            "value": 8.877,
+            "from": "2025-12-31",
+            "fromClose": 155.12
+          },
+          "1Y": {
+            "value": 10.148,
+            "from": "2025-11-07",
+            "fromClose": 153.33
+          }
+        },
+        "weightInSP500": {
+          "value": 8.24,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLI daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xli.xlsx"
+          },
+          "items": [
+            {
+              "name": "GENERAL ELECTRIC",
+              "ticker": "GE",
+              "weight": 6.49
+            },
+            {
+              "name": "CATERPILLAR INC",
+              "ticker": "CAT",
+              "weight": 5.13
+            },
+            {
+              "name": "RTX CORP",
+              "ticker": "RTX",
+              "weight": 4.93
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLY",
+        "sector": "Consumer Discretionary",
+        "close": {
+          "value": 121.01,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLY.json",
+            "series": "XLY"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 2.9172,
+            "from": "2026-11-06",
+            "fromClose": 117.58
+          },
+          "1W": {
+            "value": 2.412,
+            "from": "2026-11-02",
+            "fromClose": 118.16
+          },
+          "1M": {
+            "value": 7.2308,
+            "from": "2026-10-09",
+            "fromClose": 112.85
+          },
+          "3M": {
+            "value": 0.9595,
+            "from": "2026-08-07",
+            "fromClose": 119.86
+          },
+          "YTD": {
+            "value": 1.3399,
+            "from": "2025-12-31",
+            "fromClose": 119.41
+          },
+          "1Y": {
+            "value": 2.6117,
+            "from": "2025-11-07",
+            "fromClose": 117.93
+          }
+        },
+        "weightInSP500": {
+          "value": 9.58,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLY daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xly.xlsx"
+          },
+          "items": [
+            {
+              "name": "AMAZON.COM INC",
+              "ticker": "AMZN",
+              "weight": 22.57
+            },
+            {
+              "name": "TESLA INC",
+              "ticker": "TSLA",
+              "weight": 16.96
+            },
+            {
+              "name": "HOME DEPOT INC",
+              "ticker": "HD",
+              "weight": 5.61
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLP",
+        "sector": "Consumer Staples",
+        "close": {
+          "value": 90.89,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLP.json",
+            "series": "XLP"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 0.8992,
+            "from": "2026-11-06",
+            "fromClose": 90.08
+          },
+          "1W": {
+            "value": 0.0661,
+            "from": "2026-11-02",
+            "fromClose": 90.83
+          },
+          "1M": {
+            "value": 8.9416,
+            "from": "2026-10-09",
+            "fromClose": 83.43
+          },
+          "3M": {
+            "value": 6.7787,
+            "from": "2026-08-07",
+            "fromClose": 85.12
+          },
+          "YTD": {
+            "value": 17.0057,
+            "from": "2025-12-31",
+            "fromClose": 77.68
+          },
+          "1Y": {
+            "value": 18.4852,
+            "from": "2025-11-07",
+            "fromClose": 76.71
+          }
+        },
+        "weightInSP500": {
+          "value": 5.08,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLP daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlp.xlsx"
+          },
+          "items": [
+            {
+              "name": "WALMART INC",
+              "ticker": "WMT",
+              "weight": 11.21
+            },
+            {
+              "name": "COSTCO WHOLESALE CORP",
+              "ticker": "COST",
+              "weight": 9.46
+            },
+            {
+              "name": "PROCTER + GAMBLE CO/THE",
+              "ticker": "PG",
+              "weight": 7.83
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLV",
+        "sector": "Health Care",
+        "close": {
+          "value": 188.33,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLV.json",
+            "series": "XLV"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.9102,
+            "from": "2026-11-06",
+            "fromClose": 184.8
+          },
+          "1W": {
+            "value": 2.0206,
+            "from": "2026-11-02",
+            "fromClose": 184.6
+          },
+          "1M": {
+            "value": 10.257,
+            "from": "2026-10-09",
+            "fromClose": 170.81
+          },
+          "3M": {
+            "value": 13.6709,
+            "from": "2026-08-07",
+            "fromClose": 165.68
+          },
+          "YTD": {
+            "value": 21.6602,
+            "from": "2025-12-31",
+            "fromClose": 154.8
+          },
+          "1Y": {
+            "value": 28.8696,
+            "from": "2025-11-07",
+            "fromClose": 146.14
+          }
+        },
+        "weightInSP500": {
+          "value": 10.47,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLV daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlv.xlsx"
+          },
+          "items": [
+            {
+              "name": "ELI LILLY + CO",
+              "ticker": "LLY",
+              "weight": 16.54
+            },
+            {
+              "name": "JOHNSON + JOHNSON",
+              "ticker": "JNJ",
+              "weight": 9.95
+            },
+            {
+              "name": "ABBVIE INC",
+              "ticker": "ABBV",
+              "weight": 7.59
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLU",
+        "sector": "Utilities",
+        "close": {
+          "value": 43.79,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLU.json",
+            "series": "XLU"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.5303,
+            "from": "2026-11-06",
+            "fromClose": 43.13
+          },
+          "1W": {
+            "value": 0.2748,
+            "from": "2026-11-02",
+            "fromClose": 43.67
+          },
+          "1M": {
+            "value": 5.7474,
+            "from": "2026-10-09",
+            "fromClose": 41.41
+          },
+          "3M": {
+            "value": 0.4127,
+            "from": "2026-08-07",
+            "fromClose": 43.61
+          },
+          "YTD": {
+            "value": 2.5767,
+            "from": "2025-12-31",
+            "fromClose": 42.69
+          },
+          "1Y": {
+            "value": -2.3417,
+            "from": "2025-11-07",
+            "fromClose": 44.84
+          }
+        },
+        "weightInSP500": {
+          "value": 2.11,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLU daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlu.xlsx"
+          },
+          "items": [
+            {
+              "name": "NEXTERA ENERGY INC",
+              "ticker": "NEE",
+              "weight": 13.16
+            },
+            {
+              "name": "SOUTHERN CO/THE",
+              "ticker": "SO",
+              "weight": 7.82
+            },
+            {
+              "name": "DUKE ENERGY CORP",
+              "ticker": "DUK",
+              "weight": 7.25
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLRE",
+        "sector": "Real Estate",
+        "close": {
+          "value": 44.64,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLRE.json",
+            "series": "XLRE"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.4545,
+            "from": "2026-11-06",
+            "fromClose": 44
+          },
+          "1W": {
+            "value": 2.2915,
+            "from": "2026-11-02",
+            "fromClose": 43.64
+          },
+          "1M": {
+            "value": 7.2819,
+            "from": "2026-10-09",
+            "fromClose": 41.61
+          },
+          "3M": {
+            "value": -0.7559,
+            "from": "2026-08-07",
+            "fromClose": 44.98
+          },
+          "YTD": {
+            "value": 10.632,
+            "from": "2025-12-31",
+            "fromClose": 40.35
+          },
+          "1Y": {
+            "value": 8.1657,
+            "from": "2025-11-07",
+            "fromClose": 41.27
+          }
+        },
+        "weightInSP500": {
+          "value": 1.87,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLRE daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlre.xlsx"
+          },
+          "items": [
+            {
+              "name": "WELLTOWER INC",
+              "ticker": "WELL",
+              "weight": 11.52
+            },
+            {
+              "name": "PROLOGIS INC",
+              "ticker": "PLD",
+              "weight": 8.04
+            },
+            {
+              "name": "EQUINIX INC",
+              "ticker": "EQIX",
+              "weight": 6.74
+            }
+          ]
+        }
+      }
+    ],
+    "blocked": [
+      {
+        "series": "ETF daily closes via Stooq",
+        "source": "https://stooq.com/q/d/l/?s=xlk.us&i=d",
+        "reason": "Returns an HTML JavaScript proof-of-work bot check, not CSV. Not bypassed. Closes are read from Cboe's public delayed-quote data instead."
+      },
+      {
+        "series": "ETF daily closes via Nasdaq.com",
+        "source": "https://api.nasdaq.com/api/quote/XLK/historical",
+        "reason": "Answers only a browser-impersonating User-Agent; a plain request gets the connection reset. Not used."
+      }
+    ]
+  }
+}
