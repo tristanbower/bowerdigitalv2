@@ -1,5 +1,5 @@
 // Bower Digital — /side-bets terminal.
-// A personal research terminal: macro band, S&P 500 sectors, GPU compute pricing.
+// A personal research terminal: macro band, composite sector indexes, GPU compute pricing.
 // Renders from the latest JSON snapshots in /data/side-bets/ plus the
 // append-only history files in /data/side-bets/history/ (both written by
 // scripts/side-bets-collect.cjs). Every figure shows value + as-of + source.
@@ -608,13 +608,26 @@ function heat(v, maxAbs) {
   return { "--heat": `color-mix(in oklab, var(--sb-${v > 0 ? "up" : "down"}) ${a}%, transparent)` };
 }
 
+// One row per sector: the Bower composite is the headline, its Select Sector
+// SPDR fund rides along as the single-fund reference (weight, holdings, close).
+function sectorRows(data) {
+  const fund = (t) => data.funds.find((f) => f.etf === t);
+  return (data.composites || []).map((c) => {
+    const ref = fund(c.spdr);
+    return { ...c, etf: c.spdr, ref, weightInSP500: ref?.weightInSP500, topHoldings: ref?.topHoldings };
+  });
+}
+
+const constituentList = (c) => c.constituents.map((x) => `${x.ticker} (${x.brand})`).join(", ");
+
 function Sectors({ snap }) {
   const [sort, setSort] = React.useState({ key: "1D", dir: -1 });
   const [focus, setFocus] = React.useState("1D");
+  const [open, setOpen] = React.useState(() => new Set());
   const data = snap?.data;
-  if (!data) return null;
+  if (!data?.composites) return null;
   const spy = data.funds.find((f) => f.etf === "SPY");
-  const sectors = data.funds.filter((f) => f.etf !== "SPY");
+  const sectors = sectorRows(data);
   const val = (f, k) => (k === "weight" ? f.weightInSP500?.value : k === "name" ? f.sector : f.returns[k]?.value);
   const sorted = [...sectors].sort((a, b) => {
     const x = val(a, sort.key), y = val(b, sort.key);
@@ -628,57 +641,144 @@ function Sectors({ snap }) {
   const arrow = (key) => (sort.key === key ? (sort.dir < 0 ? " ↓" : " ↑") : "");
   const ariaSort = (key) => (sort.key === key ? (sort.dir < 0 ? "descending" : "ascending") : undefined);
 
-  const maxAbs = Object.fromEntries(PERIODS.map((p) => [p, Math.max(...data.funds.map((f) => Math.abs(f.returns[p]?.value ?? 0)))]));
+  const maxAbs = Object.fromEntries(PERIODS.map((p) => [p, Math.max(...[spy, ...sectors].map((f) => Math.abs(f.returns[p]?.value ?? 0)))]));
   const maxW = Math.max(...sectors.map((f) => f.weightInSP500?.value ?? 0));
   const ranked = [...sectors].filter((f) => f.returns[focus]).sort((a, b) => b.returns[focus].value - a.returns[focus].value);
   const best = ranked[0], worst = ranked[ranked.length - 1];
   const above = ranked.filter((f) => f.returns[focus].value > (spy.returns[focus]?.value ?? 0)).length;
 
-  const closeAsOf = spy.close.asOf;
-  const ref = spy.returns;
+  const closeAsOf = sectors[0].asOf;
+  const ref = sectors[0].returns;
   const w = sectors[0].weightInSP500;
   const h = sectors.find((f) => f.topHoldings)?.topHoldings;
-  const cellTitle = (f, p) =>
+  const nFunds = sectors.reduce((n, c) => n + c.constituents.length, 0);
+  const singles = sectors.filter((c) => c.single);
+  const fundTitle = (f, p) =>
     f.returns[p] ? `${f.etf} ${p}: close ${fmtAsOf(f.close.asOf)} $${f.close.value} vs ${fmtAsOf(f.returns[p].from)} $${f.returns[p].fromClose} · ${f.close.source.name}` : "";
+  const compTitle = (c, p) => {
+    const r = c.returns[p];
+    if (!r) return "";
+    const parts = c.constituents.map((x) => `${x.ticker} ${fmtSigned(r.constituents[x.ticker].value, 2)}`).join(", ");
+    return `${c.name} ${p}: equal-weight mean of ${parts} · closes ${fmtAsOf(r.from)} → ${fmtAsOf(c.asOf)} · ${c.source.name}`;
+  };
+  const toggle = (key) => setOpen((o) => { const n = new Set(o); n.has(key) ? n.delete(key) : n.add(key); return n; });
+  const COLS = PERIODS.length + 4;
 
-  const Row = ({ f, isRef }) => (
-    <tr className={isRef ? "sb-ref-row" : ""}>
+  const weightCell = (f) => (
+    <td className="sb-num sb-quiet sb-td-weight" title={f.weightInSP500 ? `As of ${fmtAsOf(f.weightInSP500.asOf)} · ${f.weightInSP500.source.name}` : ""}>
+      {f.weightInSP500 ? (
+        <>
+          <span className="sb-wbar" style={{ width: `${(f.weightInSP500.value / maxW) * 100}%` }} aria-hidden="true" />
+          <span>{fmtNum(f.weightInSP500.value, 1)}%</span>
+        </>
+      ) : <span className="sb-faint">—</span>}
+    </td>
+  );
+  const holdingsCell = (f) => (
+    <td className="sb-td-hold sb-quiet" title={f.topHoldings ? `${f.etf} · as of ${fmtAsOf(f.topHoldings.asOf)} · ${f.topHoldings.source.name}` : ""}>
+      {f.topHoldings ? f.topHoldings.items.map((x) => (
+        <span key={x.ticker} className="sb-hold"><span>{x.ticker}</span> <span className="sb-faint">{fmtNum(x.weight, 1)}%</span></span>
+      )) : <span className="sb-faint">—</span>}
+    </td>
+  );
+  const periodCells = (f, title) => PERIODS.map((p) => {
+    const v = f.returns[p]?.value;
+    return (
+      <td key={p} className={`sb-num sb-heat ${p === focus ? "is-focus" : ""}`} style={heat(v, maxAbs[p])} title={title(f, p)}>
+        {fmtSigned(v, p === focus ? 2 : 1)}
+      </td>
+    );
+  });
+
+  const refRow = (
+    <tr className="sb-ref-row">
       <td className="sb-td-name">
-        <span className="sb-sector">{isRef ? "S&P 500 (reference)" : f.sector}</span>
-        <span className="sb-td-etf">{f.etf}</span>
+        <span className="sb-sector">S&amp;P 500 (reference)</span>
+        <span className="sb-td-etf">SPY · single fund</span>
       </td>
-      {PERIODS.map((p) => {
-        const v = f.returns[p]?.value;
-        return (
-          <td key={p} className={`sb-num sb-heat ${p === focus ? "is-focus" : ""}`} style={heat(v, maxAbs[p])} title={cellTitle(f, p)}>
-            {fmtSigned(v, p === focus ? 2 : 1)}
-          </td>
-        );
-      })}
-      <td className="sb-num sb-quiet" title={`Close ${fmtAsOf(f.close.asOf)} · ${f.close.source.name}`}>{usd(f.close.value)}</td>
-      <td className="sb-num sb-quiet sb-td-weight" title={f.weightInSP500 ? `As of ${fmtAsOf(f.weightInSP500.asOf)} · ${f.weightInSP500.source.name}` : ""}>
-        {f.weightInSP500 ? (
-          <>
-            <span className="sb-wbar" style={{ width: `${(f.weightInSP500.value / maxW) * 100}%` }} aria-hidden="true" />
-            <span>{fmtNum(f.weightInSP500.value, 1)}%</span>
-          </>
-        ) : <span className="sb-faint">—</span>}
+      {periodCells(spy, fundTitle)}
+      <td className="sb-num sb-quiet" title={fundTitle(spy, focus)}>
+        <span className="sb-td-etf">SPY</span> {fmtSigned(spy.returns[focus]?.value, 2)}
       </td>
-      <td className="sb-td-hold sb-quiet" title={f.topHoldings ? `As of ${fmtAsOf(f.topHoldings.asOf)} · ${f.topHoldings.source.name}` : ""}>
-        {f.topHoldings ? f.topHoldings.items.map((x) => (
-          <span key={x.ticker} className="sb-hold"><span>{x.ticker}</span> <span className="sb-faint">{fmtNum(x.weight, 1)}%</span></span>
-        )) : <span className="sb-faint">—</span>}
-      </td>
+      {weightCell(spy)}
+      {holdingsCell(spy)}
     </tr>
   );
+
+  const compRow = (c) => {
+    const isOpen = open.has(c.key);
+    const rv = c.ref?.returns[focus]?.value;
+    return (
+      <React.Fragment key={c.key}>
+        <tr className={isOpen ? "is-open" : ""}>
+          <td className="sb-td-name sb-td-comp">
+            <button className="sb-expand" aria-expanded={isOpen} aria-controls={`sb-comp-${c.key}`} onClick={() => toggle(c.key)}
+                    title={`${c.name} — equal-weighted composite of ${constituentList(c)}`}>
+              <span className="sb-expand-mark" aria-hidden="true">{isOpen ? "−" : "+"}</span>
+              <span className="sb-sector">{c.name}</span>
+            </button>
+            <span className="sb-comp-funds">
+              {c.single ? <>{c.constituents[0].ticker} <span className="sb-faint">{c.constituents[0].brand} · single qualifying fund</span></>
+                : c.constituents.map((x) => <span key={x.ticker} className="sb-comp-fund">{x.ticker} <span className="sb-faint">{x.brand}</span></span>)}
+            </span>
+          </td>
+          {periodCells(c, compTitle)}
+          <td className="sb-num sb-quiet" title={c.ref ? fundTitle(c.ref, focus) : ""}>
+            <span className="sb-td-etf">{c.spdr}</span> {fmtSigned(rv, 2)}
+          </td>
+          {weightCell(c)}
+          {holdingsCell(c)}
+        </tr>
+        {isOpen && (
+          <tr className="sb-comp-detail" id={`sb-comp-${c.key}`}>
+            <td colSpan={COLS}>
+              <table className="sb-table sb-table--mini sb-table--comp">
+                <caption className="sb-faint">
+                  {c.name}: {c.single ? "one qualifying fund, shown as is" : `equal-weighted mean of ${c.constituents.length} funds' price returns`}.
+                  Closes from {c.source.name.replace(", computed by this collector", "")}, latest {fmtAsOf(c.asOf)}.
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Fund</th><th>Provider · index tracked</th><th className="sb-num">Weight</th>
+                    {PERIODS.map((p) => <th key={p} className="sb-num">{p}</th>)}
+                    <th className="sb-num">Close</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {c.constituents.map((x) => (
+                    <tr key={x.ticker}>
+                      <td className="sb-mono">{x.ticker}{x.ticker === c.spdr && <span className="sb-faint"> · reference</span>}</td>
+                      <td>{x.provider} <span className="sb-faint">· {x.index}</span></td>
+                      <td className="sb-num">{fmtNum(x.weight * 100, 2)}%</td>
+                      {PERIODS.map((p) => {
+                        const r = c.returns[p]?.constituents[x.ticker];
+                        return <td key={p} className="sb-num" title={r ? `${fmtAsOf(c.returns[p].from)} $${r.fromClose} → ${fmtAsOf(c.asOf)} $${r.close}` : ""}>{fmtSigned(r?.value, 2)}</td>;
+                      })}
+                      <td className="sb-num">{usd(c.returns["1D"]?.constituents[x.ticker].close)}</td>
+                    </tr>
+                  ))}
+                  <tr className="sb-comp-total">
+                    <td colSpan={3}>{c.name}</td>
+                    {PERIODS.map((p) => <td key={p} className="sb-num">{fmtSigned(c.returns[p]?.value, 2)}</td>)}
+                    <td className="sb-num sb-faint">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        )}
+      </React.Fragment>
+    );
+  };
 
   return (
     <section className="sb-section" id="sectors" data-screen-label="02 Sectors">
       <Hairline n="(02)" label="SECTORS" />
       <div className="sb-sec-head">
         <p className="sb-lede">
-          The 11 GICS sectors of the S&amp;P 500. Alphabet and Meta sit in Communication
-          Services (XLC), not Technology.
+          The 11 GICS sectors. Each headline is a Bower Digital composite index — the equal-weighted
+          average of {nFunds} plain sector funds from the major providers — with the Select Sector
+          SPDR fund alongside for reference. Alphabet and Meta sit in Communication Services, not Technology.
         </p>
         {best && (
           <div className="sb-sec-summary">
@@ -700,35 +800,57 @@ function Sectors({ snap }) {
         <table className="sb-table sb-table--sectors">
           <thead>
             <tr>
-              <th aria-sort={ariaSort("name")}><button className="sb-sort" onClick={() => onSort("name")}>Sector · fund{arrow("name")}</button></th>
+              <th aria-sort={ariaSort("name")}><button className="sb-sort" onClick={() => onSort("name")}>Composite index · constituents{arrow("name")}</button></th>
               {PERIODS.map((p) => (
                 <th key={p} className={`sb-num ${p === focus ? "is-focus" : ""}`} aria-sort={ariaSort(p)}>
                   <button className="sb-sort" onClick={() => onSort(p)}>{p}{arrow(p)}</button>
                 </th>
               ))}
-              <th className="sb-num sb-quiet">Close</th>
+              <th className="sb-num sb-quiet">SPDR fund {focus}</th>
               <th className="sb-num sb-quiet" aria-sort={ariaSort("weight")}><button className="sb-sort" onClick={() => onSort("weight")}>S&amp;P 500 wt{arrow("weight")}</button></th>
-              <th className="sb-quiet">Top 3 holdings (fund weight)</th>
+              <th className="sb-quiet">Top 3 holdings (SPDR fund weight)</th>
             </tr>
           </thead>
           <tbody>
-            <Row f={spy} isRef />
-            {sorted.map((f) => <Row key={f.etf} f={f} />)}
+            {refRow}
+            {sorted.map(compRow)}
           </tbody>
         </table>
       </div>
       <p className="sb-legend">
         <span className="sb-legend-ramp" aria-hidden="true"><i className="d3" /><i className="d2" /><i className="d1" /><i className="n" /><i className="u1" /><i className="u2" /><i className="u3" /></span>
         Shade scales with the size of the move, relative to the largest move in the same column. Green is a rise,
-        red a fall; the signed figure is always printed. Click a period to make it the headline column and sort by it.
+        red a fall; the signed figure is always printed. Click a period to make it the headline column and sort by it;
+        open a row to see each constituent's own return.
       </p>
       <p className="sb-method">{data.method}</p>
       <dl className="sb-prov">
         <div>
+          <dt>Composite method</dt>
+          <dd>
+            Equal weight: each sector's included funds count the same ({singles.length ? `${singles.length} sector${singles.length > 1 ? "s have" : " has"} one qualifying fund, shown as is` : "every sector has two or more funds"}).
+            For each period, every fund's return runs between the same two closes and the composite is their plain
+            average — equal weight at the start of the period, no rebalancing. Recomputed from the latest closes
+            each collection. A Bower Digital construction: not affiliated with, endorsed by, or tracking any
+            provider's index. The constituent funds track different underlying indexes (S&amp;P 500 members only
+            for SPDR; all-cap MSCI US IMI for Vanguard and Fidelity) under the same GICS sector definition; see the
+            fund list for each one's index. Funds on a different sector definition (iShares' US sector funds, on FTSE Russell or Dow Jones sectors;
+            REIT-only funds) and equal-weight funds are left out rather than blended; the fund list gives each reason.
+          </dd>
+        </div>
+        <div>
+          <dt>Fund list</dt>
+          <dd>
+            <a className="sb-src" href={DATA_DIR + sectors[0].universe.file} target="_blank" rel="noopener noreferrer">{sectors[0].universe.file}</a>{" "}
+            v{sectors[0].universe.version}, researched {fmtAsOf(sectors[0].universe.asOf)}: every fund considered per
+            sector, with provider, index, expense ratio, assets (each dated and sourced) and the reason for every exclusion.
+          </dd>
+        </div>
+        <div>
           <dt>Closes &amp; returns</dt>
           <dd>
-            Close of {fmtAsOf(closeAsOf)} · <SourceLink source={spy.close.source} />. Price return, dividends
-            not included. Compared with closes of 1D {fmtAsOf(ref["1D"]?.from)}, 1W {fmtAsOf(ref["1W"]?.from)},
+            Closes of {fmtAsOf(closeAsOf)} · <SourceLink source={spy.close.source} />. Price return for every
+            fund, composite and SPDR reference alike — distributions not included. Compared with closes of 1D {fmtAsOf(ref["1D"]?.from)}, 1W {fmtAsOf(ref["1W"]?.from)},
             1M {fmtAsOf(ref["1M"]?.from)}, 3M {fmtAsOf(ref["3M"]?.from)}, YTD {fmtAsOf(ref.YTD?.from)},
             1Y {fmtAsOf(ref["1Y"]?.from)}.
           </dd>
@@ -740,11 +862,11 @@ function Sectors({ snap }) {
         {h && (
           <div>
             <dt>Top holdings</dt>
-            <dd>As of {fmtAsOf(h.asOf)} · <SourceLink source={h.source}>State Street daily holdings file</SourceLink> for each fund, line items as reported (Alphabet's two share classes are listed separately).</dd>
+            <dd>As of {fmtAsOf(h.asOf)} · <SourceLink source={h.source}>State Street daily holdings file</SourceLink> for each SPDR reference fund, line items as reported (Alphabet's two share classes are listed separately).</dd>
           </div>
         )}
       </dl>
-      {data.classificationCheck && <p className="sb-check">Classification check: {data.classificationCheck}</p>}
+      {data.classificationCheck && <p className="sb-check">Classification check: {data.classificationCheck.value ?? data.classificationCheck}</p>}
       <NotShown items={data.blocked} label="Sources tried, not used" />
     </section>
   );
@@ -1070,6 +1192,8 @@ function Compute({ snap, history }) {
 function Sources({ snaps }) {
   const files = ["macro", "sectors", "compute"].map((s) => snaps[s]?.file).filter(Boolean);
   const hist = Object.values(snaps.history || {}).sort((a, b) => a.file.localeCompare(b.file));
+  // Composite series carry every constituent close per day; linked, not loaded.
+  const comp = Object.values(snaps.index?.sectorHistory || {}).sort();
   return (
     <section className="sb-section" id="sources" data-screen-label="04 Sources">
       <Hairline n="(04)" label="METHOD & SOURCES" />
@@ -1100,6 +1224,16 @@ function Sources({ snaps }) {
               </li>
             ))}
           </ul>
+          {comp.length > 0 && (
+            <>
+              <div className="sb-group-label sb-mt-s">Composite index series</div>
+              <ul className="sb-plain">
+                {comp.map((f) => (
+                  <li key={f}><a className="sb-src" href={DATA_DIR + f} target="_blank" rel="noopener noreferrer">{f.replace("history/", "")}</a></li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </div>
     </section>
@@ -1111,7 +1245,7 @@ function Footer() {
     <footer className="foot">
       <span>© 2026 Bower Digital</span>
       <span className="foot-mid">Side Bets terminal · Educational data, not investment advice</span>
-      <span>Phase 2 — Nov ’26</span>
+      <span>Phase 3 — Nov ’26</span>
     </footer>
   );
 }

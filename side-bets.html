@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="/styles.css?v=7" />
+<link rel="stylesheet" href="/styles.css?v=8" />
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -28,13 +28,13 @@
   });
   document.addEventListener("mouseover", (e) => {
     const t = e.target;
-    if (t.closest && t.closest("a, button, .work-row, .service-card, .r-info-card, .r-issue-card, .tool-card, .w-cell, .sb-sort, input, textarea, select")) {
+    if (t.closest && t.closest("a, button, .work-row, .service-card, .r-info-card, .r-issue-card, .tool-card, .w-cell, .sb-sort, .sb-expand, input, textarea, select")) {
       document.body.classList.add("cursor-big");
     }
   });
   document.addEventListener("mouseout", (e) => {
     const t = e.target;
-    if (t.closest && t.closest("a, button, .work-row, .service-card, .r-info-card, .r-issue-card, .tool-card, .w-cell, .sb-sort, input, textarea, select")) {
+    if (t.closest && t.closest("a, button, .work-row, .service-card, .r-info-card, .r-issue-card, .tool-card, .w-cell, .sb-sort, .sb-expand, input, textarea, select")) {
       document.body.classList.remove("cursor-big");
     }
   });
@@ -42,6 +42,6 @@
 
 <script type="text/babel" src="/tweaks-panel.jsx?v=2"></script>
 <script type="text/babel" src="/pattern-bg.jsx?v=2"></script>
-<script type="text/babel" src="/side-bets.jsx?v=4"></script>
+<script type="text/babel" src="/side-bets.jsx?v=5"></script>
 </body>
 </html>
