@@ -4,9 +4,10 @@
     "macro": {
       "files": [
         "macro-2026-11-10.json",
-        "macro-2026-11-10-2.json"
+        "macro-2026-11-10-2.json",
+        "macro-2026-11-11.json"
       ],
-      "latest": "macro-2026-11-10-2.json"
+      "latest": "macro-2026-11-11.json"
     },
     "sectors": {
       "files": [
@@ -19,12 +20,13 @@
       "files": [
         "compute-2026-11-10.json",
         "compute-2026-11-10-2.json",
-        "compute-2026-11-10-3.json"
+        "compute-2026-11-10-3.json",
+        "compute-2026-11-11.json"
       ],
-      "latest": "compute-2026-11-10-3.json"
+      "latest": "compute-2026-11-11.json"
     }
   },
-  "updated": "2026-11-11T03:49:37.310Z",
+  "updated": "2026-11-11T05:07:52.141Z",
   "history": {
     "macro-us10y": "history/macro-us10y.json",
     "macro-wti": "history/macro-wti.json",
@@ -51,5 +53,235 @@
     "sector-composite-health-care": "history/sector-composite-health-care.json",
     "sector-composite-utilities": "history/sector-composite-utilities.json",
     "sector-composite-real-estate": "history/sector-composite-real-estate.json"
+  },
+  "coverage": {
+    "macro-us10y": {
+      "firstPoint": "1962-01-05",
+      "asOf": "2026-11-09",
+      "points": 3581,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 3332,
+      "recentPoints": 249
+    },
+    "macro-wti": {
+      "firstPoint": "1986-01-03",
+      "asOf": "2026-11-03",
+      "points": 2322,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 2077,
+      "recentPoints": 245
+    },
+    "macro-natgas": {
+      "firstPoint": "1997-01-10",
+      "asOf": "2026-11-03",
+      "points": 1626,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 1384,
+      "recentPoints": 242
+    },
+    "macro-gold": {
+      "firstPoint": "2026-11-11T00:13:28Z",
+      "asOf": "2026-11-11T05:04:59Z",
+      "points": 4,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 0,
+      "recentPoints": 4
+    },
+    "macro-copper": {
+      "firstPoint": "2026-11-11T00:13:30Z",
+      "asOf": "2026-11-11T05:05:01Z",
+      "points": 4,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 0,
+      "recentPoints": 4
+    },
+    "macro-btc": {
+      "firstPoint": "2025-11-12",
+      "asOf": "2026-11-11",
+      "points": 365,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 0,
+      "recentPoints": 365
+    },
+    "macro-ura": {
+      "firstPoint": "2010-11-05",
+      "asOf": "2026-11-09",
+      "points": 1034,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 784,
+      "recentPoints": 250
+    },
+    "macro-remx": {
+      "firstPoint": "2010-10-29",
+      "asOf": "2026-11-09",
+      "points": 1035,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 785,
+      "recentPoints": 250
+    },
+    "macro-botz": {
+      "firstPoint": "2016-09-16",
+      "asOf": "2026-11-09",
+      "points": 728,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 478,
+      "recentPoints": 250
+    },
+    "sector-composite-technology": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FTEC"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-communication-services": {
+      "firstPoint": "2018-06-22",
+      "asOf": "2026-11-09",
+      "points": 636,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 386,
+      "recentPoints": 250,
+      "limitedBy": [
+        "XLC"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-financials": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FNCL"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-energy": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FENY"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-materials": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FMAT"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-industrials": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FIDU"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-consumer-discretionary": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FDIS"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-consumer-staples": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FSTA"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-health-care": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FHLC"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-utilities": {
+      "firstPoint": "2013-10-25",
+      "asOf": "2026-11-09",
+      "points": 879,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 629,
+      "recentPoints": 250,
+      "limitedBy": [
+        "FUTY"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "sector-composite-real-estate": {
+      "firstPoint": "2015-10-09",
+      "asOf": "2026-11-09",
+      "points": 777,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 527,
+      "recentPoints": 250,
+      "limitedBy": [
+        "XLRE"
+      ],
+      "baseDate": "2025-10-06"
+    },
+    "compute-vast-H200": {
+      "firstPoint": "2026-11-11T00:05:41.415Z",
+      "asOf": "2026-11-11T05:05:41.538Z",
+      "points": 4,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 0,
+      "recentPoints": 4
+    },
+    "compute-vast-H100": {
+      "firstPoint": "2026-11-11T00:05:41.415Z",
+      "asOf": "2026-11-11T05:05:41.538Z",
+      "points": 4,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 0,
+      "recentPoints": 4
+    },
+    "compute-vast-B200": {
+      "firstPoint": "2026-11-11T00:05:41.415Z",
+      "asOf": "2026-11-11T05:05:41.538Z",
+      "points": 4,
+      "weeklyBefore": "2025-11-11",
+      "weeklyPoints": 0,
+      "recentPoints": 4
+    }
   }
 }
