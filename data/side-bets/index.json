@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "sections": {
+    "macro": {
+      "files": [
+        "macro-2026-11-10.json",
+        "macro-2026-11-10-2.json"
+      ],
+      "latest": "macro-2026-11-10-2.json"
+    },
+    "sectors": {
+      "files": [
+        "sectors-2026-11-10.json"
+      ],
+      "latest": "sectors-2026-11-10.json"
+    },
+    "compute": {
+      "files": [
+        "compute-2026-11-10.json",
+        "compute-2026-11-10-2.json",
+        "compute-2026-11-10-3.json"
+      ],
+      "latest": "compute-2026-11-10-3.json"
+    }
+  },
+  "updated": "2026-11-11T03:11:09.656Z",
+  "history": {
+    "macro-us10y": "history/macro-us10y.json",
+    "macro-wti": "history/macro-wti.json",
+    "macro-natgas": "history/macro-natgas.json",
+    "macro-gold": "history/macro-gold.json",
+    "macro-copper": "history/macro-copper.json",
+    "macro-btc": "history/macro-btc.json",
+    "macro-ura": "history/macro-ura.json",
+    "macro-remx": "history/macro-remx.json",
+    "macro-botz": "history/macro-botz.json",
+    "compute-vast-H200": "history/compute-vast-H200.json",
+    "compute-vast-H100": "history/compute-vast-H100.json",
+    "compute-vast-B200": "history/compute-vast-B200.json"
+  }
+}

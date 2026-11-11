@@ -324,6 +324,7 @@ function App() {
         <nav className="nav-links">
           <a href="/">← Main studio</a>
           <a href="/work">Work</a>
+          <a href="/side-bets">Terminal</a>
           <a href="#what-youll-get">What you'll get</a>
           <a href="#subscribe">Subscribe</a>
           <button className="theme-toggle" onClick={() => setTweak("invert", !tweaks.invert)} aria-label="Toggle theme">

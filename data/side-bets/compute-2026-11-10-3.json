@@ -1,0 +1,440 @@
+{
+  "schema": 1,
+  "section": "compute",
+  "collectedAt": "2026-11-11T03:10:47.524Z",
+  "data": {
+    "unit": "USD per GPU-hour",
+    "columns": {
+      "marketplaceMedian": "Vast.ai marketplace median, on-demand",
+      "marketplaceSpotLow": "Vast.ai marketplace lowest spot (interruptible) bid",
+      "runpod": "RunPod list price (community and secure clouds)",
+      "list": "Provider list price, on-demand (hyperscalers and GPU clouds)"
+    },
+    "gpus": {
+      "H200": {
+        "key": "H200",
+        "label": "H200 SXM 141GB",
+        "marketplace": {
+          "median": {
+            "value": 4.3421,
+            "type": "on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Vast.ai public marketplace API",
+              "url": "https://cloud.vast.ai/create/"
+            },
+            "offers": 3,
+            "capped": false,
+            "note": "Median of dph_base (GPU-hour base rate, excludes storage and bandwidth) across 3 offers; gpu_name=H200, 1 GPU, rentable, verified hosts."
+          },
+          "spotLow": {
+            "value": 1.3158,
+            "type": "spot (interruptible, min bid)",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Vast.ai public marketplace API",
+              "url": "https://cloud.vast.ai/create/"
+            },
+            "offers": 3,
+            "capped": false,
+            "note": "Lowest minimum bid across 3 interruptible offers; gpu_name=H200, 1 GPU, rentable, verified hosts. A bid can be outbid and the instance paused."
+          }
+        },
+        "runpod": {
+          "community": {
+            "value": 3.59,
+            "type": "community, on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "RunPod public GraphQL pricing API",
+              "url": "https://www.runpod.io/pricing"
+            },
+            "sku": "H200 SXM"
+          },
+          "secure": {
+            "value": 5.29,
+            "type": "secure, on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "RunPod public GraphQL pricing API",
+              "url": "https://www.runpod.io/pricing"
+            },
+            "sku": "H200 SXM"
+          }
+        },
+        "list": [
+          {
+            "provider": "AWS",
+            "tier": "hyperscaler",
+            "value": 7.912,
+            "type": "list, on-demand",
+            "sku": "p5en.48xlarge",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-10T17:38:52Z",
+            "source": {
+              "name": "AWS public EC2 price list (us-east-1, Linux, on-demand)",
+              "url": "https://aws.amazon.com/ec2/pricing/on-demand/"
+            },
+            "note": "$63.2960/hr for 8 GPUs"
+          },
+          {
+            "provider": "Azure",
+            "tier": "hyperscaler",
+            "value": 10.6,
+            "type": "list, on-demand",
+            "sku": "Standard_ND96isr_H200_v5",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Azure Retail Prices API (East US 2, Linux, pay-as-you-go)",
+              "url": "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/"
+            },
+            "note": "$84.8/hr for 8 GPUs; price effective 2025-04-01"
+          },
+          {
+            "provider": "Oracle",
+            "tier": "hyperscaler",
+            "value": 10,
+            "type": "list, on-demand",
+            "sku": "B110519 OCI - Compute - GPU - H200",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Oracle Cloud price list API (pay as you go)",
+              "url": "https://www.oracle.com/cloud/compute/pricing/"
+            },
+            "note": "Priced per GPU-hour"
+          },
+          {
+            "provider": "CoreWeave",
+            "tier": "gpu-cloud",
+            "value": 6.305,
+            "type": "list, on-demand",
+            "sku": "NVIDIA HGX H200",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "CoreWeave pricing page",
+              "url": "https://www.coreweave.com/pricing"
+            },
+            "note": "$50.44/hr for 8 GPUs"
+          },
+          {
+            "provider": "Nebius",
+            "tier": "gpu-cloud",
+            "value": 5.4,
+            "type": "list, on-demand",
+            "sku": "NVIDIA HGX H200",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Nebius pricing page",
+              "url": "https://nebius.com/prices"
+            },
+            "note": "On-demand, per GPU-hour"
+          },
+          {
+            "provider": "Hyperstack",
+            "tier": "gpu-cloud",
+            "value": 3.99,
+            "type": "list, on-demand",
+            "sku": "NVIDIA H200 SXM",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Hyperstack GPU pricing page",
+              "url": "https://www.hyperstack.cloud/gpu-pricing"
+            },
+            "note": "On-demand, per GPU-hour"
+          }
+        ]
+      },
+      "H100": {
+        "key": "H100",
+        "label": "H100 SXM 80GB",
+        "marketplace": {
+          "median": {
+            "value": 2.7933,
+            "type": "on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Vast.ai public marketplace API",
+              "url": "https://cloud.vast.ai/create/"
+            },
+            "offers": 6,
+            "capped": false,
+            "note": "Median of dph_base (GPU-hour base rate, excludes storage and bandwidth) across 6 offers; gpu_name=H100 SXM, 1 GPU, rentable, verified hosts."
+          },
+          "spotLow": {
+            "value": 0.6667,
+            "type": "spot (interruptible, min bid)",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Vast.ai public marketplace API",
+              "url": "https://cloud.vast.ai/create/"
+            },
+            "offers": 6,
+            "capped": false,
+            "note": "Lowest minimum bid across 6 interruptible offers; gpu_name=H100 SXM, 1 GPU, rentable, verified hosts. A bid can be outbid and the instance paused."
+          }
+        },
+        "runpod": {
+          "community": {
+            "value": 2.69,
+            "type": "community, on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "RunPod public GraphQL pricing API",
+              "url": "https://www.runpod.io/pricing"
+            },
+            "sku": "H100 SXM"
+          },
+          "secure": {
+            "value": 3.99,
+            "type": "secure, on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "RunPod public GraphQL pricing API",
+              "url": "https://www.runpod.io/pricing"
+            },
+            "sku": "H100 SXM"
+          }
+        },
+        "list": [
+          {
+            "provider": "AWS",
+            "tier": "hyperscaler",
+            "value": 6.88,
+            "type": "list, on-demand",
+            "sku": "p5.48xlarge",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-10T17:38:52Z",
+            "source": {
+              "name": "AWS public EC2 price list (us-east-1, Linux, on-demand)",
+              "url": "https://aws.amazon.com/ec2/pricing/on-demand/"
+            },
+            "note": "$55.0400/hr for 8 GPUs"
+          },
+          {
+            "provider": "Azure",
+            "tier": "hyperscaler",
+            "value": 12.29,
+            "type": "list, on-demand",
+            "sku": "Standard_ND96isr_H100_v5",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Azure Retail Prices API (East US 2, Linux, pay-as-you-go)",
+              "url": "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/"
+            },
+            "note": "$98.32/hr for 8 GPUs; price effective 2023-12-01"
+          },
+          {
+            "provider": "Oracle",
+            "tier": "hyperscaler",
+            "value": 10,
+            "type": "list, on-demand",
+            "sku": "B98415 Oracle Cloud Infrastructure - Compute - GPU - H100",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Oracle Cloud price list API (pay as you go)",
+              "url": "https://www.oracle.com/cloud/compute/pricing/"
+            },
+            "note": "Priced per GPU-hour"
+          },
+          {
+            "provider": "CoreWeave",
+            "tier": "gpu-cloud",
+            "value": 6.155,
+            "type": "list, on-demand",
+            "sku": "NVIDIA HGX H100",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "CoreWeave pricing page",
+              "url": "https://www.coreweave.com/pricing"
+            },
+            "note": "$49.24/hr for 8 GPUs"
+          },
+          {
+            "provider": "Nebius",
+            "tier": "gpu-cloud",
+            "value": 4.5,
+            "type": "list, on-demand",
+            "sku": "NVIDIA HGX H100",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Nebius pricing page",
+              "url": "https://nebius.com/prices"
+            },
+            "note": "On-demand, per GPU-hour"
+          },
+          {
+            "provider": "Hyperstack",
+            "tier": "gpu-cloud",
+            "value": 3.2,
+            "type": "list, on-demand",
+            "sku": "NVIDIA H100 SXM",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Hyperstack GPU pricing page",
+              "url": "https://www.hyperstack.cloud/gpu-pricing"
+            },
+            "note": "On-demand, per GPU-hour"
+          }
+        ]
+      },
+      "B200": {
+        "key": "B200",
+        "label": "B200 180GB",
+        "marketplace": {
+          "median": {
+            "value": 7.7406,
+            "type": "on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Vast.ai public marketplace API",
+              "url": "https://cloud.vast.ai/create/"
+            },
+            "offers": 2,
+            "capped": false,
+            "note": "Median of dph_base (GPU-hour base rate, excludes storage and bandwidth) across 2 offers; gpu_name=B200, 1 GPU, rentable, verified hosts."
+          },
+          "spotLow": {
+            "value": 5.9375,
+            "type": "spot (interruptible, min bid)",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Vast.ai public marketplace API",
+              "url": "https://cloud.vast.ai/create/"
+            },
+            "offers": 1,
+            "capped": false,
+            "note": "Lowest minimum bid across 1 interruptible offers; gpu_name=B200, 1 GPU, rentable, verified hosts. A bid can be outbid and the instance paused."
+          }
+        },
+        "runpod": {
+          "community": {
+            "value": 5.98,
+            "type": "community, on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "RunPod public GraphQL pricing API",
+              "url": "https://www.runpod.io/pricing"
+            },
+            "sku": "B200"
+          },
+          "secure": {
+            "value": 7.99,
+            "type": "secure, on-demand",
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "RunPod public GraphQL pricing API",
+              "url": "https://www.runpod.io/pricing"
+            },
+            "sku": "B200"
+          }
+        },
+        "list": [
+          {
+            "provider": "AWS",
+            "tier": "hyperscaler",
+            "value": 14.2416,
+            "type": "list, on-demand",
+            "sku": "p6-b200.48xlarge",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-10T17:38:52Z",
+            "source": {
+              "name": "AWS public EC2 price list (us-east-1, Linux, on-demand)",
+              "url": "https://aws.amazon.com/ec2/pricing/on-demand/"
+            },
+            "note": "$113.9328/hr for 8 GPUs"
+          },
+          {
+            "provider": "Oracle",
+            "tier": "hyperscaler",
+            "value": 14,
+            "type": "list, on-demand",
+            "sku": "B110978 OCI - Compute - GPU - B200",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Oracle Cloud price list API (pay as you go)",
+              "url": "https://www.oracle.com/cloud/compute/pricing/"
+            },
+            "note": "Priced per GPU-hour"
+          },
+          {
+            "provider": "CoreWeave",
+            "tier": "gpu-cloud",
+            "value": 8.6,
+            "type": "list, on-demand",
+            "sku": "NVIDIA HGX B200",
+            "gpusPerSku": 8,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "CoreWeave pricing page",
+              "url": "https://www.coreweave.com/pricing"
+            },
+            "note": "$68.8/hr for 8 GPUs"
+          },
+          {
+            "provider": "Nebius",
+            "tier": "gpu-cloud",
+            "value": 8.5,
+            "type": "list, on-demand",
+            "sku": "NVIDIA HGX B200",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Nebius pricing page",
+              "url": "https://nebius.com/prices"
+            },
+            "note": "On-demand, per GPU-hour"
+          },
+          {
+            "provider": "Hyperstack",
+            "tier": "gpu-cloud",
+            "value": 6,
+            "type": "list, on-demand",
+            "sku": "NVIDIA B200",
+            "gpusPerSku": 1,
+            "asOf": "2026-11-11T03:09:34.998Z",
+            "source": {
+              "name": "Hyperstack GPU pricing page",
+              "url": "https://www.hyperstack.cloud/gpu-pricing"
+            },
+            "note": "On-demand, per GPU-hour"
+          }
+        ]
+      }
+    },
+    "blocked": [
+      {
+        "series": "Google Cloud list price",
+        "source": "https://cloud.google.com/compute/gpus-pricing",
+        "reason": "H200/H100/B200 prices are rendered client-side; the static pages carry no figures. The Cloud Billing Catalog API needs an API key.",
+        "needs": "A Google Cloud API key (free) for the Cloud Billing Catalog API."
+      },
+      {
+        "series": "Lambda list price",
+        "source": "https://lambda.ai/pricing",
+        "reason": "The public page shows prices that 'take effect November 16, 2026'; current prices require logging in. Future prices are not shown as current.",
+        "needs": "Re-read after Nov 16, 2026."
+      },
+      {
+        "series": "Vast.ai price history",
+        "source": "https://console.vast.ai/api/v0/",
+        "reason": "No public history endpoint found: /api/v0/price_history/, /market/history/, /gpu_stats/ and /bundles/history/ all return HTTP 404. Charts use this collector's own readings only."
+      },
+      {
+        "series": "RunPod price history",
+        "source": "https://api.runpod.io/graphql",
+        "reason": "No history field: asking the GraphQL API for one answers 'Cannot query field \"priceHistory\" on type \"GpuType\".', and schema introspection is disabled. RunPod is not charted."
+      }
+    ]
+  }
+}
