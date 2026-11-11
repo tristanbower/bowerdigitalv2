@@ -170,6 +170,9 @@ function Services() {
       <div className="services-engagement">
         Fixed projects · Hourly at $50/hr · Retainer on request
       </div>
+      <div className="work-see-all">
+        <MagLink href="/side-bets">Side Bets terminal — macro, sectors, compute pricing →</MagLink>
+      </div>
     </section>
   );
 }
@@ -404,6 +407,7 @@ function App() {
         <nav className="nav-links">
           <a href="/work">Work</a>
           <a href="/research">Side Bets</a>
+          <a href="/side-bets">Terminal</a>
           <a href="#inquiry">Contact</a>
           <button className="theme-toggle" onClick={() => setTweak("invert", !tweaks.invert)} aria-label="Toggle theme">
             {tweaks.invert ? "DARK" : "LIGHT"}
