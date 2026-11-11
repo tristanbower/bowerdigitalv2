@@ -2228,6 +2228,23 @@ body.invert { --sb-up: #13875f; --sb-down: #cf3b26; }
 .sb-legend-ramp .u3 { background: color-mix(in oklab, var(--sb-up) 62%, transparent); }
 .sb-td-hold { white-space: nowrap; font-family: var(--mono); font-size: 12px; }
 .sb-hold + .sb-hold { margin-left: 14px; }
+/* Composite rows: index name over its constituent funds; expands to the math. */
+.sb-td-comp { padding-top: 7px !important; padding-bottom: 7px !important; height: auto !important; }
+.sb-expand {
+  display: inline-flex; align-items: baseline; gap: 8px;
+  padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: none;
+}
+.sb-expand:focus-visible { outline: 1px solid var(--fg); outline-offset: 3px; }
+.sb-expand-mark { font-family: var(--mono); font-size: 12px; width: 10px; color: var(--fg-mute); }
+.sb-expand:hover .sb-expand-mark, .is-open .sb-expand-mark { color: var(--fg); }
+.sb-comp-funds { display: block; margin: 3px 0 0 18px; font-family: var(--mono); font-size: 11px; color: var(--fg-soft); }
+.sb-comp-fund + .sb-comp-fund { margin-left: 12px; }
+.sb-comp-detail > td { padding: 6px 14px 18px !important; height: auto !important; background: var(--fg-faint); }
+.sb-table--comp { width: auto; min-width: 70%; }
+.sb-table--comp caption { caption-side: top; text-align: left; padding: 4px 10px 8px; font-size: 12px; }
+.sb-table--comp .sb-mono { font-family: var(--mono); white-space: nowrap; }
+.sb-table--comp td:nth-child(2) { white-space: normal; max-width: 46ch; }
+.sb-comp-total td { font-weight: 600; color: var(--fg); border-top: 1px solid var(--fg-mute); }
 .sb-ref-row td { border-bottom: 1px solid var(--hairline); }
 .sb-ref-row .sb-sector { font-style: italic; color: var(--fg-soft); }
 .sb-group-row th {

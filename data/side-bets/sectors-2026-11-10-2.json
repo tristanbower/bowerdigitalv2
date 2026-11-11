@@ -1,0 +1,2888 @@
+{
+  "schema": 1,
+  "section": "sectors",
+  "collectedAt": "2026-11-11T03:49:37.305Z",
+  "data": {
+    "method": "Each sector's headline is a Bower Digital composite: the equal-weighted average of the price returns of the sector funds listed for it (constituents and providers per row), equal weight at the start of each window, no rebalancing. The Select Sector SPDR fund is shown alongside as the single-fund reference. S&P 500 measured with SPY.",
+    "composites": [
+      {
+        "key": "technology",
+        "name": "Technology Index",
+        "sector": "Information Technology",
+        "spdr": "XLK",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLK",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Technology Select Sector SPDR ETF",
+            "index": "Technology Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VGT",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Information Technology ETF",
+            "index": "MSCI US Investable Market Information Technology 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FTEC",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Information Technology Index ETF",
+            "index": "MSCI USA IMI Information Technology 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 3.4127,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLK": {
+                "value": 3.7271,
+                "fromClose": 164.74,
+                "close": 170.88
+              },
+              "VGT": {
+                "value": 3.1979,
+                "fromClose": 108.51,
+                "close": 111.98
+              },
+              "FTEC": {
+                "value": 3.3132,
+                "fromClose": 258.66,
+                "close": 267.23
+              }
+            }
+          },
+          "1W": {
+            "value": -1.7147,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLK": {
+                "value": -1.9171,
+                "fromClose": 174.22,
+                "close": 170.88
+              },
+              "VGT": {
+                "value": -1.6252,
+                "fromClose": 113.83,
+                "close": 111.98
+              },
+              "FTEC": {
+                "value": -1.6017,
+                "fromClose": 271.58,
+                "close": 267.23
+              }
+            }
+          },
+          "1M": {
+            "value": -13.0091,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLK": {
+                "value": -14.0356,
+                "fromClose": 198.78,
+                "close": 170.88
+              },
+              "VGT": {
+                "value": -12.502,
+                "fromClose": 127.98,
+                "close": 111.98
+              },
+              "FTEC": {
+                "value": -12.4898,
+                "fromClose": 305.37,
+                "close": 267.23
+              }
+            }
+          },
+          "3M": {
+            "value": -8.2301,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLK": {
+                "value": -9.0919,
+                "fromClose": 187.97,
+                "close": 170.88
+              },
+              "VGT": {
+                "value": -7.7974,
+                "fromClose": 121.45,
+                "close": 111.98
+              },
+              "FTEC": {
+                "value": -7.8009,
+                "fromClose": 289.84,
+                "close": 267.23
+              }
+            }
+          },
+          "YTD": {
+            "value": 18.8281,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLK": {
+                "value": 18.6914,
+                "fromClose": 143.97,
+                "close": 170.88
+              },
+              "VGT": {
+                "value": 18.8495,
+                "fromClose": 94.22,
+                "close": 111.98
+              },
+              "FTEC": {
+                "value": 18.9433,
+                "fromClose": 224.67,
+                "close": 267.23
+              }
+            }
+          },
+          "1Y": {
+            "value": 18.0076,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLK": {
+                "value": 18.6008,
+                "fromClose": 144.08,
+                "close": 170.88
+              },
+              "VGT": {
+                "value": 17.6631,
+                "fromClose": 95.17,
+                "close": 111.98
+              },
+              "FTEC": {
+                "value": 17.7588,
+                "fromClose": 226.93,
+                "close": 267.23
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "communication-services",
+        "name": "Communication Services Index",
+        "sector": "Communication Services",
+        "spdr": "XLC",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLC",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Communication Services Select Sector SPDR ETF",
+            "index": "Communication Services Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VOX",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Communication Services ETF",
+            "index": "MSCI US Investable Market Communication Services 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FCOM",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Communication Services Index ETF",
+            "index": "MSCI USA IMI Communication Services 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 2.6905,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLC": {
+                "value": 2.4525,
+                "fromClose": 104.79,
+                "close": 107.36
+              },
+              "VOX": {
+                "value": 2.775,
+                "fromClose": 176.94,
+                "close": 181.85
+              },
+              "FCOM": {
+                "value": 2.8439,
+                "fromClose": 66.81,
+                "close": 68.71
+              }
+            }
+          },
+          "1W": {
+            "value": 6.4087,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLC": {
+                "value": 7.0816,
+                "fromClose": 100.26,
+                "close": 107.36
+              },
+              "VOX": {
+                "value": 5.9794,
+                "fromClose": 171.59,
+                "close": 181.85
+              },
+              "FCOM": {
+                "value": 6.165,
+                "fromClose": 64.72,
+                "close": 68.71
+              }
+            }
+          },
+          "1M": {
+            "value": -3.8766,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLC": {
+                "value": -2.736,
+                "fromClose": 110.38,
+                "close": 107.36
+              },
+              "VOX": {
+                "value": -4.4705,
+                "fromClose": 190.36,
+                "close": 181.85
+              },
+              "FCOM": {
+                "value": -4.4234,
+                "fromClose": 71.89,
+                "close": 68.71
+              }
+            }
+          },
+          "3M": {
+            "value": -3.1437,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLC": {
+                "value": -3.4966,
+                "fromClose": 111.25,
+                "close": 107.36
+              },
+              "VOX": {
+                "value": -3.0237,
+                "fromClose": 187.52,
+                "close": 181.85
+              },
+              "FCOM": {
+                "value": -2.9108,
+                "fromClose": 70.77,
+                "close": 68.71
+              }
+            }
+          },
+          "YTD": {
+            "value": -7.0402,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLC": {
+                "value": -8.8005,
+                "fromClose": 117.72,
+                "close": 107.36
+              },
+              "VOX": {
+                "value": -6.0838,
+                "fromClose": 193.63,
+                "close": 181.85
+              },
+              "FCOM": {
+                "value": -6.2364,
+                "fromClose": 73.28,
+                "close": 68.71
+              }
+            }
+          },
+          "1Y": {
+            "value": -1.592,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLC": {
+                "value": -4.2369,
+                "fromClose": 112.11,
+                "close": 107.36
+              },
+              "VOX": {
+                "value": -0.2633,
+                "fromClose": 182.33,
+                "close": 181.85
+              },
+              "FCOM": {
+                "value": -0.2758,
+                "fromClose": 68.9,
+                "close": 68.71
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "financials",
+        "name": "Financials Index",
+        "sector": "Financials",
+        "spdr": "XLF",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLF",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Financial Select Sector SPDR ETF",
+            "index": "Financial Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VFH",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Financials ETF",
+            "index": "MSCI US Investable Market Financials 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FNCL",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Financials Index ETF",
+            "index": "MSCI USA IMI Financials 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 1.498,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLF": {
+                "value": 1.4521,
+                "fromClose": 57.16,
+                "close": 57.99
+              },
+              "VFH": {
+                "value": 1.5297,
+                "fromClose": 138.59,
+                "close": 140.71
+              },
+              "FNCL": {
+                "value": 1.5121,
+                "fromClose": 80.68,
+                "close": 81.9
+              }
+            }
+          },
+          "1W": {
+            "value": 0.6907,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLF": {
+                "value": 0.747,
+                "fromClose": 57.56,
+                "close": 57.99
+              },
+              "VFH": {
+                "value": 0.6365,
+                "fromClose": 139.82,
+                "close": 140.71
+              },
+              "FNCL": {
+                "value": 0.6885,
+                "fromClose": 81.34,
+                "close": 81.9
+              }
+            }
+          },
+          "1M": {
+            "value": 5.7785,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLF": {
+                "value": 5.9565,
+                "fromClose": 54.73,
+                "close": 57.99
+              },
+              "VFH": {
+                "value": 5.7016,
+                "fromClose": 133.12,
+                "close": 140.71
+              },
+              "FNCL": {
+                "value": 5.6774,
+                "fromClose": 77.5,
+                "close": 81.9
+              }
+            }
+          },
+          "3M": {
+            "value": 0.1279,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLF": {
+                "value": 0.6771,
+                "fromClose": 57.6,
+                "close": 57.99
+              },
+              "VFH": {
+                "value": -0.1348,
+                "fromClose": 140.9,
+                "close": 140.71
+              },
+              "FNCL": {
+                "value": -0.1585,
+                "fromClose": 82.03,
+                "close": 81.9
+              }
+            }
+          },
+          "YTD": {
+            "value": 5.5463,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLF": {
+                "value": 5.8791,
+                "fromClose": 54.77,
+                "close": 57.99
+              },
+              "VFH": {
+                "value": 5.4086,
+                "fromClose": 133.49,
+                "close": 140.71
+              },
+              "FNCL": {
+                "value": 5.3512,
+                "fromClose": 77.74,
+                "close": 81.9
+              }
+            }
+          },
+          "1Y": {
+            "value": 9.6087,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLF": {
+                "value": 9.8712,
+                "fromClose": 52.78,
+                "close": 57.99
+              },
+              "VFH": {
+                "value": 9.4338,
+                "fromClose": 128.58,
+                "close": 140.71
+              },
+              "FNCL": {
+                "value": 9.5213,
+                "fromClose": 74.78,
+                "close": 81.9
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "energy",
+        "name": "Energy Index",
+        "sector": "Energy",
+        "spdr": "XLE",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLE",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Energy Select Sector SPDR ETF",
+            "index": "Energy Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VDE",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Energy ETF",
+            "index": "MSCI US Investable Market Energy 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FENY",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Energy Index ETF",
+            "index": "MSCI USA IMI Energy 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 0.5635,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLE": {
+                "value": 0.5193,
+                "fromClose": 61.62,
+                "close": 61.94
+              },
+              "VDE": {
+                "value": 0.578,
+                "fromClose": 171.28,
+                "close": 172.27
+              },
+              "FENY": {
+                "value": 0.5933,
+                "fromClose": 33.71,
+                "close": 33.91
+              }
+            }
+          },
+          "1W": {
+            "value": -8.0126,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLE": {
+                "value": -7.8959,
+                "fromClose": 67.25,
+                "close": 61.94
+              },
+              "VDE": {
+                "value": -8.0638,
+                "fromClose": 187.38,
+                "close": 172.27
+              },
+              "FENY": {
+                "value": -8.0781,
+                "fromClose": 36.89,
+                "close": 33.91
+              }
+            }
+          },
+          "1M": {
+            "value": -5.1956,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLE": {
+                "value": -4.8248,
+                "fromClose": 65.08,
+                "close": 61.94
+              },
+              "VDE": {
+                "value": -5.4033,
+                "fromClose": 182.11,
+                "close": 172.27
+              },
+              "FENY": {
+                "value": -5.3586,
+                "fromClose": 35.83,
+                "close": 33.91
+              }
+            }
+          },
+          "3M": {
+            "value": 6.6512,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLE": {
+                "value": 7.7217,
+                "fromClose": 57.5,
+                "close": 61.94
+              },
+              "VDE": {
+                "value": 6.0972,
+                "fromClose": 162.37,
+                "close": 172.27
+              },
+              "FENY": {
+                "value": 6.1346,
+                "fromClose": 31.95,
+                "close": 33.91
+              }
+            }
+          },
+          "YTD": {
+            "value": 37.4153,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLE": {
+                "value": 38.5372,
+                "fromClose": 44.71,
+                "close": 61.94
+              },
+              "VDE": {
+                "value": 36.8091,
+                "fromClose": 125.92,
+                "close": 172.27
+              },
+              "FENY": {
+                "value": 36.8995,
+                "fromClose": 24.77,
+                "close": 33.91
+              }
+            }
+          },
+          "1Y": {
+            "value": 37.2114,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLE": {
+                "value": 38.3516,
+                "fromClose": 44.77,
+                "close": 61.94
+              },
+              "VDE": {
+                "value": 36.5488,
+                "fromClose": 126.16,
+                "close": 172.27
+              },
+              "FENY": {
+                "value": 36.7339,
+                "fromClose": 24.8,
+                "close": 33.91
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "materials",
+        "name": "Materials Index",
+        "sector": "Materials",
+        "spdr": "XLB",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLB",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Materials Select Sector SPDR ETF",
+            "index": "Materials Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VAW",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Materials ETF",
+            "index": "MSCI US Investable Market Materials 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FMAT",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Materials Index ETF",
+            "index": "MSCI USA IMI Materials 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 2.3429,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLB": {
+                "value": 1.9057,
+                "fromClose": 51.95,
+                "close": 52.94
+              },
+              "VAW": {
+                "value": 2.4794,
+                "fromClose": 227.88,
+                "close": 233.53
+              },
+              "FMAT": {
+                "value": 2.6438,
+                "fromClose": 58.25,
+                "close": 59.79
+              }
+            }
+          },
+          "1W": {
+            "value": -0.1593,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLB": {
+                "value": -1.3602,
+                "fromClose": 53.67,
+                "close": 52.94
+              },
+              "VAW": {
+                "value": 0.361,
+                "fromClose": 232.69,
+                "close": 233.53
+              },
+              "FMAT": {
+                "value": 0.5212,
+                "fromClose": 59.48,
+                "close": 59.79
+              }
+            }
+          },
+          "1M": {
+            "value": 6.0325,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLB": {
+                "value": 7.101,
+                "fromClose": 49.43,
+                "close": 52.94
+              },
+              "VAW": {
+                "value": 5.3978,
+                "fromClose": 221.57,
+                "close": 233.53
+              },
+              "FMAT": {
+                "value": 5.5987,
+                "fromClose": 56.62,
+                "close": 59.79
+              }
+            }
+          },
+          "3M": {
+            "value": -0.7359,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLB": {
+                "value": 0.1513,
+                "fromClose": 52.86,
+                "close": 52.94
+              },
+              "VAW": {
+                "value": -1.2182,
+                "fromClose": 236.41,
+                "close": 233.53
+              },
+              "FMAT": {
+                "value": -1.1409,
+                "fromClose": 60.48,
+                "close": 59.79
+              }
+            }
+          },
+          "YTD": {
+            "value": 13.9439,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLB": {
+                "value": 16.7365,
+                "fromClose": 45.35,
+                "close": 52.94
+              },
+              "VAW": {
+                "value": 12.5175,
+                "fromClose": 207.55,
+                "close": 233.53
+              },
+              "FMAT": {
+                "value": 12.5777,
+                "fromClose": 53.11,
+                "close": 59.79
+              }
+            }
+          },
+          "1Y": {
+            "value": 21.1648,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLB": {
+                "value": 23.3745,
+                "fromClose": 42.91,
+                "close": 52.94
+              },
+              "VAW": {
+                "value": 20.0113,
+                "fromClose": 194.59,
+                "close": 233.53
+              },
+              "FMAT": {
+                "value": 20.1085,
+                "fromClose": 49.78,
+                "close": 59.79
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "industrials",
+        "name": "Industrials Index",
+        "sector": "Industrials",
+        "spdr": "XLI",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLI",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Industrial Select Sector SPDR ETF",
+            "index": "Industrial Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VIS",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Industrials ETF",
+            "index": "MSCI US Investable Market Industrials 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FIDU",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Industrials Index ETF",
+            "index": "MSCI USA IMI Industrials 25/25 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 3.9796,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLI": {
+                "value": 3.8237,
+                "fromClose": 162.67,
+                "close": 168.89
+              },
+              "VIS": {
+                "value": 4.0321,
+                "fromClose": 312.49,
+                "close": 325.09
+              },
+              "FIDU": {
+                "value": 4.0831,
+                "fromClose": 86.21,
+                "close": 89.73
+              }
+            }
+          },
+          "1W": {
+            "value": -0.2973,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLI": {
+                "value": -0.4832,
+                "fromClose": 169.71,
+                "close": 168.89
+              },
+              "VIS": {
+                "value": -0.1198,
+                "fromClose": 325.48,
+                "close": 325.09
+              },
+              "FIDU": {
+                "value": -0.2889,
+                "fromClose": 89.99,
+                "close": 89.73
+              }
+            }
+          },
+          "1M": {
+            "value": 0.0745,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLI": {
+                "value": -0.2127,
+                "fromClose": 169.25,
+                "close": 168.89
+              },
+              "VIS": {
+                "value": 0.3024,
+                "fromClose": 324.11,
+                "close": 325.09
+              },
+              "FIDU": {
+                "value": 0.1339,
+                "fromClose": 89.61,
+                "close": 89.73
+              }
+            }
+          },
+          "3M": {
+            "value": -8.899,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLI": {
+                "value": -8.7968,
+                "fromClose": 185.18,
+                "close": 168.89
+              },
+              "VIS": {
+                "value": -8.895,
+                "fromClose": 356.83,
+                "close": 325.09
+              },
+              "FIDU": {
+                "value": -9.0052,
+                "fromClose": 98.61,
+                "close": 89.73
+              }
+            }
+          },
+          "YTD": {
+            "value": 8.8729,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLI": {
+                "value": 8.877,
+                "fromClose": 155.12,
+                "close": 168.89
+              },
+              "VIS": {
+                "value": 8.9517,
+                "fromClose": 298.38,
+                "close": 325.09
+              },
+              "FIDU": {
+                "value": 8.79,
+                "fromClose": 82.48,
+                "close": 89.73
+              }
+            }
+          },
+          "1Y": {
+            "value": 9.9138,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLI": {
+                "value": 10.148,
+                "fromClose": 153.33,
+                "close": 168.89
+              },
+              "VIS": {
+                "value": 9.8722,
+                "fromClose": 295.88,
+                "close": 325.09
+              },
+              "FIDU": {
+                "value": 9.7212,
+                "fromClose": 81.78,
+                "close": 89.73
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "consumer-discretionary",
+        "name": "Consumer Discretionary Index",
+        "sector": "Consumer Discretionary",
+        "spdr": "XLY",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLY",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Consumer Discretionary Select Sector SPDR ETF",
+            "index": "Consumer Discretionary Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VCR",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Consumer Discretionary ETF",
+            "index": "MSCI US Investable Market Consumer Discretionary 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FDIS",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Consumer Discretionary Index ETF",
+            "index": "MSCI USA IMI Consumer Discretionary 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 3.0227,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLY": {
+                "value": 2.9172,
+                "fromClose": 117.58,
+                "close": 121.01
+              },
+              "VCR": {
+                "value": 3.082,
+                "fromClose": 391.31,
+                "close": 403.37
+              },
+              "FDIS": {
+                "value": 3.0691,
+                "fromClose": 101.66,
+                "close": 104.78
+              }
+            }
+          },
+          "1W": {
+            "value": 2.3024,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLY": {
+                "value": 2.412,
+                "fromClose": 118.16,
+                "close": 121.01
+              },
+              "VCR": {
+                "value": 2.251,
+                "fromClose": 394.49,
+                "close": 403.37
+              },
+              "FDIS": {
+                "value": 2.2443,
+                "fromClose": 102.48,
+                "close": 104.78
+              }
+            }
+          },
+          "1M": {
+            "value": 6.8459,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLY": {
+                "value": 7.2308,
+                "fromClose": 112.85,
+                "close": 121.01
+              },
+              "VCR": {
+                "value": 6.6496,
+                "fromClose": 378.22,
+                "close": 403.37
+              },
+              "FDIS": {
+                "value": 6.6572,
+                "fromClose": 98.24,
+                "close": 104.78
+              }
+            }
+          },
+          "3M": {
+            "value": 0.379,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLY": {
+                "value": 0.9595,
+                "fromClose": 119.86,
+                "close": 121.01
+              },
+              "VCR": {
+                "value": 0.0819,
+                "fromClose": 403.04,
+                "close": 403.37
+              },
+              "FDIS": {
+                "value": 0.0955,
+                "fromClose": 104.68,
+                "close": 104.78
+              }
+            }
+          },
+          "YTD": {
+            "value": 2.1012,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLY": {
+                "value": 1.3399,
+                "fromClose": 119.41,
+                "close": 121.01
+              },
+              "VCR": {
+                "value": 2.399,
+                "fromClose": 393.92,
+                "close": 403.37
+              },
+              "FDIS": {
+                "value": 2.5646,
+                "fromClose": 102.16,
+                "close": 104.78
+              }
+            }
+          },
+          "1Y": {
+            "value": 3.3841,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLY": {
+                "value": 2.6117,
+                "fromClose": 117.93,
+                "close": 121.01
+              },
+              "VCR": {
+                "value": 3.7261,
+                "fromClose": 388.88,
+                "close": 403.37
+              },
+              "FDIS": {
+                "value": 3.8145,
+                "fromClose": 100.93,
+                "close": 104.78
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "consumer-staples",
+        "name": "Consumer Staples Index",
+        "sector": "Consumer Staples",
+        "spdr": "XLP",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLP",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Consumer Staples Select Sector SPDR ETF",
+            "index": "Consumer Staples Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VDC",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Consumer Staples ETF",
+            "index": "MSCI US Investable Market Consumer Staples 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FSTA",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Consumer Staples Index ETF",
+            "index": "MSCI USA IMI Consumer Staples 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 0.9685,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLP": {
+                "value": 0.8992,
+                "fromClose": 90.08,
+                "close": 90.89
+              },
+              "VDC": {
+                "value": 1.0103,
+                "fromClose": 245.47,
+                "close": 247.95
+              },
+              "FSTA": {
+                "value": 0.996,
+                "fromClose": 57.23,
+                "close": 57.8
+              }
+            }
+          },
+          "1W": {
+            "value": 0.3198,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLP": {
+                "value": 0.0661,
+                "fromClose": 90.83,
+                "close": 90.89
+              },
+              "VDC": {
+                "value": 0.4415,
+                "fromClose": 246.86,
+                "close": 247.95
+              },
+              "FSTA": {
+                "value": 0.4519,
+                "fromClose": 57.54,
+                "close": 57.8
+              }
+            }
+          },
+          "1M": {
+            "value": 9.3632,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLP": {
+                "value": 8.9416,
+                "fromClose": 83.43,
+                "close": 90.89
+              },
+              "VDC": {
+                "value": 9.5331,
+                "fromClose": 226.37,
+                "close": 247.95
+              },
+              "FSTA": {
+                "value": 9.615,
+                "fromClose": 52.73,
+                "close": 57.8
+              }
+            }
+          },
+          "3M": {
+            "value": 7.1032,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLP": {
+                "value": 6.7787,
+                "fromClose": 85.12,
+                "close": 90.89
+              },
+              "VDC": {
+                "value": 7.2355,
+                "fromClose": 231.22,
+                "close": 247.95
+              },
+              "FSTA": {
+                "value": 7.2953,
+                "fromClose": 53.87,
+                "close": 57.8
+              }
+            }
+          },
+          "YTD": {
+            "value": 17.2959,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLP": {
+                "value": 17.0057,
+                "fromClose": 77.68,
+                "close": 90.89
+              },
+              "VDC": {
+                "value": 17.3783,
+                "fromClose": 211.24,
+                "close": 247.95
+              },
+              "FSTA": {
+                "value": 17.5036,
+                "fromClose": 49.19,
+                "close": 57.8
+              }
+            }
+          },
+          "1Y": {
+            "value": 18.5392,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLP": {
+                "value": 18.4852,
+                "fromClose": 76.71,
+                "close": 90.89
+              },
+              "VDC": {
+                "value": 18.5683,
+                "fromClose": 209.12,
+                "close": 247.95
+              },
+              "FSTA": {
+                "value": 18.5641,
+                "fromClose": 48.75,
+                "close": 57.8
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "health-care",
+        "name": "Health Care Index",
+        "sector": "Health Care",
+        "spdr": "XLV",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLV",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Health Care Select Sector SPDR ETF",
+            "index": "Health Care Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VHT",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Health Care ETF",
+            "index": "MSCI US Investable Market Health Care 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FHLC",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Health Care Index ETF",
+            "index": "MSCI USA IMI Health Care 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 1.9965,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLV": {
+                "value": 1.9102,
+                "fromClose": 184.8,
+                "close": 188.33
+              },
+              "VHT": {
+                "value": 2.0162,
+                "fromClose": 341.23,
+                "close": 348.11
+              },
+              "FHLC": {
+                "value": 2.063,
+                "fromClose": 88.22,
+                "close": 90.04
+              }
+            }
+          },
+          "1W": {
+            "value": 2.0216,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLV": {
+                "value": 2.0206,
+                "fromClose": 184.6,
+                "close": 188.33
+              },
+              "VHT": {
+                "value": 2.0043,
+                "fromClose": 341.27,
+                "close": 348.11
+              },
+              "FHLC": {
+                "value": 2.0399,
+                "fromClose": 88.24,
+                "close": 90.04
+              }
+            }
+          },
+          "1M": {
+            "value": 9.5282,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLV": {
+                "value": 10.257,
+                "fromClose": 170.81,
+                "close": 188.33
+              },
+              "VHT": {
+                "value": 9.122,
+                "fromClose": 319.01,
+                "close": 348.11
+              },
+              "FHLC": {
+                "value": 9.2056,
+                "fromClose": 82.45,
+                "close": 90.04
+              }
+            }
+          },
+          "3M": {
+            "value": 12.2723,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLV": {
+                "value": 13.6709,
+                "fromClose": 165.68,
+                "close": 188.33
+              },
+              "VHT": {
+                "value": 11.5308,
+                "fromClose": 312.12,
+                "close": 348.11
+              },
+              "FHLC": {
+                "value": 11.6152,
+                "fromClose": 80.67,
+                "close": 90.04
+              }
+            }
+          },
+          "YTD": {
+            "value": 21.2706,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLV": {
+                "value": 21.6602,
+                "fromClose": 154.8,
+                "close": 188.33
+              },
+              "VHT": {
+                "value": 20.9345,
+                "fromClose": 287.85,
+                "close": 348.11
+              },
+              "FHLC": {
+                "value": 21.217,
+                "fromClose": 74.28,
+                "close": 90.04
+              }
+            }
+          },
+          "1Y": {
+            "value": 28.2237,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLV": {
+                "value": 28.8696,
+                "fromClose": 146.14,
+                "close": 188.33
+              },
+              "VHT": {
+                "value": 27.6671,
+                "fromClose": 272.67,
+                "close": 348.11
+              },
+              "FHLC": {
+                "value": 28.1343,
+                "fromClose": 70.27,
+                "close": 90.04
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "utilities",
+        "name": "Utilities Index",
+        "sector": "Utilities",
+        "spdr": "XLU",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLU",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Utilities Select Sector SPDR ETF",
+            "index": "Utilities Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VPU",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Utilities ETF",
+            "index": "MSCI US Investable Market Utilities 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FUTY",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Utilities Index ETF",
+            "index": "MSCI USA IMI Utilities 25/50 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 1.5446,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLU": {
+                "value": 1.5303,
+                "fromClose": 43.13,
+                "close": 43.79
+              },
+              "VPU": {
+                "value": 1.5226,
+                "fromClose": 186.52,
+                "close": 189.36
+              },
+              "FUTY": {
+                "value": 1.581,
+                "fromClose": 55.66,
+                "close": 56.54
+              }
+            }
+          },
+          "1W": {
+            "value": 0.3669,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLU": {
+                "value": 0.2748,
+                "fromClose": 43.67,
+                "close": 43.79
+              },
+              "VPU": {
+                "value": 0.3817,
+                "fromClose": 188.64,
+                "close": 189.36
+              },
+              "FUTY": {
+                "value": 0.4441,
+                "fromClose": 56.29,
+                "close": 56.54
+              }
+            }
+          },
+          "1M": {
+            "value": 5.7294,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLU": {
+                "value": 5.7474,
+                "fromClose": 41.41,
+                "close": 43.79
+              },
+              "VPU": {
+                "value": 5.6991,
+                "fromClose": 179.15,
+                "close": 189.36
+              },
+              "FUTY": {
+                "value": 5.7415,
+                "fromClose": 53.47,
+                "close": 56.54
+              }
+            }
+          },
+          "3M": {
+            "value": 0.3323,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLU": {
+                "value": 0.4127,
+                "fromClose": 43.61,
+                "close": 43.79
+              },
+              "VPU": {
+                "value": 0.2647,
+                "fromClose": 188.86,
+                "close": 189.36
+              },
+              "FUTY": {
+                "value": 0.3194,
+                "fromClose": 56.36,
+                "close": 56.54
+              }
+            }
+          },
+          "YTD": {
+            "value": 2.4339,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLU": {
+                "value": 2.5767,
+                "fromClose": 42.69,
+                "close": 43.79
+              },
+              "VPU": {
+                "value": 2.3346,
+                "fromClose": 185.04,
+                "close": 189.36
+              },
+              "FUTY": {
+                "value": 2.3904,
+                "fromClose": 55.22,
+                "close": 56.54
+              }
+            }
+          },
+          "1Y": {
+            "value": -2.4787,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLU": {
+                "value": -2.3417,
+                "fromClose": 44.84,
+                "close": 43.79
+              },
+              "VPU": {
+                "value": -2.6277,
+                "fromClose": 194.47,
+                "close": 189.36
+              },
+              "FUTY": {
+                "value": -2.4668,
+                "fromClose": 57.97,
+                "close": 56.54
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      },
+      {
+        "key": "real-estate",
+        "name": "Real Estate Index",
+        "sector": "Real Estate",
+        "spdr": "XLRE",
+        "version": 1,
+        "single": false,
+        "constituents": [
+          {
+            "ticker": "XLRE",
+            "brand": "SPDR",
+            "provider": "State Street Global Advisors (Select Sector SPDR)",
+            "name": "State Street Real Estate Select Sector SPDR ETF",
+            "index": "Real Estate Select Sector Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "VNQ",
+            "brand": "Vanguard",
+            "provider": "Vanguard",
+            "name": "Vanguard Real Estate ETF",
+            "index": "MSCI US Investable Market Real Estate 25/50 Index",
+            "weight": 0.333333
+          },
+          {
+            "ticker": "FREL",
+            "brand": "Fidelity",
+            "provider": "Fidelity Investments",
+            "name": "Fidelity MSCI Real Estate Index ETF",
+            "index": "MSCI USA IMI Real Estate 25/25 Index",
+            "weight": 0.333333
+          }
+        ],
+        "weighting": "Equal weight: 3 funds, 33.33% each at the start of every window; no rebalancing within a window.",
+        "returnBasis": "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+        "asOf": "2026-11-09",
+        "lagging": null,
+        "returns": {
+          "1D": {
+            "value": 1.5703,
+            "from": "2026-11-06",
+            "constituents": {
+              "XLRE": {
+                "value": 1.4545,
+                "fromClose": 44,
+                "close": 44.64
+              },
+              "VNQ": {
+                "value": 1.64,
+                "fromClose": 95.73,
+                "close": 97.3
+              },
+              "FREL": {
+                "value": 1.6162,
+                "fromClose": 29.08,
+                "close": 29.55
+              }
+            }
+          },
+          "1W": {
+            "value": 2.3462,
+            "from": "2026-11-02",
+            "constituents": {
+              "XLRE": {
+                "value": 2.2915,
+                "fromClose": 43.64,
+                "close": 44.64
+              },
+              "VNQ": {
+                "value": 2.3564,
+                "fromClose": 95.06,
+                "close": 97.3
+              },
+              "FREL": {
+                "value": 2.3909,
+                "fromClose": 28.86,
+                "close": 29.55
+              }
+            }
+          },
+          "1M": {
+            "value": 7.3835,
+            "from": "2026-10-09",
+            "constituents": {
+              "XLRE": {
+                "value": 7.2819,
+                "fromClose": 41.61,
+                "close": 44.64
+              },
+              "VNQ": {
+                "value": 7.3359,
+                "fromClose": 90.65,
+                "close": 97.3
+              },
+              "FREL": {
+                "value": 7.5328,
+                "fromClose": 27.48,
+                "close": 29.55
+              }
+            }
+          },
+          "3M": {
+            "value": -1.0358,
+            "from": "2026-08-07",
+            "constituents": {
+              "XLRE": {
+                "value": -0.7559,
+                "fromClose": 44.98,
+                "close": 44.64
+              },
+              "VNQ": {
+                "value": -1.148,
+                "fromClose": 98.43,
+                "close": 97.3
+              },
+              "FREL": {
+                "value": -1.2036,
+                "fromClose": 29.91,
+                "close": 29.55
+              }
+            }
+          },
+          "YTD": {
+            "value": 10.16,
+            "from": "2025-12-31",
+            "constituents": {
+              "XLRE": {
+                "value": 10.632,
+                "fromClose": 40.35,
+                "close": 44.64
+              },
+              "VNQ": {
+                "value": 9.9559,
+                "fromClose": 88.49,
+                "close": 97.3
+              },
+              "FREL": {
+                "value": 9.8922,
+                "fromClose": 26.89,
+                "close": 29.55
+              }
+            }
+          },
+          "1Y": {
+            "value": 7.9493,
+            "from": "2025-11-07",
+            "constituents": {
+              "XLRE": {
+                "value": 8.1657,
+                "fromClose": 41.27,
+                "close": 44.64
+              },
+              "VNQ": {
+                "value": 7.8355,
+                "fromClose": 90.23,
+                "close": 97.3
+              },
+              "FREL": {
+                "value": 7.8467,
+                "fromClose": 27.4,
+                "close": 29.55
+              }
+            }
+          }
+        },
+        "source": {
+          "name": "Cboe delayed quotes (daily closes), computed by this collector",
+          "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/"
+        },
+        "universe": {
+          "file": "sector-etf-universe.json",
+          "version": 1,
+          "asOf": "2026-11-10"
+        }
+      }
+    ],
+    "returnBasis": "Price return from daily closes (dividends not included). 1W/1M/3M/1Y compare the latest close with the last close on or before the same calendar date one week/month/three months/year earlier; YTD compares with the last close of the prior year.",
+    "classificationCheck": {
+      "value": "GOOGL, GOOG and META confirmed in XLC holdings and absent from XLK holdings; likewise in VOX and absent from VGT (Vanguard holdings as of 2026-09-30). FTEC and FCOM not checked: Fidelity's holdings need a session token.",
+      "sources": [
+        "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlc.xlsx",
+        "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlk.xlsx",
+        "https://investor.vanguard.com/vmf/api/VOX/portfolio-holding/stock",
+        "https://investor.vanguard.com/vmf/api/VGT/portfolio-holding/stock"
+      ]
+    },
+    "funds": [
+      {
+        "etf": "SPY",
+        "sector": "S&P 500 (index reference)",
+        "close": {
+          "value": 752.69,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/SPY.json",
+            "series": "SPY"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 2.3664,
+            "from": "2026-11-06",
+            "fromClose": 735.29
+          },
+          "1W": {
+            "value": 0.0784,
+            "from": "2026-11-02",
+            "fromClose": 752.1
+          },
+          "1M": {
+            "value": -3.324,
+            "from": "2026-10-09",
+            "fromClose": 778.57
+          },
+          "3M": {
+            "value": -2.6602,
+            "from": "2026-08-07",
+            "fromClose": 773.26
+          },
+          "YTD": {
+            "value": 10.3781,
+            "from": "2025-12-31",
+            "fromClose": 681.92
+          },
+          "1Y": {
+            "value": 12.1794,
+            "from": "2025-11-07",
+            "fromClose": 670.97
+          }
+        },
+        "weightInSP500": null,
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx"
+          },
+          "items": [
+            {
+              "name": "APPLE INC",
+              "ticker": "AAPL",
+              "weight": 7.86
+            },
+            {
+              "name": "NVIDIA CORP",
+              "ticker": "NVDA",
+              "weight": 6.64
+            },
+            {
+              "name": "MICROSOFT CORP",
+              "ticker": "MSFT",
+              "weight": 6.21
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLK",
+        "sector": "Information Technology",
+        "close": {
+          "value": 170.88,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLK.json",
+            "series": "XLK"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 3.7271,
+            "from": "2026-11-06",
+            "fromClose": 164.74
+          },
+          "1W": {
+            "value": -1.9171,
+            "from": "2026-11-02",
+            "fromClose": 174.22
+          },
+          "1M": {
+            "value": -14.0356,
+            "from": "2026-10-09",
+            "fromClose": 198.78
+          },
+          "3M": {
+            "value": -9.0919,
+            "from": "2026-08-07",
+            "fromClose": 187.97
+          },
+          "YTD": {
+            "value": 18.6914,
+            "from": "2025-12-31",
+            "fromClose": 143.97
+          },
+          "1Y": {
+            "value": 18.6008,
+            "from": "2025-11-07",
+            "fromClose": 144.08
+          }
+        },
+        "weightInSP500": {
+          "value": 36.06,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLK daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlk.xlsx"
+          },
+          "items": [
+            {
+              "name": "APPLE INC",
+              "ticker": "AAPL",
+              "weight": 16.33
+            },
+            {
+              "name": "NVIDIA CORP",
+              "ticker": "NVDA",
+              "weight": 13.79
+            },
+            {
+              "name": "MICROSOFT CORP",
+              "ticker": "MSFT",
+              "weight": 12.92
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLC",
+        "sector": "Communication Services",
+        "close": {
+          "value": 107.36,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLC.json",
+            "series": "XLC"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 2.4525,
+            "from": "2026-11-06",
+            "fromClose": 104.79
+          },
+          "1W": {
+            "value": 7.0816,
+            "from": "2026-11-02",
+            "fromClose": 100.26
+          },
+          "1M": {
+            "value": -2.736,
+            "from": "2026-10-09",
+            "fromClose": 110.38
+          },
+          "3M": {
+            "value": -3.4966,
+            "from": "2026-08-07",
+            "fromClose": 111.25
+          },
+          "YTD": {
+            "value": -8.8005,
+            "from": "2025-12-31",
+            "fromClose": 117.72
+          },
+          "1Y": {
+            "value": -4.2369,
+            "from": "2025-11-07",
+            "fromClose": 112.11
+          }
+        },
+        "weightInSP500": {
+          "value": 8.82,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLC daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlc.xlsx"
+          },
+          "items": [
+            {
+              "name": "META PLATFORMS INC CLASS A",
+              "ticker": "META",
+              "weight": 21.4
+            },
+            {
+              "name": "ALPHABET INC CL A",
+              "ticker": "GOOGL",
+              "weight": 10.64
+            },
+            {
+              "name": "ALPHABET INC CL C",
+              "ticker": "GOOG",
+              "weight": 8.55
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLF",
+        "sector": "Financials",
+        "close": {
+          "value": 57.99,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLF.json",
+            "series": "XLF"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.4521,
+            "from": "2026-11-06",
+            "fromClose": 57.16
+          },
+          "1W": {
+            "value": 0.747,
+            "from": "2026-11-02",
+            "fromClose": 57.56
+          },
+          "1M": {
+            "value": 5.9565,
+            "from": "2026-10-09",
+            "fromClose": 54.73
+          },
+          "3M": {
+            "value": 0.6771,
+            "from": "2026-08-07",
+            "fromClose": 57.6
+          },
+          "YTD": {
+            "value": 5.8791,
+            "from": "2025-12-31",
+            "fromClose": 54.77
+          },
+          "1Y": {
+            "value": 9.8712,
+            "from": "2025-11-07",
+            "fromClose": 52.78
+          }
+        },
+        "weightInSP500": {
+          "value": 12.53,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLF daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlf.xlsx"
+          },
+          "items": [
+            {
+              "name": "BERKSHIRE HATHAWAY INC CL B",
+              "ticker": "BRK.B",
+              "weight": 13.12
+            },
+            {
+              "name": "JPMORGAN CHASE + CO",
+              "ticker": "JPM",
+              "weight": 11.14
+            },
+            {
+              "name": "VISA INC CLASS A SHARES",
+              "ticker": "V",
+              "weight": 8.79
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLE",
+        "sector": "Energy",
+        "close": {
+          "value": 61.94,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLE.json",
+            "series": "XLE"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 0.5193,
+            "from": "2026-11-06",
+            "fromClose": 61.62
+          },
+          "1W": {
+            "value": -7.8959,
+            "from": "2026-11-02",
+            "fromClose": 67.25
+          },
+          "1M": {
+            "value": -4.8248,
+            "from": "2026-10-09",
+            "fromClose": 65.08
+          },
+          "3M": {
+            "value": 7.7217,
+            "from": "2026-08-07",
+            "fromClose": 57.5
+          },
+          "YTD": {
+            "value": 38.5372,
+            "from": "2025-12-31",
+            "fromClose": 44.71
+          },
+          "1Y": {
+            "value": 38.3516,
+            "from": "2025-11-07",
+            "fromClose": 44.77
+          }
+        },
+        "weightInSP500": {
+          "value": 3.47,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLE daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xle.xlsx"
+          },
+          "items": [
+            {
+              "name": "EXXONMOBIL HOLDINGS CORP",
+              "ticker": "XOM",
+              "weight": 24.2
+            },
+            {
+              "name": "CHEVRON CORP",
+              "ticker": "CVX",
+              "weight": 18.54
+            },
+            {
+              "name": "CONOCOPHILLIPS",
+              "ticker": "COP",
+              "weight": 7.19
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLB",
+        "sector": "Materials",
+        "close": {
+          "value": 52.94,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLB.json",
+            "series": "XLB"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.9057,
+            "from": "2026-11-06",
+            "fromClose": 51.95
+          },
+          "1W": {
+            "value": -1.3602,
+            "from": "2026-11-02",
+            "fromClose": 53.67
+          },
+          "1M": {
+            "value": 7.101,
+            "from": "2026-10-09",
+            "fromClose": 49.43
+          },
+          "3M": {
+            "value": 0.1513,
+            "from": "2026-08-07",
+            "fromClose": 52.86
+          },
+          "YTD": {
+            "value": 16.7365,
+            "from": "2025-12-31",
+            "fromClose": 45.35
+          },
+          "1Y": {
+            "value": 23.3745,
+            "from": "2025-11-07",
+            "fromClose": 42.91
+          }
+        },
+        "weightInSP500": {
+          "value": 1.77,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLB daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlb.xlsx"
+          },
+          "items": [
+            {
+              "name": "LINDE PLC",
+              "ticker": "LIN",
+              "weight": 12.97
+            },
+            {
+              "name": "NEWMONT CORP",
+              "ticker": "NEM",
+              "weight": 7.13
+            },
+            {
+              "name": "VULCAN MATERIALS CO",
+              "ticker": "VMC",
+              "weight": 5.28
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLI",
+        "sector": "Industrials",
+        "close": {
+          "value": 168.89,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLI.json",
+            "series": "XLI"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 3.8237,
+            "from": "2026-11-06",
+            "fromClose": 162.67
+          },
+          "1W": {
+            "value": -0.4832,
+            "from": "2026-11-02",
+            "fromClose": 169.71
+          },
+          "1M": {
+            "value": -0.2127,
+            "from": "2026-10-09",
+            "fromClose": 169.25
+          },
+          "3M": {
+            "value": -8.7968,
+            "from": "2026-08-07",
+            "fromClose": 185.18
+          },
+          "YTD": {
+            "value": 8.877,
+            "from": "2025-12-31",
+            "fromClose": 155.12
+          },
+          "1Y": {
+            "value": 10.148,
+            "from": "2025-11-07",
+            "fromClose": 153.33
+          }
+        },
+        "weightInSP500": {
+          "value": 8.24,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLI daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xli.xlsx"
+          },
+          "items": [
+            {
+              "name": "GENERAL ELECTRIC",
+              "ticker": "GE",
+              "weight": 6.49
+            },
+            {
+              "name": "CATERPILLAR INC",
+              "ticker": "CAT",
+              "weight": 5.13
+            },
+            {
+              "name": "RTX CORP",
+              "ticker": "RTX",
+              "weight": 4.93
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLY",
+        "sector": "Consumer Discretionary",
+        "close": {
+          "value": 121.01,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLY.json",
+            "series": "XLY"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 2.9172,
+            "from": "2026-11-06",
+            "fromClose": 117.58
+          },
+          "1W": {
+            "value": 2.412,
+            "from": "2026-11-02",
+            "fromClose": 118.16
+          },
+          "1M": {
+            "value": 7.2308,
+            "from": "2026-10-09",
+            "fromClose": 112.85
+          },
+          "3M": {
+            "value": 0.9595,
+            "from": "2026-08-07",
+            "fromClose": 119.86
+          },
+          "YTD": {
+            "value": 1.3399,
+            "from": "2025-12-31",
+            "fromClose": 119.41
+          },
+          "1Y": {
+            "value": 2.6117,
+            "from": "2025-11-07",
+            "fromClose": 117.93
+          }
+        },
+        "weightInSP500": {
+          "value": 9.58,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLY daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xly.xlsx"
+          },
+          "items": [
+            {
+              "name": "AMAZON.COM INC",
+              "ticker": "AMZN",
+              "weight": 22.57
+            },
+            {
+              "name": "TESLA INC",
+              "ticker": "TSLA",
+              "weight": 16.96
+            },
+            {
+              "name": "HOME DEPOT INC",
+              "ticker": "HD",
+              "weight": 5.61
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLP",
+        "sector": "Consumer Staples",
+        "close": {
+          "value": 90.89,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLP.json",
+            "series": "XLP"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 0.8992,
+            "from": "2026-11-06",
+            "fromClose": 90.08
+          },
+          "1W": {
+            "value": 0.0661,
+            "from": "2026-11-02",
+            "fromClose": 90.83
+          },
+          "1M": {
+            "value": 8.9416,
+            "from": "2026-10-09",
+            "fromClose": 83.43
+          },
+          "3M": {
+            "value": 6.7787,
+            "from": "2026-08-07",
+            "fromClose": 85.12
+          },
+          "YTD": {
+            "value": 17.0057,
+            "from": "2025-12-31",
+            "fromClose": 77.68
+          },
+          "1Y": {
+            "value": 18.4852,
+            "from": "2025-11-07",
+            "fromClose": 76.71
+          }
+        },
+        "weightInSP500": {
+          "value": 5.08,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLP daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlp.xlsx"
+          },
+          "items": [
+            {
+              "name": "WALMART INC",
+              "ticker": "WMT",
+              "weight": 11.21
+            },
+            {
+              "name": "COSTCO WHOLESALE CORP",
+              "ticker": "COST",
+              "weight": 9.46
+            },
+            {
+              "name": "PROCTER + GAMBLE CO/THE",
+              "ticker": "PG",
+              "weight": 7.83
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLV",
+        "sector": "Health Care",
+        "close": {
+          "value": 188.33,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLV.json",
+            "series": "XLV"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.9102,
+            "from": "2026-11-06",
+            "fromClose": 184.8
+          },
+          "1W": {
+            "value": 2.0206,
+            "from": "2026-11-02",
+            "fromClose": 184.6
+          },
+          "1M": {
+            "value": 10.257,
+            "from": "2026-10-09",
+            "fromClose": 170.81
+          },
+          "3M": {
+            "value": 13.6709,
+            "from": "2026-08-07",
+            "fromClose": 165.68
+          },
+          "YTD": {
+            "value": 21.6602,
+            "from": "2025-12-31",
+            "fromClose": 154.8
+          },
+          "1Y": {
+            "value": 28.8696,
+            "from": "2025-11-07",
+            "fromClose": 146.14
+          }
+        },
+        "weightInSP500": {
+          "value": 10.47,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLV daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlv.xlsx"
+          },
+          "items": [
+            {
+              "name": "ELI LILLY + CO",
+              "ticker": "LLY",
+              "weight": 16.54
+            },
+            {
+              "name": "JOHNSON + JOHNSON",
+              "ticker": "JNJ",
+              "weight": 9.95
+            },
+            {
+              "name": "ABBVIE INC",
+              "ticker": "ABBV",
+              "weight": 7.59
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLU",
+        "sector": "Utilities",
+        "close": {
+          "value": 43.79,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLU.json",
+            "series": "XLU"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.5303,
+            "from": "2026-11-06",
+            "fromClose": 43.13
+          },
+          "1W": {
+            "value": 0.2748,
+            "from": "2026-11-02",
+            "fromClose": 43.67
+          },
+          "1M": {
+            "value": 5.7474,
+            "from": "2026-10-09",
+            "fromClose": 41.41
+          },
+          "3M": {
+            "value": 0.4127,
+            "from": "2026-08-07",
+            "fromClose": 43.61
+          },
+          "YTD": {
+            "value": 2.5767,
+            "from": "2025-12-31",
+            "fromClose": 42.69
+          },
+          "1Y": {
+            "value": -2.3417,
+            "from": "2025-11-07",
+            "fromClose": 44.84
+          }
+        },
+        "weightInSP500": {
+          "value": 2.11,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLU daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlu.xlsx"
+          },
+          "items": [
+            {
+              "name": "NEXTERA ENERGY INC",
+              "ticker": "NEE",
+              "weight": 13.16
+            },
+            {
+              "name": "SOUTHERN CO/THE",
+              "ticker": "SO",
+              "weight": 7.82
+            },
+            {
+              "name": "DUKE ENERGY CORP",
+              "ticker": "DUK",
+              "weight": 7.25
+            }
+          ]
+        }
+      },
+      {
+        "etf": "XLRE",
+        "sector": "Real Estate",
+        "close": {
+          "value": 44.64,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "Cboe delayed quotes (daily closes)",
+            "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+            "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/XLRE.json",
+            "series": "XLRE"
+          }
+        },
+        "returns": {
+          "1D": {
+            "value": 1.4545,
+            "from": "2026-11-06",
+            "fromClose": 44
+          },
+          "1W": {
+            "value": 2.2915,
+            "from": "2026-11-02",
+            "fromClose": 43.64
+          },
+          "1M": {
+            "value": 7.2819,
+            "from": "2026-10-09",
+            "fromClose": 41.61
+          },
+          "3M": {
+            "value": -0.7559,
+            "from": "2026-08-07",
+            "fromClose": 44.98
+          },
+          "YTD": {
+            "value": 10.632,
+            "from": "2025-12-31",
+            "fromClose": 40.35
+          },
+          "1Y": {
+            "value": 8.1657,
+            "from": "2025-11-07",
+            "fromClose": 41.27
+          }
+        },
+        "weightInSP500": {
+          "value": 1.87,
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — SPY fund page, Index Sector Breakdown",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy"
+          }
+        },
+        "topHoldings": {
+          "asOf": "2026-11-09",
+          "source": {
+            "name": "State Street — XLRE daily holdings file",
+            "url": "https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-xlre.xlsx"
+          },
+          "items": [
+            {
+              "name": "WELLTOWER INC",
+              "ticker": "WELL",
+              "weight": 11.52
+            },
+            {
+              "name": "PROLOGIS INC",
+              "ticker": "PLD",
+              "weight": 8.04
+            },
+            {
+              "name": "EQUINIX INC",
+              "ticker": "EQIX",
+              "weight": 6.74
+            }
+          ]
+        }
+      }
+    ],
+    "blocked": [
+      {
+        "series": "ETF daily closes via Stooq",
+        "source": "https://stooq.com/q/d/l/?s=xlk.us&i=d",
+        "reason": "Returns an HTML JavaScript proof-of-work bot check, not CSV. Not bypassed. Closes are read from Cboe's public delayed-quote data instead."
+      },
+      {
+        "series": "ETF daily closes via Nasdaq.com",
+        "source": "https://api.nasdaq.com/api/quote/XLK/historical",
+        "reason": "Answers only a browser-impersonating User-Agent; a plain request gets the connection reset. Not used."
+      }
+    ]
+  }
+}

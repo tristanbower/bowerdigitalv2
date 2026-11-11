@@ -393,9 +393,10 @@ function closeOnOrBefore(closes, iso) {
   return null;
 }
 
-function periodReturns(closes) {
+// Reference close for each window, given closes sorted ascending.
+function windowRefs(closes) {
   const last = closes[closes.length - 1];
-  const ref = {
+  return {
     "1D": closes[closes.length - 2],
     "1W": closeOnOrBefore(closes, shiftIso(last.date, { days: -7 })),
     "1M": closeOnOrBefore(closes, shiftIso(last.date, { months: -1 })),
@@ -403,8 +404,12 @@ function periodReturns(closes) {
     YTD: closeOnOrBefore(closes, `${Number(last.date.slice(0, 4)) - 1}-12-31`),
     "1Y": closeOnOrBefore(closes, shiftIso(last.date, { years: -1 })),
   };
+}
+
+function periodReturns(closes) {
+  const last = closes[closes.length - 1];
   const out = {};
-  for (const [k, r] of Object.entries(ref)) {
+  for (const [k, r] of Object.entries(windowRefs(closes))) {
     out[k] = r ? { value: round((last.close / r.close - 1) * 100, 4), from: r.date, fromClose: r.close } : null;
   }
   return { last, returns: out };
@@ -428,6 +433,15 @@ async function topHoldings(etf) {
   return { asOf, url, all: holdings, top3: holdings.slice(0, 3).map((x) => ({ ...x, weight: round(x.weight, 2) })) };
 }
 
+// Vanguard's own holdings API (monthly, as of month end).
+async function vanguardHoldings(t) {
+  const url = `https://investor.vanguard.com/vmf/api/${t}/portfolio-holding/stock`;
+  const d = await get(url, { json: true });
+  const items = d?.fund?.entity || [];
+  if (!items.length) throw new Error(`Vanguard ${t}: no holdings`);
+  return { asOf: d.asOfDate.slice(0, 10), url, tickers: new Set(items.map((h) => h.ticker)) };
+}
+
 async function spySectorWeights() {
   const url = "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy";
   const t = htmlToText(await text(url));
@@ -446,6 +460,133 @@ async function spySectorWeights() {
   return { asOf, url, weights };
 }
 
+// ── Composite sector indexes ──
+//
+// Each sector's headline is a Bower Digital composite: the equal-weighted
+// average of the price returns of the sector funds listed as `included` in
+// data/side-bets/sector-etf-universe.json. For a window, every constituent's
+// return runs from the same reference date to the same latest date, and the
+// composite is their plain mean — equal weight at the start of the window, no
+// rebalancing inside it. Nothing about the composite is estimated: a fund with
+// no close on a date takes that date out of the composite, it is not filled.
+
+const UNIVERSE_FILE = path.join(OUT_DIR, "sector-etf-universe.json");
+const COMPOSITE_VERSION = 1;
+const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+
+function readUniverse() {
+  const u = JSON.parse(fs.readFileSync(UNIVERSE_FILE, "utf8"));
+  for (const s of SECTORS) {
+    const us = u.sectors.find((x) => x.spdr === s.etf);
+    if (!us?.included?.length) throw new Error(`universe: no included funds for ${s.sector}`);
+    if (!us.included.some((f) => f.ticker === s.etf)) throw new Error(`universe: ${s.etf} missing from ${s.sector} constituents`);
+  }
+  return u;
+}
+
+// Dates on which every constituent has a close, ascending.
+function commonCloses(tickers, hist) {
+  const maps = tickers.map((t) => new Map(hist[t].closes.map((c) => [c.date, c.close])));
+  return hist[tickers[0]].closes
+    .map((c) => c.date)
+    .filter((d) => maps.every((m) => m.has(d)))
+    .map((date) => ({ date, close: Object.fromEntries(tickers.map((t, i) => [t, maps[i].get(date)])) }));
+}
+
+function compositeFor(meta, us, hist, stored, universeRef) {
+  const tickers = us.included.map((f) => f.ticker);
+  if (stored && stored.constituents.join() !== tickers.join()) {
+    throw new Error(`${meta.short}: constituents changed (${stored.constituents.join(", ")} → ${tickers.join(", ")}); the stored series stays as is — a new composite version is needed`);
+  }
+  const all = commonCloses(tickers, hist);
+  if (all.length < 2) throw new Error(`${meta.short}: fewer than two common closes across ${tickers.join(", ")}`);
+  const last = all[all.length - 1];
+  // Only the span the composite uses: from the history base date, or one year
+  // (plus a week) before the latest close for the 1Y window, whichever is earlier.
+  const floor = shiftIso(torontoDate(), { days: -HIST_DAYS });
+  const baseDate = stored?.base?.date ?? all.find((r) => r.date >= floor).date;
+  const start = [baseDate, shiftIso(last.date, { years: -1, days: -7 })].sort()[0];
+  const rows = all.filter((r) => r.date >= start);
+  const lagging = tickers.filter((t) => hist[t].closes[hist[t].closes.length - 1].date !== last.date);
+
+  const ret = (t, a, b) => (b.close[t] / a.close[t] - 1) * 100;
+  // An unadjusted split shows up as a one-day jump; refuse it rather than blend it.
+  for (let i = 1; i < rows.length; i++) {
+    for (const t of tickers) {
+      if (Math.abs(ret(t, rows[i - 1], rows[i])) > 25) throw new Error(`${t}: ${round(ret(t, rows[i - 1], rows[i]), 2)}% move ${rows[i - 1].date} → ${rows[i].date} — possible unadjusted split`);
+    }
+  }
+  const returns = {};
+  for (const [k, ref] of Object.entries(windowRefs(rows))) {
+    if (!ref) { returns[k] = null; continue; }
+    const each = tickers.map((t) => ret(t, ref, last));
+    returns[k] = {
+      value: round(mean(each), 4),
+      from: ref.date,
+      constituents: Object.fromEntries(tickers.map((t, i) => [t, { value: round(each[i], 4), fromClose: ref.close[t], close: last.close[t] }])),
+    };
+  }
+
+  // History: level of an equal-weight basket bought on the base date and held
+  // (100 = base), plus the composite 1-day return and every constituent close,
+  // so each point can be recomputed from the file alone.
+  const base = rows.find((r) => r.date === baseDate);
+  if (!base) throw new Error(`${meta.short}: base date ${baseDate} has no common close`);
+  const points = [];
+  rows.forEach((r, i) => {
+    if (r.date < baseDate) return;
+    const prev = rows[i - 1];
+    points.push({
+      t: r.date,
+      value: round(100 * mean(tickers.map((t) => r.close[t] / base.close[t])), 6),
+      d1: prev && prev.date >= baseDate ? round(mean(tickers.map((t) => ret(t, prev, r))), 6) : null,
+      closes: r.close,
+    });
+  });
+
+  const name = `${meta.short} Index`;
+  return {
+    composite: {
+      key: us.key,
+      name,
+      sector: meta.sector,
+      spdr: meta.etf,
+      version: COMPOSITE_VERSION,
+      single: tickers.length === 1,
+      constituents: us.included.map((f) => ({ ticker: f.ticker, brand: f.brand, provider: f.provider, name: f.name, index: f.index, weight: round(1 / tickers.length, 6) })),
+      weighting: `Equal weight: ${tickers.length} fund${tickers.length > 1 ? "s" : ""}, ${round(100 / tickers.length, 2)}% each at the start of every window; no rebalancing within a window.`,
+      returnBasis: "Price return (split-adjusted daily closes; distributions not included) for every constituent.",
+      asOf: last.date,
+      lagging: lagging.length ? `${lagging.join(", ")} had a later close than the others; the composite uses the latest date all constituents share.` : null,
+      returns,
+      source: { name: "Cboe delayed quotes (daily closes), computed by this collector", url: "https://www.cboe.com/us/equities/market_statistics/historical_data/" },
+      universe: universeRef,
+    },
+    history: {
+      label: `${name} (equal-weight composite of ${tickers.join(", ")})`,
+      unit: "index level, base 100",
+      registry: "sectorHistory",
+      points,
+      backfill: { available: true, note: `Computed from Cboe's published daily closes of each constituent; base 100 = close of ${baseDate}.` },
+      source: { name: "Cboe delayed quotes (daily closes), computed by this collector", url: "https://www.cboe.com/us/equities/market_statistics/historical_data/", series: tickers.join(",") },
+      extra: {
+        methodology: {
+          version: COMPOSITE_VERSION,
+          construction: "Bower Digital composite — not affiliated with, endorsed by, or tracking any provider's index.",
+          value: "100 × mean over constituents of (close on t ÷ close on base date): an equal-weight basket bought at the base close and held, no rebalancing.",
+          d1: "Mean of the constituents' 1-day price returns from the previous common close, in %.",
+          returnBasis: "Price return from split-adjusted daily closes; distributions not included.",
+        },
+        constituents: tickers,
+        weights: Object.fromEntries(tickers.map((t) => [t, round(1 / tickers.length, 6)])),
+        base: { date: baseDate, closes: base.close },
+        asOf: last.date,
+        universe: universeRef,
+      },
+    },
+  };
+}
+
 async function collectSectors() {
   const blocked = [
     {
@@ -460,19 +601,24 @@ async function collectSectors() {
     },
   ];
 
+  const universe = readUniverse();
+  const universeRef = { file: "sector-etf-universe.json", version: universe.version, asOf: universe.asOf };
   const weights = await spySectorWeights();
+  const hist = {};
+  const allTickers = new Set(["SPY", ...SECTORS.map((s) => s.etf), ...universe.sectors.flatMap((s) => s.included.map((f) => f.ticker))]);
+  for (const t of allTickers) { hist[t] = await cboeHistory(t); await sleep(150); }
+
   const funds = [];
   for (const t of ["SPY", ...SECTORS.map((s) => s.etf)]) {
     const meta = SECTORS.find((s) => s.etf === t);
-    const hist = await cboeHistory(t);
-    const { last, returns } = periodReturns(hist.closes);
+    const { last, returns } = periodReturns(hist[t].closes);
     let holdings = null;
     try { holdings = await topHoldings(t); }
     catch (e) { blocked.push({ series: `${t} holdings`, source: ssgaHoldingsUrl(t), reason: e.message }); }
     funds.push({
       etf: t,
       sector: meta ? meta.sector : "S&P 500 (index reference)",
-      close: { value: last.close, asOf: last.date, source: hist.source },
+      close: { value: last.close, asOf: last.date, source: hist[t].source },
       returns,
       weightInSP500: meta ? { value: weights.weights[meta.sector], asOf: weights.asOf, source: { name: "State Street — SPY fund page, Index Sector Breakdown", url: weights.url } } : null,
       topHoldings: holdings ? { asOf: holdings.asOf, source: { name: `State Street — ${t} daily holdings file`, url: holdings.url }, items: holdings.top3 } : null,
@@ -489,13 +635,38 @@ async function collectSectors() {
     if (xlk.has(t)) throw new Error(`classification check: ${t} found in XLK holdings`);
   }
   for (const f of funds) delete f._all;
+  // The same check on the Vanguard constituents (month-end holdings). Fidelity
+  // publishes holdings only behind a session token, so FTEC/FCOM are not checked.
+  const vg = { tech: await vanguardHoldings("VGT"), comm: await vanguardHoldings("VOX") };
+  for (const t of ["GOOGL", "GOOG", "META"]) {
+    if (!vg.comm.tickers.has(t)) throw new Error(`classification check: ${t} not found in VOX holdings`);
+    if (vg.tech.tickers.has(t)) throw new Error(`classification check: ${t} found in VGT holdings`);
+  }
+
+  const composites = [], _histories = {};
+  for (const meta of SECTORS) {
+    const us = universe.sectors.find((x) => x.spdr === meta.etf);
+    const series = `sector-composite-${us.key}`;
+    const stored = fs.existsSync(histFile(series)) ? JSON.parse(fs.readFileSync(histFile(series), "utf8")) : null;
+    try {
+      const { composite, history } = compositeFor(meta, us, hist, stored, universeRef);
+      composites.push(composite);
+      _histories[series] = history;
+    } catch (e) { blocked.push({ series: `${meta.short} composite`, source: "collector", reason: e.message }); }
+  }
+  if (composites.length !== SECTORS.length) throw new Error(`composite: not every sector produced one — ${blocked.filter((b) => b.source === "collector").map((b) => `${b.series}: ${b.reason}`).join("; ")}`);
 
   return {
-    method: "Each sector is the Select Sector SPDR fund that tracks it, measured close to close; S&P 500 measured with SPY.",
+    method: "Each sector's headline is a Bower Digital composite: the equal-weighted average of the price returns of the sector funds listed for it (constituents and providers per row), equal weight at the start of each window, no rebalancing. The Select Sector SPDR fund is shown alongside as the single-fund reference. S&P 500 measured with SPY.",
+    composites,
     returnBasis: "Price return from daily closes (dividends not included). 1W/1M/3M/1Y compare the latest close with the last close on or before the same calendar date one week/month/three months/year earlier; YTD compares with the last close of the prior year.",
-    classificationCheck: "GOOGL, GOOG and META confirmed in XLC holdings and absent from XLK holdings.",
+    classificationCheck: {
+      value: `GOOGL, GOOG and META confirmed in XLC holdings and absent from XLK holdings; likewise in VOX and absent from VGT (Vanguard holdings as of ${vg.tech.asOf}). FTEC and FCOM not checked: Fidelity's holdings need a session token.`,
+      sources: [ssgaHoldingsUrl("XLC"), ssgaHoldingsUrl("XLK"), vg.comm.url, vg.tech.url],
+    },
     funds,
     blocked,
+    _histories,
   };
 }
 
@@ -793,12 +964,13 @@ function appendHistory(index, series, entry) {
     appendOnly: "Points are only ever added. A stored point is never edited or removed; later source differences are listed under revisions.",
     backfill: entry.backfill,
     source: entry.source,
+    ...entry.extra,
     firstPoint: points[0]?.t ?? null,
     points,
     revisions,
   };
   fs.writeFileSync(file, JSON.stringify(out) + "\n");
-  (index.history ||= {})[series] = `history/${series}.json`;
+  (index[entry.registry || "history"] ||= {})[series] = `history/${series}.json`;
   console.log(`  history ${series}: +${added} point(s) → v${out.version}${revised ? " (revision logged)" : ""}`);
   return true;
 }

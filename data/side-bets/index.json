@@ -10,9 +10,10 @@
     },
     "sectors": {
       "files": [
-        "sectors-2026-11-10.json"
+        "sectors-2026-11-10.json",
+        "sectors-2026-11-10-2.json"
       ],
-      "latest": "sectors-2026-11-10.json"
+      "latest": "sectors-2026-11-10-2.json"
     },
     "compute": {
       "files": [
@@ -23,7 +24,7 @@
       "latest": "compute-2026-11-10-3.json"
     }
   },
-  "updated": "2026-11-11T03:11:09.656Z",
+  "updated": "2026-11-11T03:49:37.310Z",
   "history": {
     "macro-us10y": "history/macro-us10y.json",
     "macro-wti": "history/macro-wti.json",
@@ -37,5 +38,18 @@
     "compute-vast-H200": "history/compute-vast-H200.json",
     "compute-vast-H100": "history/compute-vast-H100.json",
     "compute-vast-B200": "history/compute-vast-B200.json"
+  },
+  "sectorHistory": {
+    "sector-composite-technology": "history/sector-composite-technology.json",
+    "sector-composite-communication-services": "history/sector-composite-communication-services.json",
+    "sector-composite-financials": "history/sector-composite-financials.json",
+    "sector-composite-energy": "history/sector-composite-energy.json",
+    "sector-composite-materials": "history/sector-composite-materials.json",
+    "sector-composite-industrials": "history/sector-composite-industrials.json",
+    "sector-composite-consumer-discretionary": "history/sector-composite-consumer-discretionary.json",
+    "sector-composite-consumer-staples": "history/sector-composite-consumer-staples.json",
+    "sector-composite-health-care": "history/sector-composite-health-care.json",
+    "sector-composite-utilities": "history/sector-composite-utilities.json",
+    "sector-composite-real-estate": "history/sector-composite-real-estate.json"
   }
 }

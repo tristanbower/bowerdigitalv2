@@ -1,0 +1,2434 @@
+{
+  "schema": 1,
+  "version": 1,
+  "asOf": "2026-11-10",
+  "title": "Side Bets — sector ETF universe for the Bower composite sector indexes",
+  "purpose": "Every US sector ETF considered for each GICS sector, the funds included in each Bower composite, and the reason for every exclusion. The collector (scripts/side-bets-collect.cjs) reads `included` from this file; editing it changes the composites.",
+  "inclusionRule": [
+    "Dedicated to one GICS sector of US equities, tracking a passive index (no active, leveraged, inverse, options-income, factor/smart-beta or thematic funds).",
+    "Same sector definition: the index must classify by GICS. Funds on other sector definitions (FTSE Russell / ICB-style, REIT-only) are listed as exclusions with evidence, not blended.",
+    "Market-cap weighted (capped or uncapped). Equal-weight sector funds are a different construction and are excluded.",
+    "From a major provider with a full lineup across the 11 GICS sectors, so every composite is built from the same providers. Partial lineups are listed as watch items.",
+    "Has a free, no-key daily price source with at least a year of history (Cboe's public delayed-quote daily closes)."
+  ],
+  "returnBasis": "Price return for every fund: Cboe's daily closes are split-adjusted but not dividend-adjusted. No free source of total-return or distribution history was used, so no fund is on a total-return basis.",
+  "priceSources": {
+    "used": {
+      "name": "Cboe delayed quotes — daily closes",
+      "url": "https://www.cboe.com/us/equities/market_statistics/historical_data/",
+      "endpoint": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/<TICKER>.json",
+      "checked": "2026-11-10",
+      "note": "All 56 candidate tickers checked (SPDR, Vanguard, iShares, Fidelity, Invesco, SCHH): each has daily history through 2026-11-09."
+    },
+    "notUsed": [
+      {
+        "name": "Stooq daily CSV",
+        "url": "https://stooq.com/q/d/l/?s=vfh.us&i=d",
+        "checked": "2026-11-10",
+        "reason": "Returns an HTML JavaScript proof-of-work bot check instead of CSV ('This site requires JavaScript to verify your browser'). Not bypassed. Same result as in phase 1."
+      }
+    ]
+  },
+  "sectors": [
+    {
+      "key": "technology",
+      "sector": "Information Technology",
+      "spdr": "XLK",
+      "included": [
+        {
+          "ticker": "XLK",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Technology Select Sector SPDR ETF",
+          "index": "Technology Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-technology-select-sector-spdr-etf-xlk",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 114210556140.98,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-technology-select-sector-spdr-etf-xlk"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VGT",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Information Technology ETF",
+          "index": "MSCI US Investable Market Information Technology 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VGT/expense"
+            }
+          },
+          "aum": {
+            "value": 145100000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 167100000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vgt"
+            }
+          },
+          "priceSource": "cboe",
+          "note": "8-for-1 share split effective 2026-04-21; Cboe closes are split-adjusted (checked)."
+        },
+        {
+          "ticker": "FTEC",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Information Technology Index ETF",
+          "index": "MSCI USA IMI Information Technology 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023203/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092808&securityIdType=CUSIP&collectionId=1023203&docName=T07-SUPKG6506594524819239389.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 20790529127,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FTEC"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092808"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYW",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Technology ETF",
+          "index": "Russell 1000 Technology RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239522/ishares-u-s-technology-etf"
+            }
+          },
+          "aum": {
+            "value": 23063082149,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239522/ishares-u-s-technology-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): holds META 3.43%, GOOGL 2.34%, GOOG 1.90% (7.67% in names GICS puts in Communication Services; 8.39% Communication overall); 90.59% GICS Information Technology.",
+          "holdingsSource": "https://www.ishares.com/us/products/239522/ishares-u-s-technology-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPT",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Technology ETF",
+          "index": "S&P 500 Equal Weight Information Technology Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-technology-etf.html"
+            }
+          },
+          "aum": {
+            "value": 5585252474.02,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V282?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        },
+        {
+          "ticker": "GXPT",
+          "brand": "Global X",
+          "provider": "Global X",
+          "name": "Global X PureCap MSCI Information Technology ETF",
+          "index": "MSCI USA Information Technology Index",
+          "classification": "GICS",
+          "weighting": "Free-float market cap, uncapped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.15,
+            "type": "net (gross 0.25%; contractual waiver to 2027-04-01)",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpt"
+            }
+          },
+          "aum": {
+            "value": 110069529.9,
+            "unit": "USD",
+            "basis": "Net assets",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "Global X fund page / explore list",
+              "url": "https://www.globalxetfs.com/funds/gxpt"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list. Plain cap-weighted GICS sector fund, but the PureCap line covers only 5 of 11 sectors and launched 2025-07-22 with ~$110M in assets. Including it would give four sectors a different constituent set from the other seven; left out so every composite uses the same three full sector lineups. Revisit if the lineup completes."
+        },
+        {
+          "ticker": "XLKM",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors",
+          "name": "State Street S&P 500 Technology Market Sector SPDR ETF",
+          "index": "S&P 500 Information Technology Sector Index",
+          "classification": "GICS",
+          "weighting": "Float market cap, uncapped index; fund meets diversification limits by optimization",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.12,
+            "type": "gross",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "aum": {
+            "value": 444097.78,
+            "unit": "USD",
+            "basis": "AUM",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list. Launched 2026-10-13 (under one month of prices, no 1M/3M/YTD/1Y history), under $1M in assets, and holds mainly the matching Select Sector SPDR fund — including it would largely double-count XLK."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions.",
+        "Alphabet and Meta: GICS places them in Communication Services. The collector checks XLK's daily holdings and VGT's month-end holdings for GOOGL, GOOG and META on every run; FTEC's holdings feed needs a session token and is not checked automatically (its index, MSCI USA IMI Information Technology, is GICS-defined)."
+      ]
+    },
+    {
+      "key": "communication-services",
+      "sector": "Communication Services",
+      "spdr": "XLC",
+      "included": [
+        {
+          "ticker": "XLC",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Communication Services Select Sector SPDR ETF",
+          "index": "Communication Services Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-communication-services-select-sector-spdr-etf-xlc",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 22115795144.83,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-communication-services-select-sector-spdr-etf-xlc"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VOX",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Communication Services ETF",
+          "index": "MSCI US Investable Market Communication Services 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VOX/expense"
+            }
+          },
+          "aum": {
+            "value": 5400000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 5600000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vox"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FCOM",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Communication Services Index ETF",
+          "index": "MSCI USA IMI Communication Services 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023213/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092873&securityIdType=CUSIP&collectionId=1023213&docName=T09-SUPKG3753246231926013190.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 1506363225,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FCOM"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092873"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYZ",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Telecommunications ETF",
+          "index": "Russell 1000 Telecommunications RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-07-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239523/ishares-u-s-telecommunications-etf"
+            }
+          },
+          "aum": {
+            "value": 534041447,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239523/ishares-u-s-telecommunications-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): a telecom index, not Communication Services: 50.6% GICS Information Technology (CSCO 22.08%, ANET 11.64%); holds no GOOGL, GOOG, META, NFLX or DIS.",
+          "holdingsSource": "https://www.ishares.com/us/products/239523/ishares-u-s-telecommunications-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPC",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Communication Services ETF",
+          "index": "S&P 500 Equal Weight Communication Services Plus Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-communication-services-etf.html"
+            }
+          },
+          "aum": {
+            "value": 55399479.62,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137Y609?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended. Its 'Plus' index also tops up from S&P MidCap 400 stocks when the sector has fewer than 22 S&P 500 members."
+        },
+        {
+          "ticker": "GXPC",
+          "brand": "Global X",
+          "provider": "Global X",
+          "name": "Global X PureCap MSCI Communication Services ETF",
+          "index": "MSCI USA Communication Services Index",
+          "classification": "GICS",
+          "weighting": "Free-float market cap, uncapped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.15,
+            "type": "net (gross 0.25%; waiver to 2027-04-01)",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpc"
+            }
+          },
+          "aum": {
+            "value": 96910016.07,
+            "unit": "USD",
+            "basis": "Net assets",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpc"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — same reason as GXPT (partial 5-sector lineup, launched 2025-07-22, ~$97M)."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions.",
+        "No iShares US fund tracks GICS Communication Services; its only fund under that label (IXP) is global."
+      ]
+    },
+    {
+      "key": "financials",
+      "sector": "Financials",
+      "spdr": "XLF",
+      "included": [
+        {
+          "ticker": "XLF",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Financial Select Sector SPDR ETF",
+          "index": "Financial Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-financial-select-sector-spdr-etf-xlf",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 53575836320.78,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-financial-select-sector-spdr-etf-xlf"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VFH",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Financials ETF",
+          "index": "MSCI US Investable Market Financials 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VFH/expense"
+            }
+          },
+          "aum": {
+            "value": 13300000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 14500000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vfh"
+            }
+          },
+          "priceSource": "cboe",
+          "note": "Includes mortgage REITs (GICS Financials)."
+        },
+        {
+          "ticker": "FNCL",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Financials Index ETF",
+          "index": "MSCI USA IMI Financials 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023195/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092501&securityIdType=CUSIP&collectionId=1023195&docName=T04-SUPKG962290055685537628.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 2309425693,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FNCL"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092501"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYF",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Financials ETF",
+          "index": "Russell 1000 Financials 40 Act 15/22.5 Daily Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239508/ishares-u-s-financials-etf"
+            }
+          },
+          "aum": {
+            "value": 3937367805,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239508/ishares-u-s-financials-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): holds no V, MA, AXP, COF or PYPL (GICS Financials; FTSE Russell places them in Industrials, see IYJ); otherwise 99.21% GICS Financials.",
+          "holdingsSource": "https://www.ishares.com/us/products/239508/ishares-u-s-financials-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPF",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Financials ETF",
+          "index": "S&P 500 Equal Weight Financials Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-financials-etf.html"
+            }
+          },
+          "aum": {
+            "value": 331468010.86,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V340?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "energy",
+      "sector": "Energy",
+      "spdr": "XLE",
+      "included": [
+        {
+          "ticker": "XLE",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Energy Select Sector SPDR ETF",
+          "index": "Energy Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-energy-select-sector-spdr-etf-xle",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 40744292680.37,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-energy-select-sector-spdr-etf-xle"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VDE",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Energy ETF",
+          "index": "MSCI US Investable Market Energy 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VDE/expense"
+            }
+          },
+          "aum": {
+            "value": 11900000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 14500000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vde"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FENY",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Energy Index ETF",
+          "index": "MSCI USA IMI Energy 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023197/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092402&securityIdType=CUSIP&collectionId=1023197&docName=T03-SUPKG4301505388215927294.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 2369634608,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FENY"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092402"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYE",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Energy ETF",
+          "index": "Russell 1000 Energy RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239507/ishares-u-s-energy-etf"
+            }
+          },
+          "aum": {
+            "value": 1768799452,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239507/ishares-u-s-energy-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS-defined (FTSE Russell sector definition). Its holdings are close to GICS Energy — 98.17% by the GICS labels in its holdings file of 2026-11-09, the rest solar names GICS puts in Information Technology and Industrials (FSLR 0.85%, NXT 0.69%, ENPH 0.16%) — but it is left out so every composite follows one sector definition, as with the other iShares funds. Closest call in the universe.",
+          "holdingsSource": "https://www.ishares.com/us/products/239507/ishares-u-s-energy-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPG",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Energy ETF",
+          "index": "S&P 500 Equal Weight Energy Plus Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-energy-etf.html"
+            }
+          },
+          "aum": {
+            "value": 585550234.38,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V365?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended. Its 'Plus' index also tops up from S&P MidCap 400 stocks when the sector has fewer than 22 S&P 500 members."
+        },
+        {
+          "ticker": "GXPE",
+          "brand": "Global X",
+          "provider": "Global X",
+          "name": "Global X PureCap MSCI Energy ETF",
+          "index": "MSCI USA Energy Index",
+          "classification": "GICS",
+          "weighting": "Free-float market cap, uncapped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.15,
+            "type": "net (gross 0.25%; waiver to 2027-04-01)",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpe"
+            }
+          },
+          "aum": {
+            "value": 1462292.38,
+            "unit": "USD",
+            "basis": "Net assets",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpe"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — as GXPT, and assets of ~$1.5M."
+        },
+        {
+          "ticker": "XLEM",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors",
+          "name": "State Street S&P 500 Energy Market Sector SPDR ETF",
+          "index": "S&P 500 Energy Sector Index",
+          "classification": "GICS",
+          "weighting": "Float market cap, uncapped index; optimized",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.12,
+            "type": "gross",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "aum": {
+            "value": 469162.24,
+            "unit": "USD",
+            "basis": "AUM",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — as XLKM (launched 2026-10-13, under $1M, holds mainly XLE)."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "materials",
+      "sector": "Materials",
+      "spdr": "XLB",
+      "included": [
+        {
+          "ticker": "XLB",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Materials Select Sector SPDR ETF",
+          "index": "Materials Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-materials-select-sector-spdr-etf-xlb",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 8599286181.93,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-materials-select-sector-spdr-etf-xlb"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VAW",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Materials ETF",
+          "index": "MSCI US Investable Market Materials 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VAW/expense"
+            }
+          },
+          "aum": {
+            "value": 3000000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 4400000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vaw"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FMAT",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Materials Index ETF",
+          "index": "MSCI USA IMI Materials 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023209/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092881&securityIdType=CUSIP&collectionId=1023209&docName=T08-SUPKG3583719504869379655.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 599111193,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FMAT"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092881"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYM",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Basic Materials ETF",
+          "index": "Russell 1000 Basic Materials RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239503/ishares-u-s-basic-materials-etf"
+            }
+          },
+          "aum": {
+            "value": 1062473190,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239503/ishares-u-s-basic-materials-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): 10.19% GICS Industrials (FAST 4.63%); omits GICS Materials names SHW, CRH, MLM, VMC, BALL, PKG, AMCR, DOW (FTSE Russell puts construction materials and packaging in Industrials).",
+          "holdingsSource": "https://www.ishares.com/us/products/239503/ishares-u-s-basic-materials-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPM",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Materials ETF",
+          "index": "S&P 500 Equal Weight Materials Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-materials-etf.html"
+            }
+          },
+          "aum": {
+            "value": 192872301.49,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V316?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "industrials",
+      "sector": "Industrials",
+      "spdr": "XLI",
+      "included": [
+        {
+          "ticker": "XLI",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Industrial Select Sector SPDR ETF",
+          "index": "Industrial Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-industrial-select-sector-spdr-etf-xli",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 30666130998.56,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-industrial-select-sector-spdr-etf-xli"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VIS",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Industrials ETF",
+          "index": "MSCI US Investable Market Industrials 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VIS/expense"
+            }
+          },
+          "aum": {
+            "value": 7700000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 8200000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vis"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FIDU",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Industrials Index ETF",
+          "index": "MSCI USA IMI Industrials 25/25 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/25 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023201/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092709&securityIdType=CUSIP&collectionId=1023201&docName=T06-SUPKG2288076233473050325.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 2270443351,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FIDU"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092709"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYJ",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Industrials ETF",
+          "index": "Russell 1000 Industrials 40 Act 15/22.5 Daily Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239514/ishares-u-s-industrials-etf"
+            }
+          },
+          "aum": {
+            "value": 1864912047,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239514/ishares-u-s-industrials-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): largest holdings V 8.66% and MA 6.41% (GICS Financials); 21.79% GICS Financials, 3.87% Information Technology (ACN), 5.08% Materials; only 68.46% GICS Industrials.",
+          "holdingsSource": "https://www.ishares.com/us/products/239514/ishares-u-s-industrials-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPN",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Industrials ETF",
+          "index": "S&P 500 Equal Weight Industrials Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-industrials-etf.html"
+            }
+          },
+          "aum": {
+            "value": 849859048.04,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V324?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions.",
+        "FIDU's index is capped 25/25 rather than 25/50."
+      ]
+    },
+    {
+      "key": "consumer-discretionary",
+      "sector": "Consumer Discretionary",
+      "spdr": "XLY",
+      "included": [
+        {
+          "ticker": "XLY",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Consumer Discretionary Select Sector SPDR ETF",
+          "index": "Consumer Discretionary Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-consumer-discretionary-select-sector-spdr-etf-xly",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 23244558036.81,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-consumer-discretionary-select-sector-spdr-etf-xly"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VCR",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Consumer Discretionary ETF",
+          "index": "MSCI US Investable Market Consumer Discretionary 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VCR/expense"
+            }
+          },
+          "aum": {
+            "value": 5900000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 6500000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vcr"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FDIS",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Consumer Discretionary Index ETF",
+          "index": "MSCI USA IMI Consumer Discretionary 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023199/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092204&securityIdType=CUSIP&collectionId=1023199&docName=T01-SUPKG9084956976478405715.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 1627277802,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FDIS"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092204"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYC",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Consumer Discretionary ETF",
+          "index": "Russell 1000 Consumer Discretionary 40 Act 15/22.5 Daily Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239506/ishares-u-s-consumer-discretionary-etf"
+            }
+          },
+          "aum": {
+            "value": 1660987989,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239506/ishares-u-s-consumer-discretionary-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): WMT 4.29%, COST 4.25% (GICS Consumer Staples, 11.53% total); NFLX 3.81%, DIS 3.43% (Communication Services, 12.85%); UBER 2.31% (Industrials, 5.63%); only 69.86% GICS Consumer Discretionary.",
+          "holdingsSource": "https://www.ishares.com/us/products/239506/ishares-u-s-consumer-discretionary-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPD",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Consumer Discretionary ETF",
+          "index": "S&P 500 Equal Weight Consumer Discretionary Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-consumer-discretionary-etf.html"
+            }
+          },
+          "aum": {
+            "value": 291320399.48,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V381?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        },
+        {
+          "ticker": "GXPD",
+          "brand": "Global X",
+          "provider": "Global X",
+          "name": "Global X PureCap MSCI Consumer Discretionary ETF",
+          "index": "MSCI USA Consumer Discretionary Index",
+          "classification": "GICS",
+          "weighting": "Free-float market cap, uncapped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.15,
+            "type": "net (gross 0.25%; waiver to 2027-04-01)",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpd"
+            }
+          },
+          "aum": {
+            "value": 52020753.37,
+            "unit": "USD",
+            "basis": "Net assets",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxpd"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — as GXPT (~$52M)."
+        },
+        {
+          "ticker": "XLYM",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors",
+          "name": "State Street S&P 500 Consumer Discretionary Market Sector SPDR ETF",
+          "index": "S&P 500 Consumer Discretionary Sector Index",
+          "classification": "GICS",
+          "weighting": "Float market cap, uncapped index; optimized",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.12,
+            "type": "gross",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "aum": {
+            "value": 530280.62,
+            "unit": "USD",
+            "basis": "AUM",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — as XLKM (launched 2026-10-13, under $1M, holds mainly XLY)."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "consumer-staples",
+      "sector": "Consumer Staples",
+      "spdr": "XLP",
+      "included": [
+        {
+          "ticker": "XLP",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Consumer Staples Select Sector SPDR ETF",
+          "index": "Consumer Staples Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-consumer-staples-select-sector-spdr-etf-xlp",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 14515999645.64,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-consumer-staples-select-sector-spdr-etf-xlp"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VDC",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Consumer Staples ETF",
+          "index": "MSCI US Investable Market Consumer Staples 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VDC/expense"
+            }
+          },
+          "aum": {
+            "value": 8100000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 9600000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vdc"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FSTA",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Consumer Staples Index ETF",
+          "index": "MSCI USA IMI Consumer Staples 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023193/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092303&securityIdType=CUSIP&collectionId=1023193&docName=T02-SUPKG944669012878341586.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 1527184405,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FSTA"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092303"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYK",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Consumer Staples ETF",
+          "index": "Russell 1000 Consumer Staples RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239505/ishares-u-s-consumer-staples-etf"
+            }
+          },
+          "aum": {
+            "value": 1540503445,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239505/ishares-u-s-consumer-staples-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): holds no WMT, COST, TGT or DG (GICS Consumer Staples); holds MCK 4.43%, CVS 3.75%, CAH 2.75%, COR 2.74% (GICS Health Care, 13.67% total).",
+          "holdingsSource": "https://www.ishares.com/us/products/239505/ishares-u-s-consumer-staples-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPS",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Consumer Staples ETF",
+          "index": "S&P 500 Equal Weight Consumer Staples Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-consumer-staples-etf.html"
+            }
+          },
+          "aum": {
+            "value": 273111781.55,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V373?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        },
+        {
+          "ticker": "GXPS",
+          "brand": "Global X",
+          "provider": "Global X",
+          "name": "Global X PureCap MSCI Consumer Staples ETF",
+          "index": "MSCI USA Consumer Staples Index",
+          "classification": "GICS",
+          "weighting": "Free-float market cap, uncapped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.15,
+            "type": "net (gross 0.25%; waiver to 2027-04-01)",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxps"
+            }
+          },
+          "aum": {
+            "value": 78880229.91,
+            "unit": "USD",
+            "basis": "Net assets",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "Global X fund page",
+              "url": "https://www.globalxetfs.com/funds/gxps"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — as GXPT (~$79M)."
+        },
+        {
+          "ticker": "XLPM",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors",
+          "name": "State Street S&P 500 Consumer Staples Market Sector SPDR ETF",
+          "index": "S&P 500 Consumer Staples Sector Index",
+          "classification": "GICS",
+          "weighting": "Float market cap, uncapped index; optimized",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.12,
+            "type": "gross",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "aum": {
+            "value": 539435.17,
+            "unit": "USD",
+            "basis": "AUM",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Watch list — as XLKM (launched 2026-10-13, under $1M, holds mainly XLP)."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "health-care",
+      "sector": "Health Care",
+      "spdr": "XLV",
+      "included": [
+        {
+          "ticker": "XLV",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Health Care Select Sector SPDR ETF",
+          "index": "Health Care Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-health-care-select-sector-spdr-etf-xlv",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 50536526401.68,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-health-care-select-sector-spdr-etf-xlv"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VHT",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Health Care ETF",
+          "index": "MSCI US Investable Market Health Care 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VHT/expense"
+            }
+          },
+          "aum": {
+            "value": 20800000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 23700000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vht"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FHLC",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Health Care Index ETF",
+          "index": "MSCI USA IMI Health Care 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023205/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092600&securityIdType=CUSIP&collectionId=1023205&docName=T05-SUPKG8996185182046291718.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 3952983053,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FHLC"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092600"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYH",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Healthcare ETF",
+          "index": "Russell 1000 Health Care RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239511/ishares-u-s-healthcare-etf"
+            }
+          },
+          "aum": {
+            "value": 4828817239,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239511/ishares-u-s-healthcare-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): 99.9% GICS Health Care by content, but omits GICS Health Care names MCK, CVS, CAH, COR (FTSE Russell places them in Consumer Staples, see IYK).",
+          "holdingsSource": "https://www.ishares.com/us/products/239511/ishares-u-s-healthcare-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPH",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Health Care ETF",
+          "index": "S&P 500 Equal Weight Health Care Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-health-care-etf.html"
+            }
+          },
+          "aum": {
+            "value": 1064536629.12,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V332?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "utilities",
+      "sector": "Utilities",
+      "spdr": "XLU",
+      "included": [
+        {
+          "ticker": "XLU",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Utilities Select Sector SPDR ETF",
+          "index": "Utilities Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-utilities-select-sector-spdr-etf-xlu",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 23814147631.58,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-utilities-select-sector-spdr-etf-xlu"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VPU",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Utilities ETF",
+          "index": "MSCI US Investable Market Utilities 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.09,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2025-12-19",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VPU/expense"
+            }
+          },
+          "aum": {
+            "value": 8200000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 10100000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vpu"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "FUTY",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Utilities Index ETF",
+          "index": "MSCI USA IMI Utilities 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/50 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023215/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092865&securityIdType=CUSIP&collectionId=1023215&docName=T11-SUPKG6038646946067300987.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 2068550221,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FUTY"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092865"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IDU",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Utilities ETF",
+          "index": "Russell 1000 Utilities RIC 22.5/45 Capped Index",
+          "classification": "FTSE Russell sector definition (ICB-style membership; inferred from holdings — iShares documents say only 'as defined by FTSE Russell')",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-08-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239524/ishares-u-s-utilities-etf"
+            }
+          },
+          "aum": {
+            "value": 1380563740,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239524/ishares-u-s-utilities-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): includes waste management — WM 5.42%, RSG 3.02%, GFL 0.98%, CLH 0.90% (GICS Industrials, 10.32% total).",
+          "holdingsSource": "https://www.ishares.com/us/products/239524/ishares-u-s-utilities-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPU",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Utilities ETF",
+          "index": "S&P 500 Equal Weight Utilities Plus Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-utilities-etf.html"
+            }
+          },
+          "aum": {
+            "value": 542740467.12,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V274?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended. Its 'Plus' index also tops up from S&P MidCap 400 stocks when the sector has fewer than 22 S&P 500 members."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions."
+      ]
+    },
+    {
+      "key": "real-estate",
+      "sector": "Real Estate",
+      "spdr": "XLRE",
+      "included": [
+        {
+          "ticker": "XLRE",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors (Select Sector SPDR)",
+          "name": "State Street Real Estate Select Sector SPDR ETF",
+          "index": "Real Estate Select Sector Index",
+          "classification": "GICS",
+          "universe": "S&P 500 constituents only",
+          "weighting": "Float-adjusted modified market cap; quarterly caps: single stock ≤24%, sum of weights >4.8% ≤50%",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "gross (page prints gross only; prospectus fee table shows 0.08% total, no waiver)",
+            "asOf": "2026-01-28",
+            "asOfNote": "fund page prints the figure undated (read 2026-11-10); date is the prospectus filing",
+            "source": {
+              "name": "State Street fund page; Select Sector SPDR Trust prospectus (SEC EDGAR 485BPOS)",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-real-estate-select-sector-spdr-etf-xlre",
+              "secondary": "https://www.sec.gov/Archives/edgar/data/1064641/000119312526027312/d15107d485bpos.htm"
+            }
+          },
+          "aum": {
+            "value": 8497929558.01,
+            "unit": "USD",
+            "basis": "Assets under management",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund page",
+              "url": "https://www.ssga.com/us/en/intermediary/etfs/state-street-real-estate-select-sector-spdr-etf-xlre"
+            }
+          },
+          "priceSource": "cboe"
+        },
+        {
+          "ticker": "VNQ",
+          "brand": "Vanguard",
+          "provider": "Vanguard",
+          "name": "Vanguard Real Estate ETF",
+          "index": "MSCI US Investable Market Real Estate 25/50 Index",
+          "classification": "GICS",
+          "universe": "MSCI US Investable Market Index (large, mid and small cap)",
+          "weighting": "Cap-weighted, 25/50 capped (per index name)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.13,
+            "type": "expense ratio per prospectus (Vanguard does not label gross/net)",
+            "asOf": "2026-05-28",
+            "source": {
+              "name": "Vanguard fund data API",
+              "url": "https://investor.vanguard.com/vmf/api/VNQ/expense"
+            }
+          },
+          "aum": {
+            "value": 37600000000.0,
+            "unit": "USD",
+            "basis": "ETF share class net assets",
+            "totalFund": 69500000000.0,
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Vanguard fund page",
+              "url": "https://investor.vanguard.com/investment-products/etfs/profile/vnq"
+            }
+          },
+          "priceSource": "cboe",
+          "note": "Holds non-REIT real estate companies as GICS does (CBRE 2.14%, JLL 0.81%, CoStar 0.63% as of 2026-09-30) and 14.57% in Vanguard Real Estate II Index Fund, its underlying fund. Expense ratio 0.13%, higher than the other Vanguard sector ETFs."
+        },
+        {
+          "ticker": "FREL",
+          "brand": "Fidelity",
+          "provider": "Fidelity Investments",
+          "name": "Fidelity MSCI Real Estate Index ETF",
+          "index": "MSCI USA IMI Real Estate 25/25 Index",
+          "classification": "GICS",
+          "universe": "MSCI USA Investable Market Index (large, mid and small cap)",
+          "weighting": "Modified float market cap, 25/25 capped",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.084,
+            "type": "net = gross (total annual operating expenses)",
+            "asOf": "2025-11-29",
+            "source": {
+              "name": "Fidelity summary prospectus",
+              "url": "https://www.actionsxchangerepository.fidelity.com/ShowDocument/1023227/FaxToCDocument.htm?clientId=Fidelity&applicationId=MFL&docType=SUMS&docFormat=html&securityId=316092857&securityIdType=CUSIP&collectionId=1023227&docName=T16-SUPKG6179028458652193868.htm&criticalIndicator=N&tocIndicator=false&extraId="
+            }
+          },
+          "aum": {
+            "value": 1397188036,
+            "unit": "USD",
+            "basis": "Fund net assets",
+            "asOf": "2026-10-31",
+            "source": {
+              "name": "Fidelity research API (similarEtfs), behind the fund's quote page",
+              "url": "https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=FREL"
+            }
+          },
+          "priceSource": "cboe",
+          "cusip": "316092857"
+        }
+      ],
+      "excluded": [
+        {
+          "ticker": "IYR",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares U.S. Real Estate ETF",
+          "index": "Dow Jones U.S. Real Estate Capped Index",
+          "classification": "S&P Dow Jones Indices real estate definition (classification system not confirmed; S&P DJI site returned HTTP 403)",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.37,
+            "type": "per summary prospectus (iShares 9/1/2026 product list still shows 0.40%)",
+            "asOf": "2026-07-31",
+            "source": {
+              "name": "iShares fund page and summary prospectus",
+              "url": "https://www.ishares.com/us/products/239520/ishares-u-s-real-estate-etf"
+            }
+          },
+          "aum": {
+            "value": 3958344308,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239520/ishares-u-s-real-estate-etf"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Not GICS: the index's sector definition differs materially from the GICS sector the other funds share. Not blended. Evidence (holdings file of 2026-11-09, GICS labels as printed in the file): 2.55% in mortgage REITs (NLY 1.06%, AGNC 0.79%), which GICS puts in Financials; otherwise 97.35% GICS Real Estate. The index's classification system could not be confirmed (S&P DJI site answered HTTP 403).",
+          "holdingsSource": "https://www.ishares.com/us/products/239520/ishares-u-s-real-estate-etf/latest-holdings.csv"
+        },
+        {
+          "ticker": "RSPR",
+          "brand": "Invesco",
+          "provider": "Invesco",
+          "name": "Invesco S&P 500 Equal Weight Real Estate ETF",
+          "index": "S&P 500 Equal Weight Real Estate Index",
+          "classification": "GICS",
+          "weighting": "Equal weight",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.4,
+            "type": "total = net (no waiver)",
+            "asOf": null,
+            "asOfNote": "not printed on the page; read 2026-11-10",
+            "source": {
+              "name": "Invesco fund page",
+              "url": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-real-estate-etf.html"
+            }
+          },
+          "aum": {
+            "value": 88737322.71,
+            "unit": "USD",
+            "basis": "Share class total net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Invesco fund data API (called by the fund page)",
+              "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/46137V290?expand=nav&idType=cusip&variationType=fundDetails&productType=ETF"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "Equal-weighted: the same GICS sector, but each stock gets the same weight, rebalanced quarterly — a different index construction (a tilt toward smaller members) from the cap-weighted funds. Not blended."
+        },
+        {
+          "ticker": "SCHH",
+          "brand": "Schwab",
+          "provider": "Charles Schwab Asset Management",
+          "name": "Schwab U.S. REIT ETF",
+          "index": "Dow Jones Equity All REIT Capped Index",
+          "classification": "REIT-only",
+          "weighting": "Capped float market cap",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.07,
+            "type": "net",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "Schwab fund page",
+              "url": "https://www.schwabassetmanagement.com/products/schh"
+            }
+          },
+          "aum": {
+            "value": 11386716601.27,
+            "unit": "USD",
+            "basis": "Net assets",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "Schwab fund page",
+              "url": "https://www.schwabassetmanagement.com/products/schh"
+            }
+          },
+          "priceSource": "cboe",
+          "reason": "REIT-only index: leaves out real estate management & development companies (e.g. CBRE, CoStar) that GICS Real Estate includes, so it is a narrower definition. Not blended. Schwab offers no other sector ETFs."
+        },
+        {
+          "ticker": "USRT",
+          "brand": "iShares",
+          "provider": "BlackRock (iShares)",
+          "name": "iShares Core U.S. REIT ETF",
+          "index": "FTSE Nareit Equity REITS 40 Act Capped Index",
+          "classification": "REIT-only",
+          "weighting": "Capped float market cap",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.08,
+            "type": "per current prospectus",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239544/ishares-core-u-s-reit-etf"
+            }
+          },
+          "aum": {
+            "value": 4299757201,
+            "unit": "USD",
+            "basis": "Net assets of fund",
+            "asOf": "2026-11-10",
+            "source": {
+              "name": "iShares fund page",
+              "url": "https://www.ishares.com/us/products/239544/ishares-core-u-s-reit-etf"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "REIT-only index: leaves out real estate management & development companies (e.g. CBRE, CoStar) that GICS Real Estate includes, so it is a narrower definition. Not blended."
+        },
+        {
+          "ticker": "RWR",
+          "brand": "SPDR",
+          "provider": "State Street Global Advisors",
+          "name": "SPDR Dow Jones REIT ETF",
+          "index": "Dow Jones U.S. Select REIT Index",
+          "classification": "REIT-only",
+          "weighting": "Float market cap",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.25,
+            "type": "gross",
+            "asOf": null,
+            "asOfNote": "not printed; read 2026-11-10",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "aum": {
+            "value": 1925760000,
+            "unit": "USD",
+            "basis": "AUM",
+            "asOf": "2026-11-09",
+            "source": {
+              "name": "State Street fund finder",
+              "url": "https://www.ssga.com/bin/v1/ssmp/fund/fundfinder?country=us&language=en&role=intermediary&product=etfs&ui=fund-finder"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "REIT-only index: leaves out real estate management & development companies (e.g. CBRE, CoStar) that GICS Real Estate includes, so it is a narrower definition. Not blended."
+        },
+        {
+          "ticker": "BBRE",
+          "brand": "JPMorgan",
+          "provider": "J.P. Morgan Asset Management",
+          "name": "JPMorgan BetaBuilders MSCI US REIT ETF",
+          "index": "MSCI US REIT Custom Capped Index",
+          "classification": "REIT-only",
+          "weighting": "Capped float market cap",
+          "passive": true,
+          "expenseRatio": {
+            "value": 0.11,
+            "type": "net = gross",
+            "asOf": "2026-09-30",
+            "source": {
+              "name": "JPMorgan fact sheet",
+              "url": "https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/literature/fact-sheet/etfs/FS-BBRE.PDF"
+            }
+          },
+          "aum": {
+            "value": 1200000000.0,
+            "unit": "USD",
+            "basis": "Fund AUM as printed ('$1.20bn')",
+            "asOf": "2026-09-30",
+            "source": {
+              "name": "JPMorgan fact sheet",
+              "url": "https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/literature/fact-sheet/etfs/FS-BBRE.PDF"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "REIT-only index: leaves out real estate management & development companies (e.g. CBRE, CoStar) that GICS Real Estate includes, so it is a narrower definition. Not blended."
+        },
+        {
+          "ticker": "AVRE",
+          "brand": "Avantis",
+          "provider": "Avantis Investors",
+          "name": "Avantis Real Estate ETF",
+          "index": "none (actively managed; benchmark Bloomberg World REIT Large, Mid & Small Cap Index)",
+          "classification": "REIT, global",
+          "weighting": "Active",
+          "passive": false,
+          "expenseRatio": {
+            "value": 0.17,
+            "type": "net (gross 0.17%)",
+            "asOf": "2026-01-01",
+            "source": {
+              "name": "Avantis fund page",
+              "url": "https://www.avantisinvestors.com/avantis-investments/en-us/avantis-real-estate-etf/"
+            }
+          },
+          "aum": {
+            "value": null,
+            "unit": "USD",
+            "asOf": null,
+            "asOfNote": "not in the page's static HTML",
+            "source": {
+              "name": "Avantis fund page",
+              "url": "https://www.avantisinvestors.com/avantis-investments/en-us/avantis-real-estate-etf/"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Actively managed and global."
+        },
+        {
+          "ticker": "DFAR",
+          "brand": "Dimensional",
+          "provider": "Dimensional Fund Advisors",
+          "name": "Dimensional US Real Estate ETF",
+          "index": "none (actively managed)",
+          "classification": "REIT",
+          "weighting": "Active",
+          "passive": false,
+          "expenseRatio": {
+            "value": null,
+            "asOf": null,
+            "asOfNote": "fund page returned a JavaScript shell; not read",
+            "source": {
+              "name": "Dimensional fund page",
+              "url": "https://www.dimensional.com/us-en/funds/dfar/us-real-estate-etf"
+            }
+          },
+          "aum": {
+            "value": null,
+            "asOf": null,
+            "asOfNote": "not read (as above)",
+            "source": {
+              "name": "Dimensional fund page",
+              "url": "https://www.dimensional.com/us-en/funds/dfar/us-real-estate-etf"
+            }
+          },
+          "priceSource": "not checked",
+          "reason": "Actively managed."
+        }
+      ],
+      "definitionNotes": [
+        "All three included funds use GICS. They differ in breadth: the SPDR fund holds S&P 500 members only (large cap); the Vanguard and Fidelity funds hold the all-cap MSCI US IMI sector (large, mid and small). Capping rules also differ (see each fund's weighting). The composite blends the same sector definition across those breadths; it does not blend different sector definitions.",
+        "FREL's index is capped 25/25 rather than 25/50."
+      ]
+    }
+  ],
+  "providersChecked": {
+    "included": [
+      "State Street (Select Sector SPDR) — 11 sectors",
+      "Vanguard — 11 sectors",
+      "Fidelity (MSCI sector ETFs) — 11 sectors"
+    ],
+    "excluded": {
+      "iShares (BlackRock)": "US sector funds (IY*, IDU) track FTSE Russell or Dow Jones sector indexes, not GICS; definition differences per fund under each sector. iShares has no GICS-based plain US sector ETFs; its other sector funds are global (IXN, IXG, …) or single-industry (IGV, ITA, …).",
+      "Invesco": "US sector lineup is the S&P 500 Equal Weight set (RSP*); also Dorsey Wright momentum (e.g. PTF, PXI), Dynamic/Intellidex (e.g. PSI) and S&P SmallCap sector (e.g. PSCT) funds — all factor or size variants. No cap-weighted plain sector funds found (Invesco's full product list endpoint answered HTTP 501/400, so that check is not exhaustive).",
+      "Global X": "PureCap MSCI line (GXPT, GXPC, GXPS, GXPD, GXPE) covers 5 of 11 sectors; launched 2025-07-22. Watch list.",
+      "State Street — S&P 500 Market Sector SPDRs": "XLKM, XLYM, XLPM, XLEM launched 2026-10-13; 4 sectors; each under $1M and holding mainly the matching Select Sector SPDR. Watch list.",
+      "Schwab": "Only sector fund is SCHH (REIT-only).",
+      "First Trust": "AlphaDEX sector family (e.g. FXL) is factor-selected (smart beta).",
+      "Franklin Templeton": "No US equity sector ETFs among the 94 ETFs in its product sitemap.",
+      "JPMorgan, Avantis, Dimensional": "Only real-estate funds found: BBRE (REIT-only), AVRE and DFAR (active)."
+    },
+    "notVerified": {
+      "Goldman Sachs": "Fund finder is JavaScript-rendered and its sitemap returned HTTP 404; not verified from a provider source.",
+      "WisdomTree": "Site answered HTTP 403 to every request; not verified from a provider source."
+    }
+  },
+  "compiled": {
+    "by": "Bower Digital research pass, read from provider sources on 2026-11-10",
+    "note": "Figures are as printed by each provider on the dates given; an expense ratio the provider prints without a date carries asOf null and the read date in asOfNote."
+  }
+}
