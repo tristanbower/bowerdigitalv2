@@ -108,6 +108,24 @@ function fmtShort(t, withTime = !isDateOnly(t)) {
   return new Date(t).toLocaleString("en-US", o);
 }
 const fmtClock = (t) => new Date(t).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: TZ });
+const fmtMonthYear = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+
+// History older than a year is stored weekly (the last point of each
+// Monday–Sunday week); `weeklyBefore` in each history file marks the switch.
+const pointDay = (t) => (isDateOnly(t) ? t : torontoDay(tms(t)));
+const weekNo = (t) => Math.floor((Date.parse(pointDay(t) + "T00:00:00Z") / DAY + 3) / 7); // Monday-based
+const isWeekly = (h, p) => !!h?.granularity?.weeklyBefore && pointDay(p.t) < h.granularity.weeklyBefore;
+// Runs of points with no empty week between them. A week with no point
+// breaks the line: it is a gap, never bridged.
+function runs(points) {
+  const out = [];
+  points.forEach((p, i) => {
+    if (!i || weekNo(p.t) - weekNo(points[i - 1].t) > 1) out.push([]);
+    out[out.length - 1].push(p);
+  });
+  return out;
+}
+const missingWeeks = (points) => points.reduce((n, p, i) => n + (i ? Math.max(0, weekNo(p.t) - weekNo(points[i - 1].t) - 1) : 0), 0);
 
 function fmtNum(v, dp = 2) {
   if (v == null || !Number.isFinite(v)) return "—";
@@ -187,12 +205,17 @@ function LineChart({ points, domain, fmtY, tip, extremes = false, height = 280, 
   const yTicks = niceTicks(lo, hi, 4).filter((v) => v >= lo && v <= hi);
   const nX = W < 520 ? 3 : 5;
   const xTicks = Array.from({ length: nX }, (_, i) => x0 + ((x1 - x0) * i) / (nX - 1));
-  const xLabel = (ms) => (timeAxis ? fmtClock(ms) : fmtShort(new Date(ms).toISOString(), false));
+  // Multi-year windows label the axis by month and year.
+  const xLabel = (ms) => (timeAxis ? fmtClock(ms) : x1 - x0 > 400 * DAY ? fmtMonthYear(ms) : fmtShort(new Date(ms).toISOString(), false));
 
   const first = points[0], last = points[points.length - 1];
   const trend = dir(last.value - first.value);
-  const line = points.map((p, i) => `${i ? "L" : "M"}${x(tms(p.t)).toFixed(1)},${y(p.value).toFixed(1)}`).join(" ");
-  const area = points.length > 1 ? `${line} L${x(tms(last.t)).toFixed(1)},${H - B} L${x(tms(first.t)).toFixed(1)},${H - B} Z` : null;
+  const segs = timeAxis ? [points] : runs(points);
+  const path = (seg) => seg.map((p, i) => `${i ? "L" : "M"}${x(tms(p.t)).toFixed(1)},${y(p.value).toFixed(1)}`).join(" ");
+  const line = segs.map(path).join(" ");
+  const areas = segs.filter((g) => g.length > 1).map((g) =>
+    `${path(g)} L${x(tms(g[g.length - 1].t)).toFixed(1)},${H - B} L${x(tms(g[0].t)).toFixed(1)},${H - B} Z`);
+  const lone = points.length > 40 ? segs.filter((g) => g.length === 1).map((g) => g[0]) : [];
   const gapEnd = x(xs[0]);
   const showGap = gapLabel && gapEnd - L > 24;
 
@@ -245,8 +268,9 @@ function LineChart({ points, domain, fmtY, tip, extremes = false, height = 280, 
             )}
           </g>
         )}
-        {area && <path d={area} fill={`url(#fill-${gid})`} />}
+        {areas.map((d, i) => <path key={i} d={d} fill={`url(#fill-${gid})`} />)}
         {points.length > 1 && <path d={line} className="sb-line" />}
+        {lone.map((p) => <circle key={p.t} cx={x(tms(p.t))} cy={y(p.value)} r={2} className="sb-dot" />)}
         {hover && <line x1={x(tms(hover.t))} x2={x(tms(hover.t))} y1={T} y2={H - B} className="sb-crosshair" />}
         {[hiP, loP].filter(Boolean).map((p) => {
           const isHi = p === hiP, px = x(tms(p.t)), py = y(p.value);
@@ -453,6 +477,8 @@ const RANGES = [
   { key: "3M", label: "3M", months: 3 },
   { key: "6M", label: "6M", months: 6 },
   { key: "1Y", label: "1Y", months: 12 },
+  { key: "5Y", label: "5Y", months: 60 },
+  { key: "MAX", label: "Max" },
 ];
 
 const monthsBack = (ms, n) => { const d = new Date(ms); d.setUTCMonth(d.getUTCMonth() - n); return d.getTime(); };
@@ -492,21 +518,27 @@ function rangeView(s, h, range) {
       domain = [end - 5 * DAY, end];
       sub = pts.filter((p) => tms(p.t) >= domain[0]);
     }
+  } else if (range.key === "MAX") {
+    sub = pts;
+    domain = null;
   } else {
     domain = [monthsBack(end, range.months), end];
     sub = pts.filter((p) => tms(p.t) >= domain[0]);
   }
   if (sub.length < 2) return { na: `Not enough stored points for ${range.label}. ${gapNote || ""}`.trim() };
-  const covered = !domain || tms(pts[0].t) <= domain[0] + 2 * DAY;
+  // A window that starts in the weekly stretch is covered if the first weekly point is within a week.
+  const weeklyStart = domain && h.granularity?.weeklyBefore && domain[0] < tms(h.granularity.weeklyBefore);
+  const covered = !domain || tms(pts[0].t) <= domain[0] + (weeklyStart ? 7 : 2) * DAY;
   return {
     points: sub, domain,
     note: range.key === "5D" && daily ? "last 5 observations and the one before" : null,
-    gapNote: covered ? null : gapNote || `History starts ${firstLabel}`,
+    gapNote: covered ? (range.key === "MAX" ? gapNote : null) : gapNote || `History starts ${firstLabel}`,
   };
 }
 
 function MacroChart({ series, history, pick, setPick }) {
   const [rangeKey, setRangeKey] = React.useState("1M");
+  const [tableOpen, setTableOpen] = React.useState(false);
   const s = series.find((x) => x.key === pick) || series[0];
   if (!s) return null;
   const h = history[`macro-${s.key}`];
@@ -518,13 +550,19 @@ function MacroChart({ series, history, pick, setPick }) {
     ? usd(v, 0) : usd(v, exact ? 2 : v >= 100 ? 0 : 2));
   const tip = (p) => ({
     main: macroValue(s, p.value),
-    sub: view.timeAxis ? fmtAsOf(p.t) : isDateOnly(p.t) ? fmtAsOf(p.t, s.key === "btc" ? " (00:00 UTC)" : "") : fmtAsOf(p.t),
+    sub: (view.timeAxis ? fmtAsOf(p.t) : isDateOnly(p.t) ? fmtAsOf(p.t, s.key === "btc" ? " (00:00 UTC)" : "") : fmtAsOf(p.t))
+      + (isWeekly(h, p) ? " · weekly (last of its week)" : ""),
   });
   const pts = view.points;
   const chg = pts && windowChange(s, pts[0].value, pts[pts.length - 1].value);
   const hiP = pts && pts.reduce((a, p) => (p.value > a.value ? p : a));
   const loP = pts && pts.reduce((a, p) => (p.value < a.value ? p : a));
   const src = view.source || h?.source || s.source;
+  // Multi-year windows need the year on every date.
+  const long = pts && tms(pts[pts.length - 1].t) - tms(pts[0].t) > 400 * DAY;
+  const day = (t) => (long ? fmtAsOf(t) : fmtShort(t));
+  const nWeekly = pts && !view.timeAxis ? pts.filter((p) => isWeekly(h, p)).length : 0;
+  const gaps = pts && !view.timeAxis ? missingWeeks(pts) : 0;
 
   return (
     <figure className="sb-chart sb-chart--macro">
@@ -552,9 +590,9 @@ function MacroChart({ series, history, pick, setPick }) {
         {chg && (
           <span className="sb-chart-stats">
             <span className={`sb-chg sb-chg--${dir(chg.v)}`}><span aria-hidden="true">{arrowFor(chg.v)}</span> {chg.text}</span>
-            <span className="sb-faint"> over the window, from {fmtShort(pts[0].t)}</span>
-            <span className="sb-stat">High {fmtY(hiP.value, true)} <span className="sb-faint">{fmtShort(hiP.t)}</span></span>
-            <span className="sb-stat">Low {fmtY(loP.value, true)} <span className="sb-faint">{fmtShort(loP.t)}</span></span>
+            <span className="sb-faint"> over the window, from {day(pts[0].t)}</span>
+            <span className="sb-stat">High {fmtY(hiP.value, true)} <span className="sb-faint">{day(hiP.t)}</span></span>
+            <span className="sb-stat">Low {fmtY(loP.value, true)} <span className="sb-faint">{day(loP.t)}</span></span>
           </span>
         )}
       </figcaption>
@@ -573,23 +611,31 @@ function MacroChart({ series, history, pick, setPick }) {
       <div className="sb-chart-foot">
         <span>
           {view.gapNote && <strong className="sb-gapnote">{view.gapNote}. </strong>}
-          {pts ? `${pts.length} points` : ""}{pts ? " · " : ""}Source: <SourceLink source={src} />
+          {pts ? `${pts.length} points` : ""}
+          {nWeekly > 0 && ` (${nWeekly} weekly before ${fmtAsOf(h.granularity.weeklyBefore)}, ${pts.length - nWeekly} daily)`}
+          {gaps > 0 && ` · ${gaps} week${gaps > 1 ? "s" : ""} with no observation — the line breaks there, nothing is filled`}
+          {pts ? " · " : ""}Source: <SourceLink source={src} />
           {h && <> · <a className="sb-src" href={DATA_DIR + h.file} target="_blank" rel="noopener noreferrer">history file v{h.version}</a></>}
         </span>
         {h?.backfill && <span className="sb-faint">{h.backfill.note}</span>}
       </div>
 
       {pts && (
-        <details className="sb-chart-table">
+        <details className="sb-chart-table" onToggle={(e) => setTableOpen(e.currentTarget.open)}>
           <summary>Table view</summary>
-          <table className="sb-table sb-table--mini">
-            <thead><tr><th>{view.timeAxis ? "Time" : "Date"}</th><th className="sb-num">{s.label}</th></tr></thead>
-            <tbody>
-              {[...pts].reverse().map((p) => (
-                <tr key={p.t}><td>{fmtAsOf(p.t)}</td><td className="sb-num">{macroValue(s, p.value)}</td></tr>
-              ))}
-            </tbody>
-          </table>
+          {tableOpen && (
+            <table className="sb-table sb-table--mini">
+              <thead><tr><th>{view.timeAxis ? "Time" : "Date"}</th><th className="sb-num">{s.label}</th></tr></thead>
+              <tbody>
+                {[...pts].reverse().map((p) => (
+                  <tr key={p.t}>
+                    <td>{fmtAsOf(p.t)}{!view.timeAxis && isWeekly(h, p) && <span className="sb-faint"> · weekly</span>}</td>
+                    <td className="sb-num">{macroValue(s, p.value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </details>
       )}
     </figure>
@@ -620,7 +666,7 @@ function sectorRows(data) {
 
 const constituentList = (c) => c.constituents.map((x) => `${x.ticker} (${x.brand})`).join(", ");
 
-function Sectors({ snap }) {
+function Sectors({ snap, index }) {
   const [sort, setSort] = React.useState({ key: "1D", dir: -1 });
   const [focus, setFocus] = React.useState("1D");
   const [open, setOpen] = React.useState(() => new Set());
@@ -660,6 +706,20 @@ function Sectors({ snap }) {
     if (!r) return "";
     const parts = c.constituents.map((x) => `${x.ticker} ${fmtSigned(r.constituents[x.ticker].value, 2)}`).join(", ");
     return `${c.name} ${p}: equal-weight mean of ${parts} · closes ${fmtAsOf(r.from)} → ${fmtAsOf(c.asOf)} · ${c.source.name}`;
+  };
+  // The composite's stored level history, described from index.json (the file itself is linked, not loaded).
+  const compHistory = (c) => {
+    const series = `sector-composite-${c.key}`;
+    const cov = index?.coverage?.[series], f = index?.sectorHistory?.[series];
+    if (!cov || !f) return null;
+    return (
+      <>
+        {" "}Level history{cov.baseDate ? ` (base 100 = close of ${fmtAsOf(cov.baseDate)})` : ""}: {cov.points} points from {fmtAsOf(cov.firstPoint)}
+        {cov.limitedBy?.length ? `, the first date all ${c.constituents.length} funds have a Cboe close (set by ${cov.limitedBy.join(", ")})` : ""};
+        {" "}weekly closes before {fmtAsOf(cov.weeklyBefore)}, daily since ·{" "}
+        <a className="sb-src" href={DATA_DIR + f} target="_blank" rel="noopener noreferrer">{f.replace("history/", "")}</a>
+      </>
+    );
   };
   const toggle = (key) => setOpen((o) => { const n = new Set(o); n.has(key) ? n.delete(key) : n.add(key); return n; });
   const COLS = PERIODS.length + 4;
@@ -736,6 +796,7 @@ function Sectors({ snap }) {
                 <caption className="sb-faint">
                   {c.name}: {c.single ? "one qualifying fund, shown as is" : `equal-weighted mean of ${c.constituents.length} funds' price returns`}.
                   Closes from {c.source.name.replace(", computed by this collector", "")}, latest {fmtAsOf(c.asOf)}.
+                  {compHistory(c)}
                 </caption>
                 <thead>
                   <tr>
@@ -1204,7 +1265,8 @@ function Sources({ snaps }) {
             <li>Describes the market as published. No forecasts, signals, or verdicts.</li>
             <li>Every figure carries its value, its as-of time, and its source. A source that can't be read is listed as not shown — never estimated.</li>
             <li>Snapshots are append-only: each collection writes a new dated file, and old files are never edited.</li>
-            <li>History files are append-only too: points are only ever added. Backfill comes only from a source's own published history; a series without one starts at the collector's first reading, and charts mark the missing stretch instead of filling it.</li>
+            <li>History files are append-only too: points are only ever added, never edited. Backfill comes only from a source's own published history, as far back as it goes; a series without one starts at the collector's first reading, and charts mark the missing stretch instead of filling it.</li>
+            <li>History more than a year old is kept weekly: the last close of each Monday–Sunday week, under its own date. The last year stays daily. A week with no close is a break in the line, never filled.</li>
             <li>No API keys are used. Series that need one are left out until they can be read openly.</li>
           </ul>
         </div>
@@ -1220,7 +1282,7 @@ function Sources({ snaps }) {
             {hist.map((h) => (
               <li key={h.file}>
                 <a className="sb-src" href={DATA_DIR + h.file} target="_blank" rel="noopener noreferrer">{h.file.replace("history/", "")}</a>
-                <span className="sb-faint"> v{h.version} · {h.points.length} pts{h.backfill?.available ? "" : " · no backfill"}</span>
+                <span className="sb-faint"> v{h.version} · {h.points.length} pts from {fmtAsOf(pointDay(h.points[0]?.t ?? h.firstPoint))}{h.granularity?.weeklyPoints ? ` · weekly before ${fmtAsOf(h.granularity.weeklyBefore)}` : ""}{h.backfill?.available ? "" : " · no backfill"}</span>
               </li>
             ))}
           </ul>
@@ -1228,9 +1290,15 @@ function Sources({ snaps }) {
             <>
               <div className="sb-group-label sb-mt-s">Composite index series</div>
               <ul className="sb-plain">
-                {comp.map((f) => (
-                  <li key={f}><a className="sb-src" href={DATA_DIR + f} target="_blank" rel="noopener noreferrer">{f.replace("history/", "")}</a></li>
-                ))}
+                {comp.map((f) => {
+                  const cov = snaps.index.coverage?.[f.replace(/^history\/|\.json$/g, "")];
+                  return (
+                    <li key={f}>
+                      <a className="sb-src" href={DATA_DIR + f} target="_blank" rel="noopener noreferrer">{f.replace("history/", "")}</a>
+                      {cov && <span className="sb-faint"> {cov.points} pts from {fmtAsOf(cov.firstPoint)} · weekly before {fmtAsOf(cov.weeklyBefore)}</span>}
+                    </li>
+                  );
+                })}
               </ul>
             </>
           )}
@@ -1245,7 +1313,7 @@ function Footer() {
     <footer className="foot">
       <span>© 2026 Bower Digital</span>
       <span className="foot-mid">Side Bets terminal · Educational data, not investment advice</span>
-      <span>Phase 3 — Nov ’26</span>
+      <span>Phase 4 — Nov ’26</span>
     </footer>
   );
 }
@@ -1313,7 +1381,7 @@ function App() {
         {snaps.status === "ok" && (
           <>
             <MacroBand snaps={snaps} />
-            <Sectors snap={snaps.sectors} />
+            <Sectors snap={snaps.sectors} index={snaps.index} />
             <Compute snap={snaps.compute} history={snaps.history} />
             <Sources snaps={snaps} />
           </>

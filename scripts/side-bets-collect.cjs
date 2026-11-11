@@ -16,11 +16,18 @@
 //     is recorded under `blocked` with the reason — never filled with a guess.
 //   - No API keys. Anything that needs one is an open item, not a workaround.
 //   - History files (data/side-bets/history/<series>.json) are append-only:
-//     a run may add points it hasn't seen, never edit or drop a stored one. If
-//     a source later reports a different value for a stored point, the stored
-//     value stays and the difference is logged under `revisions`.
-//   - Backfill comes only from a source's own published history. A series with
-//     no free history source starts from this collector's first reading.
+//     a run may add points it hasn't seen, never edit a stored one. If a source
+//     later reports a different value for a stored point, the stored value
+//     stays and the difference is logged under `revisions`.
+//   - Granularity rule (owner's rule): points more than one year older than the
+//     latest collection date are kept weekly — the last point of each
+//     Monday–Sunday week, labelled with its own date. The week's other points
+//     are dropped; the kept point is not edited. Points within the year stay as
+//     published (daily) or as collected. A week with no point is a gap, never
+//     filled.
+//   - Backfill comes only from a source's own published history, as far back
+//     as it goes. A series with no free history source starts from this
+//     collector's first reading.
 //
 // Data directory is data/side-bets/ (not public/): this site has no build
 // step and Vercel would treat a top-level public/ folder as the site root.
@@ -33,8 +40,6 @@ const ROOT = path.resolve(__dirname, "..");
 const OUT_DIR = path.join(ROOT, "data", "side-bets");
 const INDEX_FILE = path.join(OUT_DIR, "index.json");
 const HIST_DIR = path.join(OUT_DIR, "history");
-// Seed window for sources with published history: enough for a 1Y range.
-const HIST_DAYS = 400;
 const SCHEMA = 1;
 const TZ = "America/Toronto";
 // Identify honestly. (Sources that only answer a browser-impersonating
@@ -102,6 +107,65 @@ function shiftIso(iso, { days = 0, months = 0, years = 0 }) {
   d.setUTCMonth(d.getUTCMonth() + months);
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);
+}
+const daysBetween = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+const isDateOnly = (t) => /^\d{4}-\d{2}-\d{2}$/.test(t);
+// Calendar day of a point: date-only points as given, readings in Toronto time.
+const dayOf = (t) => (isDateOnly(t) ? t : torontoDate(new Date(t)));
+// Monday of the point's Monday–Sunday week.
+function weekOf(t) {
+  const d = new Date(dayOf(t) + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+  return d.toISOString().slice(0, 10);
+}
+
+// ── Weekly-before-one-year rule ──
+// Points dated before this day (one year before the collection date) are kept
+// weekly: only the last stored point of each Monday–Sunday week survives.
+const weeklyBefore = () => shiftIso(torontoDate(), { years: -1 });
+const GRANULARITY_RULE = "Points dated more than one year before the latest collection are weekly: the last point of each Monday–Sunday week (for markets, the week's last trading-day close), labelled with its own date. Points within the last year are as published (daily) or as collected. A week with no point is a gap — nothing is interpolated or filled.";
+
+function thinToWeekly(points, cutoff) {
+  const lastOfWeek = new Map();
+  for (const p of points) lastOfWeek.set(weekOf(p.t), p.t); // points sorted ascending
+  return points.filter((p) => dayOf(p.t) >= cutoff || lastOfWeek.get(weekOf(p.t)) === p.t);
+}
+
+// ── NYSE calendar (full-day closures) ──
+// Cboe's daily files carry a few rows on days the exchange was closed, priced
+// without the later split adjustment (e.g. XLK 64.67 on Thanksgiving 2018,
+// between closes of 32.34 and 32.04). Those rows are not closes and are left
+// out. Checked Nov 11, 2026 against SPY's Cboe rows 2010–2026: SPY has a row on
+// every open weekday and none on a closed day apart from the two phantom days.
+const NYSE_SPECIAL_CLOSURES = {
+  "2004-06-11": "national day of mourning", "2007-01-02": "national day of mourning",
+  "2012-10-29": "Hurricane Sandy", "2012-10-30": "Hurricane Sandy",
+  "2018-12-05": "national day of mourning", "2025-01-09": "national day of mourning",
+};
+function nyseHolidays(y) {
+  const iso = (m, d) => `${y}-${pad(m)}-${pad(d)}`;
+  const wd = (m, d) => new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+  const nth = (m, w, n) => { let c = 0; for (let d = 1; ; d++) if (wd(m, d) === w && ++c === n) return iso(m, d); };
+  const lastMon = (m) => { for (let d = 31; ; d--) if (wd(m, d) === 1) return iso(m, d); };
+  // Saturday holidays close the Friday before, Sunday ones the Monday after.
+  const observed = (m, d) => shiftIso(iso(m, d), { days: wd(m, d) === 6 ? -1 : wd(m, d) === 0 ? 1 : 0 });
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, h = (19 * a + b - Math.floor(b / 4) - Math.floor((b - Math.floor((b + 8) / 25) + 1) / 3) + 15) % 30;
+  const l = (32 + 2 * (b % 4) + 2 * Math.floor(c / 4) - h - (c % 4)) % 7, mm = Math.floor((a + 11 * h + 22 * l) / 451);
+  const easter = iso(Math.floor((h + l - 7 * mm + 114) / 31), ((h + l - 7 * mm + 114) % 31) + 1);
+  const out = {
+    [nth(1, 1, 3)]: "Martin Luther King Jr. Day", [nth(2, 1, 3)]: "Washington's Birthday",
+    [shiftIso(easter, { days: -2 })]: "Good Friday", [lastMon(5)]: "Memorial Day",
+    [observed(7, 4)]: "Independence Day", [nth(9, 1, 1)]: "Labor Day",
+    [nth(11, 4, 4)]: "Thanksgiving Day", [observed(12, 25)]: "Christmas Day",
+  };
+  if (wd(1, 1) !== 6) out[observed(1, 1)] = "New Year's Day"; // no Friday closure for a Saturday New Year
+  if (y >= 2022) out[observed(6, 19)] = "Juneteenth";
+  return out;
+}
+function nyseClosed(iso) {
+  const w = new Date(iso + "T00:00:00Z").getUTCDay();
+  if (w === 0 || w === 6) return "weekend";
+  return NYSE_SPECIAL_CLOSURES[iso] || nyseHolidays(Number(iso.slice(0, 4)))[iso] || null;
 }
 
 // ── Stats ──
@@ -186,7 +250,8 @@ async function fredSeries(key, label, id, unit, changeUnit, group) {
     source: { name: src.name, url: src.url, series: id },
     _history: {
       points: obs.map((o) => ({ t: o.date, value: o.value })),
-      backfill: { available: true, note: `FRED publishes the full daily history of ${id}; points kept from ${HIST_DAYS} days back.` },
+      backfill: { available: true, note: `FRED publishes the full daily history of ${id}, from ${obs[0].date}; all of it is kept (weekly before the last year).` },
+      basis: `Daily observation as published by FRED (${id}, ${unit}). FRED leaves market holidays blank; those days have no point.`,
       source: { name: src.name, url: src.url, endpoint: src.endpoint, series: id },
     },
   };
@@ -217,6 +282,7 @@ async function goldApi(key, label, symbol, unit, group, prevMacro) {
     _history: {
       points: [{ t: d.updatedAt, value: round(d.price, 4) }],
       backfill: { available: false, note: GOLD_API_NO_HISTORY[symbol] },
+      basis: `Spot price (${unit}) as read by this collector at the time shown.`,
       source: { name: "gold-api.com (this collector's own readings)", url: "https://gold-api.com", endpoint: url, series: symbol },
     },
   };
@@ -224,8 +290,8 @@ async function goldApi(key, label, symbol, unit, group, prevMacro) {
 
 // Why gold and copper have no backfill. Verbatim responses, read Nov 10, 2026.
 const GOLD_API_NO_HISTORY = {
-  XAU: "No free history source found. gold-api.com's history endpoint answers {\"error\": \"No x-api-key header.\"} (HTTP 401); FRED's LBMA gold series GOLDAMGBD228NLBM returns HTTP 404 (discontinued). History is this collector's own readings only.",
-  HG: "No free history source found. gold-api.com's history endpoint needs an API key (HTTP 401, \"No x-api-key header.\"). FRED's PCOPPUSDM is a monthly global copper price in USD per metric ton — a different instrument and unit from the COMEX HG USD/lb read here — so it is not substituted. History is this collector's own readings only.",
+  XAU: "No free history source found (rechecked Nov 11, 2026). gold-api.com's history endpoint answers {\"error\": \"No x-api-key header.\"} (HTTP 401); FRED's LBMA gold series GOLDAMGBD228NLBM and GOLDPMGBD228NLBM return HTTP 404 (discontinued); LBMA's own price files (prices.lbma.org.uk) answer HTTP 403. History is this collector's own readings only.",
+  HG: "No free history source found (rechecked Nov 11, 2026). gold-api.com's history endpoint needs an API key (HTTP 401, \"No x-api-key header.\"); CME's settlement pages refuse automated reads. FRED's PCOPPUSDM is a monthly global copper price in USD per metric ton — a different instrument, unit and frequency from the COMEX HG USD/lb read here — so it is not substituted. History is this collector's own readings only.",
 };
 
 async function coingeckoBtc() {
@@ -255,7 +321,8 @@ async function coingeckoBtc() {
     },
     _history: {
       points: daily,
-      backfill: { available: true, note: "CoinGecko's free API publishes 365 days of daily prices (00:00 UTC each day)." },
+      backfill: { available: true, note: "CoinGecko's free API publishes only the last 365 days of daily prices (00:00 UTC each day); asking for more (days=366 or days=max) answers HTTP 401, \"Public API users are limited to querying historical data within the past 365 days.\" History before that is not available without a paid plan." },
+      basis: "Daily price at 00:00 UTC as published by CoinGecko (USD).",
       source: cgSource(histUrl),
     },
   };
@@ -263,16 +330,43 @@ async function coingeckoBtc() {
 
 // Cboe's public delayed-quote CDN (no key): daily OHLC history per symbol,
 // split-adjusted, not dividend-adjusted — so returns are price returns.
+// Rows that are not closes of the fund are left out and listed under `excluded`:
+// rows on days the NYSE was closed, and rows before the fund's continuous run
+// (Cboe lists FTEC and FSTA rows from 2008–2011, priced $0.04–$1.50, two years
+// before Fidelity's funds listed in Oct 2013 at about $25).
+const LISTING_GAP_DAYS = 30;
+
 async function cboeHistory(symbol) {
   const endpoint = `https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/${symbol}.json`;
   const d = await get(endpoint, { json: true });
   if (!d?.data?.length) throw new Error(`Cboe ${symbol}: no rows`);
+  const rows = d.data
+    .map((r) => ({ date: r.date, close: Number(r.close) }))
+    .filter((r) => Number.isFinite(r.close) && r.close > 0)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const excluded = [];
+  const byDate = new Map();
+  for (const r of rows) {
+    const closed = nyseClosed(r.date);
+    if (closed) { excluded.push({ ticker: symbol, date: r.date, close: r.close, reason: `NYSE closed (${closed}) — not a trading close` }); continue; }
+    const dup = byDate.get(r.date);
+    if (dup && dup.close !== r.close) throw new Error(`Cboe ${symbol}: two different closes for ${r.date}`);
+    byDate.set(r.date, r); // an exact duplicate row collapses into one
+  }
+  let closes = [...byDate.values()];
+  let start = 0;
+  for (let i = 1; i < closes.length; i++) if (daysBetween(closes[i - 1].date, closes[i].date) > LISTING_GAP_DAYS) start = i;
+  if (start) {
+    excluded.push({
+      ticker: symbol, from: closes[0].date, to: closes[start - 1].date, rows: start,
+      reason: `Cboe has no rows for ${daysBetween(closes[start - 1].date, closes[start].date)} days before ${closes[start].date}; the earlier rows are not part of the fund's continuous close history and are not used`,
+    });
+    closes = closes.slice(start);
+  }
   return {
     source: { name: "Cboe delayed quotes (daily closes)", url: `https://www.cboe.com/us/equities/market_statistics/historical_data/`, endpoint, series: symbol },
-    closes: d.data
-      .map((r) => ({ date: r.date, close: Number(r.close) }))
-      .filter((r) => Number.isFinite(r.close) && r.close > 0)
-      .sort((a, b) => a.date.localeCompare(b.date)),
+    closes,
+    excluded,
   };
 }
 
@@ -302,7 +396,7 @@ async function cboeIntraday(symbol) {
 }
 
 async function etfProxy(key, label, symbol, group) {
-  const { closes, source } = await cboeHistory(symbol);
+  const { closes, source, excluded } = await cboeHistory(symbol);
   const last0 = closes[closes.length - 1];
   let intraday = null, intradayBlocked = null;
   try {
@@ -326,8 +420,10 @@ async function etfProxy(key, label, symbol, group) {
     intradayBlocked,
     _history: {
       points: closes.map((c) => ({ t: c.date, value: c.close })),
-      backfill: { available: true, note: `Cboe publishes the daily close history of ${symbol}; points kept from ${HIST_DAYS} days back. Stooq, the planned source, serves a bot check instead of CSV.` },
+      backfill: { available: true, note: `Cboe publishes the daily close history of ${symbol}, from ${closes[0].date}; all of it is kept (weekly before the last year). Stooq, the planned source, serves a bot check instead of CSV.` },
+      basis: "Daily close (split-adjusted, not dividend-adjusted) as published by Cboe, USD.",
       source,
+      extra: { excluded },
     },
   };
 }
@@ -498,16 +594,18 @@ function compositeFor(meta, us, hist, stored, universeRef) {
   if (stored && stored.constituents.join() !== tickers.join()) {
     throw new Error(`${meta.short}: constituents changed (${stored.constituents.join(", ")} → ${tickers.join(", ")}); the stored series stays as is — a new composite version is needed`);
   }
-  const all = commonCloses(tickers, hist);
-  if (all.length < 2) throw new Error(`${meta.short}: fewer than two common closes across ${tickers.join(", ")}`);
-  const last = all[all.length - 1];
-  // Only the span the composite uses: from the history base date, or one year
-  // (plus a week) before the latest close for the 1Y window, whichever is earlier.
-  const floor = shiftIso(torontoDate(), { days: -HIST_DAYS });
-  const baseDate = stored?.base?.date ?? all.find((r) => r.date >= floor).date;
-  const start = [baseDate, shiftIso(last.date, { years: -1, days: -7 })].sort()[0];
-  const rows = all.filter((r) => r.date >= start);
+  // Every date on which all constituents have a Cboe close: the history runs
+  // back to the earliest one, which is set by the youngest constituent.
+  const rows = commonCloses(tickers, hist);
+  if (rows.length < 2) throw new Error(`${meta.short}: fewer than two common closes across ${tickers.join(", ")}`);
+  const last = rows[rows.length - 1];
+  // A new composite takes its base 400 days back, as the first eleven did.
+  const baseDate = stored?.base?.date ?? rows.find((r) => r.date >= shiftIso(torontoDate(), { days: -400 })).date;
   const lagging = tickers.filter((t) => hist[t].closes[hist[t].closes.length - 1].date !== last.date);
+  const firsts = tickers.map((t) => ({ ticker: t, firstClose: hist[t].closes[0].date }));
+  const limitedBy = firsts.filter((f) => f.firstClose === rows[0].date).map((f) => f.ticker);
+  // Closed-day rows inside the span, and every pre-listing cut (it sets the span).
+  const excluded = tickers.flatMap((t) => hist[t].excluded).filter((e) => !e.date || e.date >= rows[0].date);
 
   const ret = (t, a, b) => (b.close[t] / a.close[t] - 1) * 100;
   // An unadjusted split shows up as a one-day jump; refuse it rather than blend it.
@@ -532,17 +630,14 @@ function compositeFor(meta, us, hist, stored, universeRef) {
   // so each point can be recomputed from the file alone.
   const base = rows.find((r) => r.date === baseDate);
   if (!base) throw new Error(`${meta.short}: base date ${baseDate} has no common close`);
-  const points = [];
-  rows.forEach((r, i) => {
-    if (r.date < baseDate) return;
-    const prev = rows[i - 1];
-    points.push({
-      t: r.date,
-      value: round(100 * mean(tickers.map((t) => r.close[t] / base.close[t])), 6),
-      d1: prev && prev.date >= baseDate ? round(mean(tickers.map((t) => ret(t, prev, r))), 6) : null,
-      closes: r.close,
-    });
-  });
+  // Points before the base date use the same formula: the value then of the
+  // basket that is worth 100 at the base close.
+  const points = rows.map((r, i) => ({
+    t: r.date,
+    value: round(100 * mean(tickers.map((t) => r.close[t] / base.close[t])), 6),
+    d1: i ? round(mean(tickers.map((t) => ret(t, rows[i - 1], r))), 6) : null,
+    closes: r.close,
+  }));
 
   const name = `${meta.short} Index`;
   return {
@@ -567,16 +662,20 @@ function compositeFor(meta, us, hist, stored, universeRef) {
       unit: "index level, base 100",
       registry: "sectorHistory",
       points,
-      backfill: { available: true, note: `Computed from Cboe's published daily closes of each constituent; base 100 = close of ${baseDate}.` },
+      backfill: { available: true, note: `Computed from Cboe's published daily closes of each constituent, back to ${rows[0].date}, the first date all of ${tickers.join(", ")} have a Cboe close (set by ${limitedBy.join(", ")}); base 100 = close of ${baseDate}.` },
+      basis: "Index level (base 100) recomputed from each constituent's Cboe daily close on the point's date.",
       source: { name: "Cboe delayed quotes (daily closes), computed by this collector", url: "https://www.cboe.com/us/equities/market_statistics/historical_data/", series: tickers.join(",") },
       extra: {
         methodology: {
           version: COMPOSITE_VERSION,
           construction: "Bower Digital composite — not affiliated with, endorsed by, or tracking any provider's index.",
           value: "100 × mean over constituents of (close on t ÷ close on base date): an equal-weight basket bought at the base close and held, no rebalancing.",
-          d1: "Mean of the constituents' 1-day price returns from the previous common close, in %.",
+          d1: "Mean of the constituents' 1-day price returns from the previous common close, in %. On weekly points the previous close is not stored in this file; it is the prior common Cboe close.",
           returnBasis: "Price return from split-adjusted daily closes; distributions not included.",
+          backHistory: "Same three funds, same weights, same base, back to the first common close. Each fund held what its sector meant at the time: before the 2016 split of Real Estate out of Financials, the 2018 creation of Communication Services (Alphabet and Meta moved out of Information Technology; telecom funds became communication-services funds) and the 2023 move of payment companies such as Visa and Mastercard from Information Technology to Financials.",
         },
+        coverage: { firstCommonClose: rows[0].date, firstClose: Object.fromEntries(firsts.map((f) => [f.ticker, f.firstClose])), limitedBy },
+        excluded,
         constituents: tickers,
         weights: Object.fromEntries(tickers.map((t) => [t, round(1 / tickers.length, 6)])),
         base: { date: baseDate, closes: base.close },
@@ -885,6 +984,7 @@ function vastHistoryEntry(key, m) {
     label: `Vast.ai ${key} marketplace median, on-demand`, unit: "USD per GPU-hour",
     points,
     backfill: { available: false, note: "No free history source found for Vast.ai or RunPod. History is this collector's own readings, one point per run." },
+    basis: "Median on-demand GPU-hour base rate across Vast.ai offers, as read by this collector at the time shown.",
     source: { name: "Vast.ai public marketplace API (this collector's own readings)", url: "https://cloud.vast.ai/create/" },
   };
 }
@@ -937,23 +1037,34 @@ function appendHistory(index, series, entry) {
   fs.mkdirSync(HIST_DIR, { recursive: true });
   const file = histFile(series);
   const cur = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : null;
-  const floor = shiftIso(torontoDate(), { days: -HIST_DAYS });
+  const cutoff = weeklyBefore();
   const byT = new Map((cur?.points || []).map((p) => [p.t, p]));
   const revisions = [...(cur?.revisions || [])];
-  let added = 0;
   for (const p of entry.points) {
     if (!p || !Number.isFinite(p.value)) continue;
     const old = byT.get(p.t);
-    if (!old) {
-      if (p.t.slice(0, 10) < floor) continue; // bounds backfill; stored points stay regardless
-      byT.set(p.t, p); added++;
-    } else if (!sameValue(old.value, p.value) && !revisions.some((r) => r.t === p.t && sameValue(r.sourceValue, p.value))) {
+    if (!old) byT.set(p.t, p);
+    else if (!sameValue(old.value, p.value) && !revisions.some((r) => r.t === p.t && sameValue(r.sourceValue, p.value))) {
       revisions.push({ t: p.t, stored: old.value, sourceValue: p.value, seenAt: new Date().toISOString() });
     }
   }
+  const points = thinToWeekly([...byT.values()].sort((a, b) => a.t.localeCompare(b.t)), cutoff);
+  const had = new Set((cur?.points || []).map((p) => p.t));
+  const kept = new Set(points.map((p) => p.t));
+  const added = points.filter((p) => !had.has(p.t)).length;
+  const thinned = [...had].filter((t) => !kept.has(t)).length;
   const revised = revisions.length !== (cur?.revisions || []).length;
-  if (cur && !added && !revised) return false;
-  const points = [...byT.values()].sort((a, b) => a.t.localeCompare(b.t));
+  const weekly = points.filter((p) => dayOf(p.t) < cutoff).length;
+  const meta = {
+    appendOnly: "Points are only ever added, never edited. Once a point is more than one year older than the latest collection, only the last point of its Monday–Sunday week is kept (unchanged) and the week's other points are dropped. Later source differences for a kept point are listed under revisions.",
+    basis: entry.basis,
+    granularity: { rule: GRANULARITY_RULE, weeklyBefore: cutoff, weeklyPoints: weekly, recentPoints: points.length - weekly },
+    backfill: entry.backfill,
+    source: entry.source,
+    ...entry.extra,
+  };
+  const metaChanged = cur && stable(Object.fromEntries(Object.keys(meta).map((k) => [k, cur[k]]))) !== stable(meta);
+  if (cur && !added && !thinned && !revised && !metaChanged) { registerCoverage(index, series, cur); return false; }
   const out = {
     schema: SCHEMA,
     series,
@@ -961,18 +1072,24 @@ function appendHistory(index, series, entry) {
     unit: entry.unit,
     version: (cur?.version || 0) + 1,
     updated: new Date().toISOString(),
-    appendOnly: "Points are only ever added. A stored point is never edited or removed; later source differences are listed under revisions.",
-    backfill: entry.backfill,
-    source: entry.source,
-    ...entry.extra,
+    ...meta,
     firstPoint: points[0]?.t ?? null,
+    asOf: points[points.length - 1]?.t ?? null,
     points,
     revisions,
   };
   fs.writeFileSync(file, JSON.stringify(out) + "\n");
   (index[entry.registry || "history"] ||= {})[series] = `history/${series}.json`;
-  console.log(`  history ${series}: +${added} point(s) → v${out.version}${revised ? " (revision logged)" : ""}`);
+  registerCoverage(index, series, out);
+  console.log(`  history ${series}: +${added} point(s), −${thinned} thinned to weekly → v${out.version}, ${points.length} pts (${weekly} weekly) from ${out.firstPoint}${revised ? " (revision logged)" : ""}`);
   return true;
+}
+
+// Span and granularity of each history file, so the page can state them
+// without loading the file.
+function registerCoverage(index, series, h) {
+  const { rule, ...gran } = h.granularity || {};
+  (index.coverage ||= {})[series] = { firstPoint: h.firstPoint, asOf: h.asOf, points: h.points.length, ...gran, ...(h.coverage && { limitedBy: h.coverage.limitedBy, baseDate: h.base?.date }) };
 }
 
 // Readings already in earlier snapshots are real collected data: feed them to
@@ -1019,7 +1136,8 @@ async function main() {
     }
     catch (e) { failed = true; console.error(`  ${name}: FAILED — ${e.message}`); }
   }
-  if (wrote) {
+  const onDisk = fs.existsSync(INDEX_FILE) ? fs.readFileSync(INDEX_FILE, "utf8") : "";
+  if (wrote || stable(JSON.parse(onDisk || "{}")) !== stable(index)) {
     index.schema = SCHEMA;
     index.updated = new Date().toISOString();
     fs.writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2) + "\n");
